@@ -2,7 +2,7 @@
 # Automatic HTTPS via Let's Encrypt / ZeroSSL when DOMAIN is provided.
 # Defaults to :80 (HTTP) when running on bare IP without a domain.
 
-{$DOMAIN::80} {
+{$DOMAIN:javadian.alihamzehiesfahani.ir} {
     # Application root directory
     root * /usr/share/caddy
 
