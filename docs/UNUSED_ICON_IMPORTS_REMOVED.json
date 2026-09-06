@@ -1,0 +1,942 @@
+[
+  {
+    "file": "src/components/auth/LoginScreen.tsx",
+    "icon": "CheckCircle2"
+  },
+  {
+    "file": "src/components/auth/LoginScreen.tsx",
+    "icon": "ArrowLeft"
+  },
+  {
+    "file": "src/components/auth/LoginScreen.tsx",
+    "icon": "Briefcase"
+  },
+  {
+    "file": "src/components/auth/LoginScreen.tsx",
+    "icon": "Building2"
+  },
+  {
+    "file": "src/components/auth/LoginScreen.tsx",
+    "icon": "KeyRound"
+  },
+  {
+    "file": "src/components/design-system/BlockerAndNextAction.tsx",
+    "icon": "ShieldAlert"
+  },
+  {
+    "file": "src/components/design-system/OperationalSevenQuestions.tsx",
+    "icon": "HelpCircle"
+  },
+  {
+    "file": "src/components/design-system/ResponsiveTable.tsx",
+    "icon": "Eye"
+  },
+  {
+    "file": "src/components/design-system/ResponsiveTable.tsx",
+    "icon": "Clock"
+  },
+  {
+    "file": "src/components/design-system/ResponsiveTable.tsx",
+    "icon": "FileText"
+  },
+  {
+    "file": "src/components/management/AssignTaskModal.tsx",
+    "icon": "Briefcase"
+  },
+  {
+    "file": "src/components/management/AssignTaskModal.tsx",
+    "icon": "User"
+  },
+  {
+    "file": "src/components/management/AssignTaskModal.tsx",
+    "icon": "Clock"
+  },
+  {
+    "file": "src/components/management/AssignTaskModal.tsx",
+    "icon": "Calendar"
+  },
+  {
+    "file": "src/components/management/AssignTaskModal.tsx",
+    "icon": "AlertTriangle"
+  },
+  {
+    "file": "src/components/management/AssignTaskModal.tsx",
+    "icon": "Building2"
+  },
+  {
+    "file": "src/components/management/AssignTaskModal.tsx",
+    "icon": "HelpCircle"
+  },
+  {
+    "file": "src/components/management/AssignTaskModal.tsx",
+    "icon": "Paperclip"
+  },
+  {
+    "file": "src/components/management/CreateUserModal.tsx",
+    "icon": "User"
+  },
+  {
+    "file": "src/components/management/CreateUserModal.tsx",
+    "icon": "ShieldCheck"
+  },
+  {
+    "file": "src/components/management/CreateUserModal.tsx",
+    "icon": "Building2"
+  },
+  {
+    "file": "src/components/management/CreateUserModal.tsx",
+    "icon": "Lock"
+  },
+  {
+    "file": "src/components/management/CreateUserModal.tsx",
+    "icon": "Calendar"
+  },
+  {
+    "file": "src/components/pwa/PWAOfflineBanner.tsx",
+    "icon": "AlertTriangle"
+  },
+  {
+    "file": "src/components/shell/GlobalSearchModal.tsx",
+    "icon": "Shield"
+  },
+  {
+    "file": "src/components/shell/NotificationsPopover.tsx",
+    "icon": "ShieldAlert"
+  },
+  {
+    "file": "src/components/shell/TopBar.tsx",
+    "icon": "Building2"
+  },
+  {
+    "file": "src/components/shell/TopBar.tsx",
+    "icon": "User"
+  },
+  {
+    "file": "src/components/shell/TopBar.tsx",
+    "icon": "HelpCircle"
+  },
+  {
+    "file": "src/components/shell/TopBar.tsx",
+    "icon": "Smartphone"
+  },
+  {
+    "file": "src/components/shell/TopBar.tsx",
+    "icon": "Monitor"
+  },
+  {
+    "file": "src/components/shell/TopBar.tsx",
+    "icon": "Info"
+  },
+  {
+    "file": "src/components/warehouse/CreateWarehouseExitModal.tsx",
+    "icon": "FilePlus"
+  },
+  {
+    "file": "src/components/warehouse/CreateWarehouseExitModal.tsx",
+    "icon": "MapPin"
+  },
+  {
+    "file": "src/components/warehouse/CreateWarehouseExitModal.tsx",
+    "icon": "ShieldCheck"
+  },
+  {
+    "file": "src/components/warehouse/CreateWarehouseExitModal.tsx",
+    "icon": "AlertCircle"
+  },
+  {
+    "file": "src/components/warehouse/CreateWarehouseExitModal.tsx",
+    "icon": "Calendar"
+  },
+  {
+    "file": "src/components/warehouse/CreateWarehouseExitModal.tsx",
+    "icon": "Hash"
+  },
+  {
+    "file": "src/components/warehouse/CreateWarehouseExitModal.tsx",
+    "icon": "Plus"
+  },
+  {
+    "file": "src/components/warehouse/ReceiptAttachmentCard.tsx",
+    "icon": "ImageIcon"
+  },
+  {
+    "file": "src/components/warehouse/RecordDispatchModal.tsx",
+    "icon": "PackageCheck"
+  },
+  {
+    "file": "src/components/warehouse/RecordDispatchModal.tsx",
+    "icon": "AlertTriangle"
+  },
+  {
+    "file": "src/components/warehouse/RecordDispatchModal.tsx",
+    "icon": "Database"
+  },
+  {
+    "file": "src/components/warehouse/RecordDispatchModal.tsx",
+    "icon": "Truck"
+  },
+  {
+    "file": "src/components/warehouse/WarehouseManifestModal.tsx",
+    "icon": "X"
+  },
+  {
+    "file": "src/components/warehouse/WarehouseManifestModal.tsx",
+    "icon": "Truck"
+  },
+  {
+    "file": "src/components/warehouse/WarehouseManifestModal.tsx",
+    "icon": "MapPin"
+  },
+  {
+    "file": "src/components/warehouse/WarehouseManifestModal.tsx",
+    "icon": "CheckCircle2"
+  },
+  {
+    "file": "src/components/warehouse/WarehouseManifestModal.tsx",
+    "icon": "FileText"
+  },
+  {
+    "file": "src/components/work-item/WorkItemActionModals.tsx",
+    "icon": "RotateCcw"
+  },
+  {
+    "file": "src/components/work-item/WorkItemActionModals.tsx",
+    "icon": "PauseCircle"
+  },
+  {
+    "file": "src/components/work-item/WorkItemActionModals.tsx",
+    "icon": "UserCheck"
+  },
+  {
+    "file": "src/components/work-item/WorkItemActionModals.tsx",
+    "icon": "Check"
+  },
+  {
+    "file": "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "icon": "Users"
+  },
+  {
+    "file": "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "icon": "Building2"
+  },
+  {
+    "file": "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "icon": "ArrowRight"
+  },
+  {
+    "file": "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "icon": "Paperclip"
+  },
+  {
+    "file": "src/views/CustomersView.tsx",
+    "icon": "CheckCircle2"
+  },
+  {
+    "file": "src/views/CustomersView.tsx",
+    "icon": "CreditCard"
+  },
+  {
+    "file": "src/views/CustomersView.tsx",
+    "icon": "Filter"
+  },
+  {
+    "file": "src/views/CustomersView.tsx",
+    "icon": "ArrowRight"
+  },
+  {
+    "file": "src/views/CustomersView.tsx",
+    "icon": "ExternalLink"
+  },
+  {
+    "file": "src/views/CustomersView.tsx",
+    "icon": "Edit3"
+  },
+  {
+    "file": "src/views/CustomersView.tsx",
+    "icon": "Calendar"
+  },
+  {
+    "file": "src/views/CustomersView.tsx",
+    "icon": "DollarSign"
+  },
+  {
+    "file": "src/views/DelegationsView.tsx",
+    "icon": "Users"
+  },
+  {
+    "file": "src/views/DelegationsView.tsx",
+    "icon": "ShieldCheck"
+  },
+  {
+    "file": "src/views/DelegationsView.tsx",
+    "icon": "Calendar"
+  },
+  {
+    "file": "src/views/DelegationsView.tsx",
+    "icon": "Clock"
+  },
+  {
+    "file": "src/views/DelegationsView.tsx",
+    "icon": "CheckCircle2"
+  },
+  {
+    "file": "src/views/DelegationsView.tsx",
+    "icon": "AlertCircle"
+  },
+  {
+    "file": "src/views/DelegationsView.tsx",
+    "icon": "FileText"
+  },
+  {
+    "file": "src/views/DelegationsView.tsx",
+    "icon": "Building2"
+  },
+  {
+    "file": "src/views/DelegationsView.tsx",
+    "icon": "Info"
+  },
+  {
+    "file": "src/views/DelegationsView.tsx",
+    "icon": "FileCheck2"
+  },
+  {
+    "file": "src/views/DesignSystemShowcaseView.tsx",
+    "icon": "Layers"
+  },
+  {
+    "file": "src/views/DesignSystemShowcaseView.tsx",
+    "icon": "Maximize2"
+  },
+  {
+    "file": "src/views/DesignSystemShowcaseView.tsx",
+    "icon": "CheckCircle2"
+  },
+  {
+    "file": "src/views/DesignSystemShowcaseView.tsx",
+    "icon": "AlertTriangle"
+  },
+  {
+    "file": "src/views/DesignSystemShowcaseView.tsx",
+    "icon": "Info"
+  },
+  {
+    "file": "src/views/DesignSystemShowcaseView.tsx",
+    "icon": "Sliders"
+  },
+  {
+    "file": "src/views/FieldSalesView.tsx",
+    "icon": "AlertCircle"
+  },
+  {
+    "file": "src/views/FieldSalesView.tsx",
+    "icon": "ChevronLeft"
+  },
+  {
+    "file": "src/views/FieldSalesView.tsx",
+    "icon": "Info"
+  },
+  {
+    "file": "src/views/FieldSalesView.tsx",
+    "icon": "Layers"
+  },
+  {
+    "file": "src/views/FieldSalesView.tsx",
+    "icon": "Smartphone"
+  },
+  {
+    "file": "src/views/FieldSalesView.tsx",
+    "icon": "X"
+  },
+  {
+    "file": "src/views/FieldSalesView.tsx",
+    "icon": "Send"
+  },
+  {
+    "file": "src/views/FieldSalesView.tsx",
+    "icon": "CornerDownLeft"
+  },
+  {
+    "file": "src/views/FieldSalesView.tsx",
+    "icon": "ArrowUpRight"
+  },
+  {
+    "file": "src/views/FieldSalesView.tsx",
+    "icon": "Search"
+  },
+  {
+    "file": "src/views/FieldSalesView.tsx",
+    "icon": "Filter"
+  },
+  {
+    "file": "src/views/InboxView.tsx",
+    "icon": "Filter"
+  },
+  {
+    "file": "src/views/InboxView.tsx",
+    "icon": "AlertTriangle"
+  },
+  {
+    "file": "src/views/InboxView.tsx",
+    "icon": "Clock"
+  },
+  {
+    "file": "src/views/InboxView.tsx",
+    "icon": "User"
+  },
+  {
+    "file": "src/views/InboxView.tsx",
+    "icon": "Users"
+  },
+  {
+    "file": "src/views/InboxView.tsx",
+    "icon": "Building2"
+  },
+  {
+    "file": "src/views/InboxView.tsx",
+    "icon": "Check"
+  },
+  {
+    "file": "src/views/InboxView.tsx",
+    "icon": "Share2"
+  },
+  {
+    "file": "src/views/InboxView.tsx",
+    "icon": "ArrowRight"
+  },
+  {
+    "file": "src/views/InboxView.tsx",
+    "icon": "ExternalLink"
+  },
+  {
+    "file": "src/views/InboxView.tsx",
+    "icon": "Award"
+  },
+  {
+    "file": "src/views/LogisticsView.tsx",
+    "icon": "Phone"
+  },
+  {
+    "file": "src/views/LogisticsView.tsx",
+    "icon": "MapPin"
+  },
+  {
+    "file": "src/views/LogisticsView.tsx",
+    "icon": "FileCheck"
+  },
+  {
+    "file": "src/views/LogisticsView.tsx",
+    "icon": "Paperclip"
+  },
+  {
+    "file": "src/views/LogisticsView.tsx",
+    "icon": "CheckCircle2"
+  },
+  {
+    "file": "src/views/LogisticsView.tsx",
+    "icon": "AlertTriangle"
+  },
+  {
+    "file": "src/views/ManagementMonitorView.tsx",
+    "icon": "Layers"
+  },
+  {
+    "file": "src/views/ManagementMonitorView.tsx",
+    "icon": "ArrowRight"
+  },
+  {
+    "file": "src/views/ManagementMonitorView.tsx",
+    "icon": "RefreshCw"
+  },
+  {
+    "file": "src/views/ManagementMonitorView.tsx",
+    "icon": "User"
+  },
+  {
+    "file": "src/views/ManagementMonitorView.tsx",
+    "icon": "Building"
+  },
+  {
+    "file": "src/views/ManagementMonitorView.tsx",
+    "icon": "Send"
+  },
+  {
+    "file": "src/views/ManagementMonitorView.tsx",
+    "icon": "Check"
+  },
+  {
+    "file": "src/views/ManagementMonitorView.tsx",
+    "icon": "FileText"
+  },
+  {
+    "file": "src/views/ManagementMonitorView.tsx",
+    "icon": "PhoneCall"
+  },
+  {
+    "file": "src/views/ManagementMonitorView.tsx",
+    "icon": "FileCheck"
+  },
+  {
+    "file": "src/views/ManualIntakeView.tsx",
+    "icon": "Paperclip"
+  },
+  {
+    "file": "src/views/ManualIntakeView.tsx",
+    "icon": "Filter"
+  },
+  {
+    "file": "src/views/ManualIntakeView.tsx",
+    "icon": "Building"
+  },
+  {
+    "file": "src/views/ManualIntakeView.tsx",
+    "icon": "Calendar"
+  },
+  {
+    "file": "src/views/ManualIntakeView.tsx",
+    "icon": "Layers"
+  },
+  {
+    "file": "src/views/ManualIntakeView.tsx",
+    "icon": "Copy"
+  },
+  {
+    "file": "src/views/ManualIntakeView.tsx",
+    "icon": "Tag"
+  },
+  {
+    "file": "src/views/ManualIntakeView.tsx",
+    "icon": "ShieldCheck"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "Users"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "Package"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "Truck"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "Warehouse"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "Edit2"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "CheckCircle2"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "ShieldCheck"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "Building2"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "Phone"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "ExternalLink"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "Copy"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "Info"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "Clock"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "DollarSign"
+  },
+  {
+    "file": "src/views/MasterDataView.tsx",
+    "icon": "Layers"
+  },
+  {
+    "file": "src/views/OrgAccessView.tsx",
+    "icon": "ShieldCheck"
+  },
+  {
+    "file": "src/views/OrgAccessView.tsx",
+    "icon": "Users"
+  },
+  {
+    "file": "src/views/OrgAccessView.tsx",
+    "icon": "UserCheck"
+  },
+  {
+    "file": "src/views/OrgAccessView.tsx",
+    "icon": "Clock"
+  },
+  {
+    "file": "src/views/OrgAccessView.tsx",
+    "icon": "AlertTriangle"
+  },
+  {
+    "file": "src/views/OrgAccessView.tsx",
+    "icon": "ChevronLeft"
+  },
+  {
+    "file": "src/views/OrgAccessView.tsx",
+    "icon": "Search"
+  },
+  {
+    "file": "src/views/OrgAccessView.tsx",
+    "icon": "KeyRound"
+  },
+  {
+    "file": "src/views/OrgAccessView.tsx",
+    "icon": "Eye"
+  },
+  {
+    "file": "src/views/OrgAccessView.tsx",
+    "icon": "FileText"
+  },
+  {
+    "file": "src/views/PaymentRequestsView.tsx",
+    "icon": "EyeOff"
+  },
+  {
+    "file": "src/views/PaymentRequestsView.tsx",
+    "icon": "FileCheck"
+  },
+  {
+    "file": "src/views/PaymentRequestsView.tsx",
+    "icon": "ExternalLink"
+  },
+  {
+    "file": "src/views/PaymentRequestsView.tsx",
+    "icon": "ArrowLeft"
+  },
+  {
+    "file": "src/views/PaymentRequestsView.tsx",
+    "icon": "FileText"
+  },
+  {
+    "file": "src/views/PaymentRequestsView.tsx",
+    "icon": "AlertCircle"
+  },
+  {
+    "file": "src/views/PaymentRequestsView.tsx",
+    "icon": "Ban"
+  },
+  {
+    "file": "src/views/PaymentRequestsView.tsx",
+    "icon": "Calendar"
+  },
+  {
+    "file": "src/views/PaymentRequestsView.tsx",
+    "icon": "X"
+  },
+  {
+    "file": "src/views/PaymentRequestsView.tsx",
+    "icon": "UserCheck"
+  },
+  {
+    "file": "src/views/PaymentRequestsView.tsx",
+    "icon": "Send"
+  },
+  {
+    "file": "src/views/PaymentRequestsView.tsx",
+    "icon": "CheckSquare"
+  },
+  {
+    "file": "src/views/PaymentRequestsView.tsx",
+    "icon": "Upload"
+  },
+  {
+    "file": "src/views/PermissionsView.tsx",
+    "icon": "ShieldAlert"
+  },
+  {
+    "file": "src/views/PermissionsView.tsx",
+    "icon": "Search"
+  },
+  {
+    "file": "src/views/PermissionsView.tsx",
+    "icon": "Users"
+  },
+  {
+    "file": "src/views/PermissionsView.tsx",
+    "icon": "Eye"
+  },
+  {
+    "file": "src/views/PermissionsView.tsx",
+    "icon": "Lock"
+  },
+  {
+    "file": "src/views/PermissionsView.tsx",
+    "icon": "Unlock"
+  },
+  {
+    "file": "src/views/PermissionsView.tsx",
+    "icon": "CheckCircle2"
+  },
+  {
+    "file": "src/views/PermissionsView.tsx",
+    "icon": "XCircle"
+  },
+  {
+    "file": "src/views/PermissionsView.tsx",
+    "icon": "Layers"
+  },
+  {
+    "file": "src/views/PermissionsView.tsx",
+    "icon": "ArrowRight"
+  },
+  {
+    "file": "src/views/PermissionsView.tsx",
+    "icon": "Info"
+  },
+  {
+    "file": "src/views/PermissionsView.tsx",
+    "icon": "Sliders"
+  },
+  {
+    "file": "src/views/PermissionsView.tsx",
+    "icon": "DollarSign"
+  },
+  {
+    "file": "src/views/PermissionsView.tsx",
+    "icon": "FileCheck"
+  },
+  {
+    "file": "src/views/ProductCatalogView.tsx",
+    "icon": "Edit2"
+  },
+  {
+    "file": "src/views/ProductCatalogView.tsx",
+    "icon": "Trash2"
+  },
+  {
+    "file": "src/views/ProductCatalogView.tsx",
+    "icon": "AlertTriangle"
+  },
+  {
+    "file": "src/views/ProductCatalogView.tsx",
+    "icon": "ExternalLink"
+  },
+  {
+    "file": "src/views/ProductCatalogView.tsx",
+    "icon": "Filter"
+  },
+  {
+    "file": "src/views/ProductCatalogView.tsx",
+    "icon": "ArrowUpDown"
+  },
+  {
+    "file": "src/views/ProductCatalogView.tsx",
+    "icon": "Info"
+  },
+  {
+    "file": "src/views/ProductCatalogView.tsx",
+    "icon": "ChevronRight"
+  },
+  {
+    "file": "src/views/ProductCatalogView.tsx",
+    "icon": "Tag"
+  },
+  {
+    "file": "src/views/ProductCatalogView.tsx",
+    "icon": "Calendar"
+  },
+  {
+    "file": "src/views/ProductCatalogView.tsx",
+    "icon": "Building"
+  },
+  {
+    "file": "src/views/ResponsibilitiesView.tsx",
+    "icon": "Building2"
+  },
+  {
+    "file": "src/views/ResponsibilitiesView.tsx",
+    "icon": "Users"
+  },
+  {
+    "file": "src/views/ResponsibilitiesView.tsx",
+    "icon": "Calendar"
+  },
+  {
+    "file": "src/views/ResponsibilitiesView.tsx",
+    "icon": "Clock"
+  },
+  {
+    "file": "src/views/ResponsibilitiesView.tsx",
+    "icon": "CheckCircle2"
+  },
+  {
+    "file": "src/views/ResponsibilitiesView.tsx",
+    "icon": "AlertCircle"
+  },
+  {
+    "file": "src/views/ResponsibilitiesView.tsx",
+    "icon": "FileText"
+  },
+  {
+    "file": "src/views/ResponsibilitiesView.tsx",
+    "icon": "ChevronRight"
+  },
+  {
+    "file": "src/views/ResponsibilitiesView.tsx",
+    "icon": "XCircle"
+  },
+  {
+    "file": "src/views/ResponsibilitiesView.tsx",
+    "icon": "HelpCircle"
+  },
+  {
+    "file": "src/views/ResponsibilitiesView.tsx",
+    "icon": "Tag"
+  },
+  {
+    "file": "src/views/ResponsibilitiesView.tsx",
+    "icon": "Scale"
+  },
+  {
+    "file": "src/views/SalesView.tsx",
+    "icon": "ShoppingBag"
+  },
+  {
+    "file": "src/views/SalesView.tsx",
+    "icon": "Filter"
+  },
+  {
+    "file": "src/views/SalesView.tsx",
+    "icon": "MessageCircle"
+  },
+  {
+    "file": "src/views/SalesView.tsx",
+    "icon": "Users"
+  },
+  {
+    "file": "src/views/SalesView.tsx",
+    "icon": "Calendar"
+  },
+  {
+    "file": "src/views/SalesView.tsx",
+    "icon": "Clock"
+  },
+  {
+    "file": "src/views/SalesView.tsx",
+    "icon": "FileSpreadsheet"
+  },
+  {
+    "file": "src/views/SalesView.tsx",
+    "icon": "DollarSign"
+  },
+  {
+    "file": "src/views/SalesView.tsx",
+    "icon": "TrendingUp"
+  },
+  {
+    "file": "src/views/SupplyRequestsView.tsx",
+    "icon": "User"
+  },
+  {
+    "file": "src/views/SupplyRequestsView.tsx",
+    "icon": "ShieldAlert"
+  },
+  {
+    "file": "src/views/SupplyRequestsView.tsx",
+    "icon": "ArrowRight"
+  },
+  {
+    "file": "src/views/SupplyRequestsView.tsx",
+    "icon": "Calendar"
+  },
+  {
+    "file": "src/views/SupplyRequestsView.tsx",
+    "icon": "Check"
+  },
+  {
+    "file": "src/views/SupplyRequestsView.tsx",
+    "icon": "Scale"
+  },
+  {
+    "file": "src/views/UsersView.tsx",
+    "icon": "Briefcase"
+  },
+  {
+    "file": "src/views/UsersView.tsx",
+    "icon": "ShieldAlert"
+  },
+  {
+    "file": "src/views/UsersView.tsx",
+    "icon": "ShieldCheck"
+  },
+  {
+    "file": "src/views/UsersView.tsx",
+    "icon": "Lock"
+  },
+  {
+    "file": "src/views/UsersView.tsx",
+    "icon": "Unlock"
+  },
+  {
+    "file": "src/views/UsersView.tsx",
+    "icon": "KeyRound"
+  },
+  {
+    "file": "src/views/UsersView.tsx",
+    "icon": "UserCheck"
+  },
+  {
+    "file": "src/views/UsersView.tsx",
+    "icon": "UserX"
+  },
+  {
+    "file": "src/views/UsersView.tsx",
+    "icon": "FileText"
+  },
+  {
+    "file": "src/views/UsersView.tsx",
+    "icon": "Clock"
+  },
+  {
+    "file": "src/views/UsersView.tsx",
+    "icon": "Calendar"
+  },
+  {
+    "file": "src/views/UsersView.tsx",
+    "icon": "ArrowRight"
+  },
+  {
+    "file": "src/views/WarehouseDispatchView.tsx",
+    "icon": "Truck"
+  },
+  {
+    "file": "src/views/WarehouseDispatchView.tsx",
+    "icon": "User"
+  },
+  {
+    "file": "src/views/WarehouseDispatchView.tsx",
+    "icon": "FileText"
+  },
+  {
+    "file": "src/views/WarehouseDispatchView.tsx",
+    "icon": "Check"
+  },
+  {
+    "file": "src/views/WarehouseDispatchView.tsx",
+    "icon": "RotateCcw"
+  },
+  {
+    "file": "src/views/WarehouseReceiptsView.tsx",
+    "icon": "Filter"
+  }
+]

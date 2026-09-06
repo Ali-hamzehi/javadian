@@ -1,0 +1,25 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+$ node --import tsx --test tests/*.test.tsx
+✔ protected business sources, IDs, permissions, lockfile, fonts and SW stay byte-identical (6.513894ms)
+✔ below-minimum price retains quantities, reference price and independent approval (35.128965ms)
+✔ submitted supply request links to WorkItem with unchanged quantity and amount (1.411866ms)
+✔ mobile navigation has at most five unique eligible destinations for every persona (50.229153ms)
+✔ key initial screens render for all accepted personas; deferred and finance notices remain (184.392344ms)
+✔ SW denies business requests, cross-origin, queries, authorization and non-GET; updates require consent (8.11576ms)
+✔ shared field label, required state and error point to the same input (16.823534ms)
+✔ explicit child IDs cannot disconnect reusable field labels (5.01132ms)
+✔ native wrapped fields have unique IDs and retain values (3.085132ms)
+✔ loading button retains its name and communicates busy + disabled (2.918905ms)
+✔ switch is keyboard-operable native button with state (1.853301ms)
+✔ adaptive table preserves every value and assigns mobile labels, not invented fields (3.619895ms)
+✔ integration and prototype states remain separately named and machine-readable (4.750383ms)
+✔ dialog is native, named, and only mounted when open (focus needs browser QA) (1.665638ms)
+✔ persona display cannot request a remote avatar (3.668945ms)
+ℹ tests 15
+ℹ suites 0
+ℹ pass 15
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2213.955508

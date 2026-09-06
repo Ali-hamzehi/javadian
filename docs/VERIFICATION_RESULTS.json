@@ -1,0 +1,22 @@
+[
+  {
+    "command": "bun run typecheck",
+    "exit_code": 0,
+    "seconds": 16.09
+  },
+  {
+    "command": "bun run lint",
+    "exit_code": 0,
+    "seconds": 14.62
+  },
+  {
+    "command": "bun run test",
+    "exit_code": 0,
+    "seconds": 9.16
+  },
+  {
+    "command": "bun run build",
+    "exit_code": 0,
+    "seconds": 13.4
+  }
+]

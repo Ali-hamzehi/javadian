@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>حالت آفلاین — سامانه عملیات جوادیان</title>
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <style>
+      @font-face { font-family: Vazirmatn; src: url('/fonts/vazirmatn-arabic.woff2') format('woff2'); font-display: swap; }
+      @font-face { font-family: Vazirmatn; src: url('/fonts/vazirmatn-latin.woff2') format('woff2'); font-display: swap; unicode-range: U+0000-00FF; }
+      body {
+        margin: 0;
+        font-family: Vazirmatn, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background-color: #0f172a;
+        color: #f8fafc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100dvh;
+        padding: 1.5rem;
+        box-sizing: border-box;
+      }
+      .card {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 1rem;
+        padding: 2.25rem 2rem;
+        max-width: 28rem;
+        width: 100%;
+        text-align: center;
+        box-shadow: none;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(245, 158, 11, 0.15);
+        color: #fbbf24;
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        border-radius: 9999px;
+        padding: 0.35rem 1rem;
+        font-size: 0.8125rem;
+        font-weight: 700;
+        margin-bottom: 1.25rem;
+      }
+      .icon-box {
+        width: 4rem;
+        height: 4rem;
+        margin: 0 auto 1.25rem;
+        background: #134e4a;
+        border: 2px solid #0f766e;
+        border-radius: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      h1 {
+        font-size: 1.15rem;
+        font-weight: 800;
+        margin: 0 0 0.75rem;
+        color: #ffffff;
+      }
+      p {
+        font-size: 1rem;
+        line-height: 1.65;
+        color: #94a3b8;
+        margin: 0 0 1.5rem;
+      }
+      .rules-box {
+        background: rgba(15, 23, 42, 0.6);
+        border: 1px solid #334155;
+        border-radius: 0.75rem;
+        padding: 0.875rem;
+        font-size: 0.75rem;
+        color: #cbd5e1;
+        text-align: right;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+      }
+      .rules-box li {
+        margin-bottom: 0.35rem;
+      }
+      .btn {
+        display: block;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        font-size: 1rem;
+        font-weight: 700;
+        cursor: pointer;
+        border: none;
+        box-sizing: border-box;
+        text-decoration: none;
+        transition: all 0.15s ease;
+      }
+      .btn-primary {
+        background: #0f766e;
+        color: #ffffff;
+        margin-bottom: 0.625rem;
+      }
+      .btn-primary:hover {
+        background: #0f766e;
+      }
+      .btn-secondary {
+        background: #334155;
+        color: #cbd5e1;
+      }
+      .btn-secondary:hover {
+        background: #475569;
+        color: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="icon-box">
+        <img src="/apple-touch-icon.png" width="48" height="48" alt="جوادیان" style="border-radius: 8px;" />
+      </div>
+
+      <div class="badge">
+        <span>●</span>
+        <span>حالت آفلاین</span>
+      </div>
+
+      <h1>حالت آفلاین — فقط مشاهده اطلاعات نمایشی ذخیره‌شده امکان‌پذیر است.</h1>
+      
+      <p>
+        ارتباط شبکه شما با سرور قطع شده است. در این حالت دسترسی به صفحات کش‌شده امکان‌پذیر است اما عملیات جدید ثبت نخواهد شد.
+      </p>
+
+      <div class="rules-box">
+        <ul style="margin: 0; padding-right: 1.25rem;">
+          <li>تراکنش‌های مالی، سفارش‌های فروش و حواله‌ها در حالت آفلاین ثبت نمی‌شوند.</li>
+          <li>هیچ صفی برای همگام‌سازی ناایمن در پس‌زمینه ایجاد نمی‌شود.</li>
+          <li>برای تأیید یا صدور اسناد، نیاز به اتصال به شبکه است.</li>
+        </ul>
+      </div>
+
+      <button class="btn btn-primary" onclick="window.location.reload()">تلاش مجدد برای برقراری ارتباط</button>
+      <a class="btn btn-secondary" href="/">ورود به نسخه ذخیره‌شده برنامه</a>
+    </div>
+  </body>
+</html>

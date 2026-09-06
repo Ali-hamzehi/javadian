@@ -1,0 +1,22 @@
+services:
+  javadian-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: javadian-operations
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN=${DOMAIN:-:80}
+    volumes:
+      # Persist Let's Encrypt / ZeroSSL TLS certificates and Caddy configuration
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+    name: javadian_caddy_data
+  caddy_config:
+    name: javadian_caddy_config

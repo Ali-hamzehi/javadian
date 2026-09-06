@@ -1,0 +1,704 @@
+{
+  "ArrowRight": [
+    "src/App.tsx",
+    "src/views/ManualIntakeView.tsx",
+    "src/views/FieldSalesView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/SalesView.tsx",
+    "src/components/management/CreateUserModal.tsx",
+    "src/components/management/AssignTaskModal.tsx",
+    "src/components/shell/GlobalSearchModal.tsx"
+  ],
+  "Users": [
+    "src/views/UsersView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/components/management/AssignTaskModal.tsx"
+  ],
+  "UserPlus": [
+    "src/views/UsersView.tsx",
+    "src/views/OrgAccessView.tsx",
+    "src/components/management/CreateUserModal.tsx"
+  ],
+  "Search": [
+    "src/views/UsersView.tsx",
+    "src/views/ManualIntakeView.tsx",
+    "src/views/MasterDataView.tsx",
+    "src/views/DelegationsView.tsx",
+    "src/views/ProductCatalogView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/InboxView.tsx",
+    "src/views/LogisticsView.tsx",
+    "src/views/SalesView.tsx",
+    "src/views/ResponsibilitiesView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/views/WarehouseDispatchView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/components/shell/TopBar.tsx",
+    "src/components/shell/GlobalSearchModal.tsx"
+  ],
+  "Building2": [
+    "src/views/UsersView.tsx",
+    "src/views/OrgAccessView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/SalesView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/views/WarehouseDispatchView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/components/warehouse/CreateWarehouseExitModal.tsx",
+    "src/components/warehouse/WarehouseManifestModal.tsx"
+  ],
+  "Eye": [
+    "src/views/UsersView.tsx",
+    "src/views/FieldSalesView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/InboxView.tsx",
+    "src/components/warehouse/ReceiptAttachmentCard.tsx",
+    "src/components/management/AssignTaskModal.tsx",
+    "src/components/auth/LoginScreen.tsx"
+  ],
+  "EyeOff": [
+    "src/views/UsersView.tsx",
+    "src/components/auth/LoginScreen.tsx"
+  ],
+  "RotateCcw": [
+    "src/views/UsersView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/InboxView.tsx",
+    "src/views/SalesView.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/shell/NotificationsPopover.tsx"
+  ],
+  "Send": [
+    "src/views/UsersView.tsx",
+    "src/views/ManualIntakeView.tsx",
+    "src/views/SalesView.tsx",
+    "src/components/management/AssignTaskModal.tsx"
+  ],
+  "Phone": [
+    "src/views/UsersView.tsx",
+    "src/views/ManualIntakeView.tsx",
+    "src/views/FieldSalesView.tsx",
+    "src/views/SalesView.tsx",
+    "src/views/CustomersView.tsx"
+  ],
+  "Mail": [
+    "src/views/UsersView.tsx"
+  ],
+  "AlertTriangle": [
+    "src/views/UsersView.tsx",
+    "src/views/ManualIntakeView.tsx",
+    "src/views/FieldSalesView.tsx",
+    "src/views/MasterDataView.tsx",
+    "src/views/DelegationsView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/SalesView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/views/PermissionsView.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/work-item/WorkItemActionModals.tsx",
+    "src/components/design-system/SystemStates.tsx",
+    "src/components/design-system/OperationalSevenQuestions.tsx",
+    "src/components/design-system/ToastContext.tsx",
+    "src/components/design-system/ResponsiveTable.tsx",
+    "src/components/design-system/ModalAndDrawer.tsx",
+    "src/components/shell/NotificationsPopover.tsx"
+  ],
+  "CheckCircle2": [
+    "src/views/UsersView.tsx",
+    "src/views/ManualIntakeView.tsx",
+    "src/views/FieldSalesView.tsx",
+    "src/views/ProductCatalogView.tsx",
+    "src/views/OrgAccessView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/InboxView.tsx",
+    "src/views/SalesView.tsx",
+    "src/views/WarehouseDispatchView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/warehouse/RecordDispatchModal.tsx",
+    "src/components/warehouse/CreateWarehouseExitModal.tsx",
+    "src/components/warehouse/ReceiptAttachmentCard.tsx",
+    "src/components/management/CreateUserModal.tsx",
+    "src/components/management/AssignTaskModal.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/work-item/WorkItemActionModals.tsx",
+    "src/components/design-system/Timeline.tsx",
+    "src/components/design-system/ToastContext.tsx",
+    "src/components/design-system/BlockerAndNextAction.tsx",
+    "src/components/pwa/PWAInstallGuideModal.tsx",
+    "src/components/shell/NotificationsPopover.tsx"
+  ],
+  "ChevronLeft": [
+    "src/views/UsersView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/components/design-system/ResponsiveTable.tsx"
+  ],
+  "ChevronRight": [
+    "src/views/UsersView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/LogisticsView.tsx",
+    "src/views/WarehouseDispatchView.tsx",
+    "src/views/SupplyRequestsView.tsx"
+  ],
+  "Info": [
+    "src/views/UsersView.tsx",
+    "src/views/ResponsibilitiesView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/components/design-system/ToastContext.tsx"
+  ],
+  "Palette": [
+    "src/views/DesignSystemShowcaseView.tsx",
+    "src/components/shell/Sidebar.tsx"
+  ],
+  "Type": [
+    "src/views/DesignSystemShowcaseView.tsx"
+  ],
+  "MessageSquare": [
+    "src/views/ManualIntakeView.tsx",
+    "src/views/FieldSalesView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/design-system/Timeline.tsx",
+    "src/components/design-system/CommentsAndAttachments.tsx",
+    "src/components/shell/GlobalSearchModal.tsx"
+  ],
+  "FileText": [
+    "src/views/ManualIntakeView.tsx",
+    "src/views/FieldSalesView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/InboxView.tsx",
+    "src/views/SalesView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/components/warehouse/ReceiptAttachmentCard.tsx",
+    "src/components/management/AssignTaskModal.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/work-item/WorkItemActionModals.tsx",
+    "src/components/design-system/CommentsAndAttachments.tsx"
+  ],
+  "Clock": [
+    "src/views/ManualIntakeView.tsx",
+    "src/views/FieldSalesView.tsx",
+    "src/views/ProductCatalogView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/LogisticsView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/views/WarehouseDispatchView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/warehouse/RecordDispatchModal.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/design-system/Timeline.tsx",
+    "src/components/design-system/OperationalSevenQuestions.tsx",
+    "src/components/design-system/BlockerAndNextAction.tsx",
+    "src/components/design-system/Badges.tsx",
+    "src/components/shell/NotificationsPopover.tsx"
+  ],
+  "Plus": [
+    "src/views/ManualIntakeView.tsx",
+    "src/views/FieldSalesView.tsx",
+    "src/views/MasterDataView.tsx",
+    "src/views/DelegationsView.tsx",
+    "src/views/ProductCatalogView.tsx",
+    "src/views/RoutePlaceholderView.tsx",
+    "src/views/OrgAccessView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/InboxView.tsx",
+    "src/views/LogisticsView.tsx",
+    "src/views/SalesView.tsx",
+    "src/views/ResponsibilitiesView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/views/WarehouseDispatchView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/views/PermissionsView.tsx"
+  ],
+  "User": [
+    "src/views/ManualIntakeView.tsx",
+    "src/views/FieldSalesView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/SalesView.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/design-system/OperationalSevenQuestions.tsx",
+    "src/components/design-system/PersonDisplay.tsx",
+    "src/components/auth/LoginScreen.tsx"
+  ],
+  "ExternalLink": [
+    "src/views/ManualIntakeView.tsx",
+    "src/views/FieldSalesView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/LogisticsView.tsx",
+    "src/views/WarehouseDispatchView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx"
+  ],
+  "Mic": [
+    "src/views/ManualIntakeView.tsx"
+  ],
+  "Image as ImageIcon": [
+    "src/views/ManualIntakeView.tsx"
+  ],
+  "Repeat": [
+    "src/views/ManualIntakeView.tsx"
+  ],
+  "MapPin": [
+    "src/views/FieldSalesView.tsx",
+    "src/views/MasterDataView.tsx",
+    "src/views/RoutePlaceholderView.tsx",
+    "src/views/SalesView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/views/WarehouseDispatchView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/shell/MobileBottomNav.tsx",
+    "src/components/shell/GlobalSearchModal.tsx",
+    "src/components/shell/Sidebar.tsx"
+  ],
+  "List": [
+    "src/views/FieldSalesView.tsx"
+  ],
+  "Map as MapIcon": [
+    "src/views/FieldSalesView.tsx"
+  ],
+  "Play": [
+    "src/views/FieldSalesView.tsx",
+    "src/views/InboxView.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx"
+  ],
+  "Square": [
+    "src/views/FieldSalesView.tsx"
+  ],
+  "ShieldCheck": [
+    "src/views/FieldSalesView.tsx",
+    "src/views/ProductCatalogView.tsx",
+    "src/views/RoutePlaceholderView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/InboxView.tsx",
+    "src/views/ResponsibilitiesView.tsx",
+    "src/views/WarehouseDispatchView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/views/PermissionsView.tsx",
+    "src/components/warehouse/WarehouseManifestModal.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/shell/Sidebar.tsx",
+    "src/components/auth/LoginScreen.tsx"
+  ],
+  "CreditCard": [
+    "src/views/FieldSalesView.tsx",
+    "src/views/RoutePlaceholderView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/SalesView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/shell/GlobalSearchModal.tsx",
+    "src/components/shell/Sidebar.tsx"
+  ],
+  "Calendar": [
+    "src/views/FieldSalesView.tsx",
+    "src/views/OrgAccessView.tsx",
+    "src/views/InboxView.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx"
+  ],
+  "WifiOff": [
+    "src/views/FieldSalesView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/components/design-system/SystemStates.tsx",
+    "src/components/pwa/PWAOfflineBanner.tsx"
+  ],
+  "RefreshCw": [
+    "src/views/FieldSalesView.tsx",
+    "src/views/RoutePlaceholderView.tsx",
+    "src/components/warehouse/ReceiptAttachmentCard.tsx",
+    "src/components/design-system/SystemStates.tsx",
+    "src/components/pwa/PWAUpdateBanner.tsx"
+  ],
+  "Building": [
+    "src/views/FieldSalesView.tsx"
+  ],
+  "Upload": [
+    "src/views/FieldSalesView.tsx",
+    "src/components/design-system/CommentsAndAttachments.tsx"
+  ],
+  "Check": [
+    "src/views/FieldSalesView.tsx",
+    "src/views/ProductCatalogView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/components/warehouse/ReceiptAttachmentCard.tsx",
+    "src/components/management/CreateUserModal.tsx",
+    "src/components/management/AssignTaskModal.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/design-system/FormControls.tsx",
+    "src/components/shell/TopBar.tsx"
+  ],
+  "ShieldAlert": [
+    "src/views/FieldSalesView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/SalesView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/views/WarehouseDispatchView.tsx",
+    "src/components/warehouse/RecordDispatchModal.tsx",
+    "src/components/management/AssignTaskModal.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/work-item/WorkItemActionModals.tsx",
+    "src/components/design-system/PersonDisplay.tsx",
+    "src/components/design-system/Badges.tsx",
+    "src/components/shell/TopBar.tsx"
+  ],
+  "Lock": [
+    "src/views/FieldSalesView.tsx",
+    "src/views/PaymentRequestsView.tsx",
+    "src/components/design-system/CommentsAndAttachments.tsx",
+    "src/components/auth/LoginScreen.tsx"
+  ],
+  "UserCheck": [
+    "src/views/DelegationsView.tsx",
+    "src/views/ResponsibilitiesView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/management/AssignTaskModal.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/design-system/OperationalSevenQuestions.tsx"
+  ],
+  "XCircle": [
+    "src/views/DelegationsView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/SalesView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/work-item/WorkItemActionModals.tsx",
+    "src/components/design-system/Timeline.tsx"
+  ],
+  "Scale": [
+    "src/views/DelegationsView.tsx",
+    "src/views/ProductCatalogView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/PermissionsView.tsx"
+  ],
+  "History": [
+    "src/views/DelegationsView.tsx",
+    "src/views/ProductCatalogView.tsx",
+    "src/views/SalesView.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/design-system/OperationalSevenQuestions.tsx"
+  ],
+  "Package": [
+    "src/views/ProductCatalogView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/components/warehouse/CreateWarehouseExitModal.tsx",
+    "src/components/design-system/OperationalSevenQuestions.tsx",
+    "src/components/shell/GlobalSearchModal.tsx"
+  ],
+  "Layers": [
+    "src/views/ProductCatalogView.tsx",
+    "src/views/ResponsibilitiesView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/components/design-system/SystemStates.tsx"
+  ],
+  "DollarSign": [
+    "src/views/ProductCatalogView.tsx"
+  ],
+  "X": [
+    "src/views/ProductCatalogView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/components/design-system/ToastContext.tsx",
+    "src/components/design-system/FormControls.tsx",
+    "src/components/design-system/ModalAndDrawer.tsx",
+    "src/components/pwa/PWAUpdateBanner.tsx",
+    "src/components/pwa/PWAInstallGuideModal.tsx",
+    "src/components/shell/GlobalSearchModal.tsx",
+    "src/components/shell/NotificationsPopover.tsx",
+    "src/components/shell/Sidebar.tsx"
+  ],
+  "ShoppingBag": [
+    "src/views/RoutePlaceholderView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/shell/MobileBottomNav.tsx",
+    "src/components/shell/GlobalSearchModal.tsx",
+    "src/components/shell/Sidebar.tsx"
+  ],
+  "Truck": [
+    "src/views/RoutePlaceholderView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/LogisticsView.tsx",
+    "src/views/CustomersView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/warehouse/CreateWarehouseExitModal.tsx",
+    "src/components/shell/MobileBottomNav.tsx",
+    "src/components/shell/GlobalSearchModal.tsx",
+    "src/components/shell/Sidebar.tsx"
+  ],
+  "BarChart3": [
+    "src/views/RoutePlaceholderView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/shell/MobileBottomNav.tsx",
+    "src/components/shell/GlobalSearchModal.tsx",
+    "src/components/shell/Sidebar.tsx"
+  ],
+  "Database": [
+    "src/views/RoutePlaceholderView.tsx",
+    "src/views/WarehouseDispatchView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/warehouse/CreateWarehouseExitModal.tsx",
+    "src/components/shell/Sidebar.tsx"
+  ],
+  "Briefcase": [
+    "src/views/OrgAccessView.tsx",
+    "src/views/ResponsibilitiesView.tsx",
+    "src/components/management/CreateUserModal.tsx",
+    "src/components/shell/TopBar.tsx"
+  ],
+  "HelpCircle": [
+    "src/views/OrgAccessView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/views/PermissionsView.tsx",
+    "src/components/auth/LoginScreen.tsx"
+  ],
+  "UserX": [
+    "src/views/OrgAccessView.tsx"
+  ],
+  "Copy": [
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/CustomersView.tsx"
+  ],
+  "Filter": [
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/LogisticsView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/views/ManagementMonitorView.tsx"
+  ],
+  "Paperclip": [
+    "src/views/PaymentRequestsView.tsx",
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/components/design-system/CommentsAndAttachments.tsx"
+  ],
+  "Sliders": [
+    "src/views/PaymentRequestsView.tsx"
+  ],
+  "Shield": [
+    "src/views/PaymentRequestsView.tsx"
+  ],
+  "CheckCircle": [
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/ManagementMonitorView.tsx"
+  ],
+  "Printer": [
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/WarehouseDispatchView.tsx",
+    "src/components/warehouse/WarehouseManifestModal.tsx"
+  ],
+  "ArrowLeft": [
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/SalesView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/management/CreateUserModal.tsx",
+    "src/components/management/AssignTaskModal.tsx",
+    "src/components/design-system/SystemStates.tsx",
+    "src/components/design-system/BlockerAndNextAction.tsx",
+    "src/components/shell/NotificationsPopover.tsx"
+  ],
+  "Trash2": [
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/SalesView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/components/warehouse/CreateWarehouseExitModal.tsx",
+    "src/components/warehouse/ReceiptAttachmentCard.tsx",
+    "src/components/management/AssignTaskModal.tsx",
+    "src/components/work-item/WorkItemActionModals.tsx"
+  ],
+  "ClipboardList": [
+    "src/views/WarehouseReceiptsView.tsx"
+  ],
+  "Camera": [
+    "src/views/WarehouseReceiptsView.tsx"
+  ],
+  "FileSpreadsheet": [
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/components/design-system/CommentsAndAttachments.tsx"
+  ],
+  "AlertCircle": [
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/views/InboxView.tsx",
+    "src/views/WarehouseDispatchView.tsx",
+    "src/views/SupplyRequestsView.tsx",
+    "src/components/warehouse/ReceiptAttachmentCard.tsx",
+    "src/components/management/CreateUserModal.tsx",
+    "src/components/management/AssignTaskModal.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/design-system/ToastContext.tsx",
+    "src/components/design-system/FormControls.tsx",
+    "src/components/pwa/PWAInstallGuideModal.tsx",
+    "src/components/auth/LoginScreen.tsx"
+  ],
+  "FileCheck": [
+    "src/views/WarehouseReceiptsView.tsx",
+    "src/components/warehouse/ReceiptAttachmentCard.tsx"
+  ],
+  "Bell": [
+    "src/views/InboxView.tsx",
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/shell/TopBar.tsx",
+    "src/components/shell/MobileBottomNav.tsx",
+    "src/components/shell/NotificationsPopover.tsx"
+  ],
+  "Activity": [
+    "src/views/InboxView.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/design-system/OperationalSevenQuestions.tsx"
+  ],
+  "ArrowLeftRight": [
+    "src/views/LogisticsView.tsx",
+    "src/components/design-system/Timeline.tsx"
+  ],
+  "ArrowDownLeft": [
+    "src/views/LogisticsView.tsx"
+  ],
+  "ArrowUpRight": [
+    "src/views/LogisticsView.tsx"
+  ],
+  "Receipt": [
+    "src/views/CustomersView.tsx"
+  ],
+  "PhoneCall": [
+    "src/views/CustomersView.tsx"
+  ],
+  "PackageCheck": [
+    "src/views/WarehouseDispatchView.tsx",
+    "src/views/SupplyRequestsView.tsx"
+  ],
+  "CheckSquare": [
+    "src/views/SupplyRequestsView.tsx",
+    "src/components/shell/MobileBottomNav.tsx"
+  ],
+  "AlertOctagon": [
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/design-system/Timeline.tsx",
+    "src/components/design-system/BlockerAndNextAction.tsx",
+    "src/components/shell/NotificationsPopover.tsx"
+  ],
+  "Server": [
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/shell/GlobalSearchModal.tsx",
+    "src/components/shell/NotificationsPopover.tsx"
+  ],
+  "Zap": [
+    "src/views/ManagementMonitorView.tsx"
+  ],
+  "GitBranch": [
+    "src/views/ManagementMonitorView.tsx"
+  ],
+  "ChevronDown": [
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/shell/TopBar.tsx",
+    "src/components/shell/Sidebar.tsx"
+  ],
+  "ChevronUp": [
+    "src/views/ManagementMonitorView.tsx"
+  ],
+  "Link2": [
+    "src/views/ManagementMonitorView.tsx",
+    "src/components/management/AssignTaskModal.tsx"
+  ],
+  "UploadCloud": [
+    "src/components/warehouse/ReceiptAttachmentCard.tsx",
+    "src/components/management/AssignTaskModal.tsx",
+    "src/components/work-item/WorkItemActionModals.tsx"
+  ],
+  "KeyRound": [
+    "src/components/management/CreateUserModal.tsx"
+  ],
+  "Award": [
+    "src/components/management/AssignTaskModal.tsx",
+    "src/components/work-item/WorkItemDetailDrawer.tsx"
+  ],
+  "Share2": [
+    "src/components/work-item/WorkItemDetailDrawer.tsx",
+    "src/components/pwa/PWAInstallGuideModal.tsx"
+  ],
+  "FilePlus": [
+    "src/components/design-system/Timeline.tsx"
+  ],
+  "CheckCheck": [
+    "src/components/design-system/Timeline.tsx",
+    "src/components/shell/NotificationsPopover.tsx"
+  ],
+  "ShieldX": [
+    "src/components/design-system/SystemStates.tsx"
+  ],
+  "FileQuestion": [
+    "src/components/design-system/SystemStates.tsx"
+  ],
+  "Inbox": [
+    "src/components/design-system/SystemStates.tsx",
+    "src/components/shell/MobileBottomNav.tsx"
+  ],
+  "ArrowRightCircle": [
+    "src/components/design-system/OperationalSevenQuestions.tsx"
+  ],
+  "ClipboardCheck": [
+    "src/components/design-system/BlockerAndNextAction.tsx"
+  ],
+  "Loader2": [
+    "src/components/design-system/Button.tsx"
+  ],
+  "FileImage": [
+    "src/components/design-system/CommentsAndAttachments.tsx"
+  ],
+  "File": [
+    "src/components/design-system/CommentsAndAttachments.tsx"
+  ],
+  "Download": [
+    "src/components/design-system/CommentsAndAttachments.tsx",
+    "src/components/pwa/PWAUpdateBanner.tsx",
+    "src/components/shell/TopBar.tsx",
+    "src/components/shell/Sidebar.tsx"
+  ],
+  "PlusSquare": [
+    "src/components/pwa/PWAInstallGuideModal.tsx"
+  ],
+  "Smartphone": [
+    "src/components/pwa/PWAInstallGuideModal.tsx"
+  ],
+  "Monitor": [
+    "src/components/pwa/PWAInstallGuideModal.tsx"
+  ],
+  "Menu": [
+    "src/components/shell/TopBar.tsx"
+  ],
+  "UsersRound": [
+    "src/components/shell/TopBar.tsx",
+    "src/components/auth/LoginScreen.tsx"
+  ],
+  "LogOut": [
+    "src/components/shell/TopBar.tsx"
+  ],
+  "MoreHorizontal": [
+    "src/components/shell/MobileBottomNav.tsx"
+  ],
+  "Boxes": [
+    "src/components/shell/MobileBottomNav.tsx",
+    "src/components/shell/Sidebar.tsx"
+  ],
+  "Home": [
+    "src/components/shell/Sidebar.tsx"
+  ],
+  "PanelRightClose": [
+    "src/components/shell/Sidebar.tsx"
+  ],
+  "PanelRightOpen": [
+    "src/components/shell/Sidebar.tsx"
+  ]
+}

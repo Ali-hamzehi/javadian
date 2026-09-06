@@ -1,0 +1,86 @@
+import React, { useState, useEffect } from 'react';
+import { Home, ShoppingBag, Truck, CreditCard, MapPin, BarChart3, Database, ShieldCheck, Palette, ChevronDown, Boxes, PanelRightClose, PanelRightOpen, Download, X } from 'lucide-react';
+import { MockPersona } from '../../types';
+import { NAV_ITEMS } from '../../data/mockData';
+import { mockRepository } from '../../runtime/workflow';
+import { toPersianDigits } from '../../utils/formatters';
+import { usePWA } from '../pwa/PWAContext';
+import { DialogSurface } from '../design-system/DialogSurface';
+
+interface SidebarProps {
+  currentRoute: string;
+  onNavigate: (routeKey: string) => void;
+  activePersona: MockPersona;
+  isCollapsed: boolean;
+  onToggleCollapse: () => void;
+  isMobileOpen?: boolean;
+  onCloseMobile?: () => void;
+}
+const icons = { Home, ShoppingBag, Truck, CreditCard, MapPin, BarChart3, Database, ShieldCheck, Palette };
+export const Sidebar: React.FC<SidebarProps> = ({ currentRoute, onNavigate, activePersona, isCollapsed, onToggleCollapse, isMobileOpen, onCloseMobile }) => {
+  const { isStandalone, setShowInstallGuide } = usePWA();
+  const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({ home: true, sales: true, design_system: true });
+
+  useEffect(() => {
+    const parentGroup = NAV_ITEMS.find(group =>
+      group.subItems?.some(sub => sub.routeKey === currentRoute)
+    );
+    if (parentGroup) {
+      setOpenGroups(prev => ({ ...prev, [parentGroup.id]: true }));
+    }
+  }, [currentRoute]);
+
+  const hasAccess = (requiredCaps: string[]) => !requiredCaps?.length || requiredCaps.some(cap => activePersona.capabilities.includes(cap as any));
+  const counts = mockRepository.computeScopedTaskCounts(activePersona);
+  const badgeCounts: Record<string, number | undefined> = { inbox: counts.mine, approvals: counts.approvals || undefined, sales_orders: counts.orders || undefined, supply_requests: counts.supplyReqs || undefined, payment_requests: counts.payRequests || undefined, visit_plans: counts.visitPlans || undefined };
+
+  const renderContent = (compact: boolean, mobile = false) => (
+    <aside className="flex flex-col h-full bg-slate-900 text-slate-200">
+      <div className="sidebar-brand px-3 border-b border-slate-800 flex items-center gap-2 shrink-0">
+        <div className="w-9 h-9 shrink-0 rounded-lg bg-primary-700 flex items-center justify-center text-white font-black" aria-hidden="true">ج</div>
+        {!compact && <div className="min-w-0 flex-1"><p className="sidebar-brand-name text-sm font-bold text-white">سامانه عملیات جوادیان</p><p className="text-caption text-slate-300">عملیات و زنجیره تأمین</p></div>}
+        {mobile ? <button type="button" onClick={onCloseMobile} aria-label="بستن منو" className="shrink-0 rounded-lg text-white inline-flex items-center justify-center"><X className="w-5 h-5" /></button> : !compact && <button type="button" onClick={onToggleCollapse} title="جمع کردن منو" aria-label="جمع کردن منو" className="shrink-0 rounded-lg text-slate-300 hover:text-white inline-flex items-center justify-center"><PanelRightClose className="w-5 h-5" /></button>}
+      </div>
+      {compact && <button type="button" onClick={onToggleCollapse} title="باز کردن منو" aria-label="باز کردن منو" className="mx-auto rounded-lg text-slate-300 inline-flex items-center justify-center"><PanelRightOpen className="w-5 h-5" /></button>}
+      <nav aria-label="بخش‌های سامانه" className="sidebar-navigation flex-1 overflow-y-auto px-2 py-3 space-y-1">
+        {NAV_ITEMS.filter(group => hasAccess(group.requiredCapabilities) && group.subItems?.some(sub => hasAccess(sub.requiredCapabilities))).map(group => {
+          const subs = group.subItems?.filter(sub => hasAccess(sub.requiredCapabilities)) || [];
+          const single = subs.length === 1;
+          const open = openGroups[group.id] ?? false;
+          const active = subs.some(sub => sub.routeKey === currentRoute);
+          const Icon = icons[group.iconName as keyof typeof icons] || Boxes;
+          return <div key={group.id}>
+            <button type="button" title={group.title} aria-label={group.title} aria-expanded={!single || group.id === 'home' ? open && !compact : undefined}
+              onClick={() => {
+                if (single && group.id !== 'home') { onNavigate(subs[0].routeKey); onCloseMobile?.(); }
+                else { if (compact) onToggleCollapse(); setOpenGroups(previous => ({ ...previous, [group.id]: compact || !open })); }
+              }}
+              className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-sm ${single && active ? 'bg-primary-700 text-white' : 'text-slate-200 hover:bg-slate-800'}`}>
+              <span className="flex items-center gap-2 min-w-0"><Icon className="shrink-0" />{!compact && <span>{group.title}</span>}</span>
+              {!compact && (!single || group.id === 'home') && <ChevronDown className={`shrink-0 ${open ? 'rotate-180' : ''}`} />}
+            </button>
+            {!compact && open && (!single || group.id === 'home') && <div className="mr-3 pr-2 border-r border-slate-700 py-1 space-y-1">
+              {subs.map(sub => <button key={sub.id} type="button" aria-current={currentRoute === sub.routeKey ? 'page' : undefined}
+                onClick={() => { onNavigate(sub.routeKey); onCloseMobile?.(); }}
+                className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg text-sm ${currentRoute === sub.routeKey ? 'bg-primary-700 text-white font-bold' : 'text-slate-300 hover:bg-slate-800 hover:text-white'}`}>
+                <span>{sub.title}</span>{badgeCounts[sub.routeKey] !== undefined && <span className="text-caption rounded-full bg-slate-800 text-white px-2 shrink-0">{toPersianDigits(badgeCounts[sub.routeKey]!)}</span>}
+              </button>)}
+            </div>}
+          </div>;
+        })}
+      </nav>
+      {!compact && <div className="p-3 border-t border-slate-800 text-caption text-slate-300 safe-bottom">
+        {!isStandalone && <button type="button" onClick={() => { onCloseMobile?.(); setShowInstallGuide(true); }} className="w-full flex items-center gap-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white p-3 mb-3"><Download className="w-5 h-5" />نصب نسخه اپلیکیشن</button>}
+        <p>{activePersona.department}</p><p className="font-bold">{activePersona.jobTitle}</p><p className="mt-1">{isStandalone ? 'نسخه نصب‌شده' : 'نسخه وب'}</p>
+      </div>}
+    </aside>
+  );
+  return <>
+    <div className="desktop-sidebar hidden lg:block shrink-0" data-collapsed={isCollapsed}>
+      <div className="sidebar-panel fixed top-0 bottom-0 right-0 z-30">{renderContent(isCollapsed)}</div>
+    </div>
+    <DialogSurface isOpen={!!isMobileOpen} onClose={() => onCloseMobile?.()} title="بخش‌های سامانه" className="drawer-surface lg:hidden">
+      <div className="h-dvh w-full max-w-sm safe-top safe-bottom bg-slate-900">{renderContent(false, true)}</div>
+    </DialogSurface>
+  </>;
+};

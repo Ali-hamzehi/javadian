@@ -1,0 +1,57 @@
+# Caddyfile for Javadian Operations PWA
+# Automatic HTTPS via Let's Encrypt / ZeroSSL when DOMAIN is provided.
+# Defaults to :80 (HTTP) when running on bare IP without a domain.
+
+{$DOMAIN::80} {
+    # Application root directory
+    root * /usr/share/caddy
+
+    # Compression (zstd & gzip)
+    encode zstd gzip
+
+    # Security Headers
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options SAMEORIGIN
+        Referrer-Policy strict-origin-when-cross-origin
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        -Server
+    }
+
+    # PWA Core Files (Never cache stale service workers or manifests)
+    @pwa_no_cache {
+        path /service-worker*.js
+        path /manifest*.json
+        path /manifest*.webmanifest
+        path /index.html
+        path /offline.html
+    }
+    header @pwa_no_cache {
+        Cache-Control "no-cache, no-store, must-revalidate"
+        Pragma "no-cache"
+        Expires "0"
+    }
+
+    # Fingerprinted static assets and fonts (Immutably cached for 1 year)
+    @immutable_assets {
+        path /assets/*
+        path /fonts/*
+        path /icons/*
+    }
+    header @immutable_assets {
+        Cache-Control "public, max-age=31536000, immutable"
+    }
+
+    # Correct MIME types for WebAssembly, JSON, Manifests, Fonts, and Workers
+    @js_workers path /service-worker*.js
+    header @js_workers Content-Type "application/javascript; charset=utf-8"
+
+    @manifest_json path /manifest*.json /manifest*.webmanifest
+    header @manifest_json Content-Type "application/manifest+json; charset=utf-8"
+
+    # SPA Routing: Fall back to index.html for client-side routing
+    try_files {path} /index.html
+
+    # Serve static files
+    file_server
+}
