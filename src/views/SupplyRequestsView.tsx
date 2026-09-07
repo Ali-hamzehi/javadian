@@ -33,6 +33,7 @@ import { Button } from '../components/design-system/Button';
 import { Drawer, ModalDialog } from '../components/design-system/ModalAndDrawer';
 import { useToast } from '../components/design-system/ToastContext';
 import { toPersianDigits, formatRials } from '../utils/formatters';
+import { getPersonaDisplayName } from '../runtime/documentBasedPersonas';
 
 export interface SupportedProductUnit {
   unit: string;
@@ -2639,7 +2640,7 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-1 text-slate-600">
                 <div>
                   <span className="text-slate-500 block text-caption">۱. ثبت‌کننده (کاربر جاری):</span>
-                  <strong className="text-slate-900">{activePersona.name}</strong> ({activePersona.jobTitle})
+                  <strong className="text-slate-900">{getPersonaDisplayName(activePersona)}</strong>
                 </div>
                 <div>
                   <span className="text-slate-500 block text-caption">۲. صاحب کار پاسخ‌گو (Owner):</span>

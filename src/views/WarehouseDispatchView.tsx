@@ -7,7 +7,7 @@ import {
   MockPersona,
 } from '../types';
 import { mockSalesWarehouseStore } from '../runtime/workflow';
-import { getDisplayPersonaName } from '../runtime/documentBasedPersonas';
+import { getDisplayPersonaName, getPersonaDisplayName } from '../runtime/documentBasedPersonas';
 import { Button } from '../components/design-system/Button';
 import { Drawer } from '../components/design-system/ModalAndDrawer';
 import { useToast } from '../components/design-system/ToastContext';
@@ -153,7 +153,7 @@ export const WarehouseDispatchView: React.FC<WarehouseDispatchViewProps> = ({
       selectedExit.id,
       roleKey,
       activePersona,
-      `امضا و تأیید دیجیتال توسط ${activePersona.name} (${activePersona.jobTitle})`
+      `امضا و تأیید دیجیتال توسط ${getPersonaDisplayName(activePersona)}`
     );
 
     if (success) {
@@ -752,12 +752,12 @@ export const WarehouseDispatchView: React.FC<WarehouseDispatchViewProps> = ({
                   {
                     roleKey: 'sales_responsible' as const,
                     roleLabel: 'مسئول فروش',
-                    defaultName: getDisplayPersonaName(selectedExit.salesResponsible?.name) || 'کارشناس فروش — نقش نمونه',
+                    defaultName: getDisplayPersonaName(selectedExit.salesResponsible?.name) || 'کارشناس فروش',
                   },
                   {
                     roleKey: 'management' as const,
                     roleLabel: 'مدیریت بازرگانی',
-                    defaultName: 'تأییدکننده بازرگانی — نقش نمونه',
+                    defaultName: 'تأییدکننده بازرگانی',
                   },
                   {
                     roleKey: 'ceo' as const,
@@ -808,7 +808,7 @@ export const WarehouseDispatchView: React.FC<WarehouseDispatchViewProps> = ({
                           onClick={() => handleSign(slot.roleKey)}
                           className="w-full text-caption"
                         >
-                          ثبت امضا به عنوان {activePersona.name}
+                          ثبت امضا به عنوان {getPersonaDisplayName(activePersona)}
                         </Button>
                       )}
                     </div>

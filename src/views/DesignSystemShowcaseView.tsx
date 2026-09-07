@@ -485,7 +485,7 @@ export const DesignSystemShowcaseView: React.FC = () => {
           <ConflictState
             currentValue="تأیید با تخفیف ۵ درصدی و موعد پرداخت ۴۵ روزه"
             serverValue="تأیید مشروط به تسویه نقدی کامل توسط تأییدکننده مالی"
-            modifiedBy="تأییدکننده مالی — نقش نمونه"
+            modifiedBy="تأییدکننده مالی"
             onResolve={(action) =>
               addToast(
                 action === 'overwrite' ? 'تغییرات شما بازنویسی شد' : 'داده‌های سرور همگام‌سازی شد',

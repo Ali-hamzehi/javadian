@@ -353,7 +353,11 @@ export const WorkItemDetailDrawer: React.FC<WorkItemDetailDrawerProps> = ({
               <div className="flex items-center gap-2">
                 <span className="text-slate-500">مسئول فعلی:</span>
                 <span className="font-bold text-primary-800 bg-primary-100/70 px-2 py-0.5 rounded">
-                  {getDisplayPersonaName(currentAssignee)}{currentAssignee.role ? ` (${getDisplayPersonaRole(currentAssignee)})` : ''}
+                  {(() => {
+                    const pName = getDisplayPersonaName(currentAssignee);
+                    const pRole = getDisplayPersonaRole(currentAssignee);
+                    return pRole && pRole !== pName ? `${pName} (${pRole})` : pName;
+                  })()}
                 </span>
                 <span className="text-caption text-slate-600 font-medium">از {currentAssignee.heldSinceJalali || 'هم‌اکنون'}</span>
               </div>

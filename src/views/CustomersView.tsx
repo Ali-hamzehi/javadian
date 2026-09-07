@@ -12,6 +12,7 @@ import {
 } from '../types';
 import { mockSalesWarehouseStore } from '../runtime/workflow';
 import { formatRials } from '../utils/formatters';
+import { getPersonaDisplayName, stripRoleSampleSuffix } from '../runtime/documentBasedPersonas';
 
 interface CustomersViewProps {
   activePersona: MockPersona;
@@ -71,7 +72,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
   const [newCustAddress, setNewCustAddress] = useState('');
   const [newCustPostalCode, setNewCustPostalCode] = useState('');
   const [newCustCreditLimit, setNewCustCreditLimit] = useState(10000000000); // 10B Rials
-  const [newCustSalespersonName, setNewCustSalespersonName] = useState(activePersona.name);
+  const [newCustSalespersonName, setNewCustSalespersonName] = useState(getPersonaDisplayName(activePersona));
 
   // Dynamic duplicate check warning during typing in New Customer modal
   const duplicateCheckResult = useMemo(() => {
@@ -191,7 +192,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
       assignedSalesperson: {
         id: activePersona.id,
         name: newCustSalespersonName,
-        role: activePersona.jobTitle,
+        role: stripRoleSampleSuffix(activePersona.jobTitle),
         department: activePersona.department,
       },
       locations: [
@@ -232,8 +233,8 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
       summary: intSummary.trim() || intTitle.trim(),
       dateJalali: '۱۴۰۴/۰۶/۱۲',
       time: 'هم‌اکنون',
-      actorName: activePersona.name,
-      actorRole: activePersona.jobTitle,
+      actorName: getPersonaDisplayName(activePersona),
+      actorRole: stripRoleSampleSuffix(activePersona.jobTitle),
       amountRials: intAmount,
       referenceCode: intRefCode.trim() || undefined,
       statusBadge:
@@ -299,8 +300,8 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
     const salespersonsMap: Record<string, Person> = {
       'p-sales': {
         id: 'p-sales',
-        name: 'کارشناس فروش — نقش نمونه',
-        role: 'کارشناس فروش — نقش نمونه',
+        name: 'کارشناس فروش',
+        role: 'کارشناس فروش',
         department: 'فروش و بازرگانی',
       },
       'p-field-sales': {
@@ -311,8 +312,8 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
       },
       'p-comm-approver': {
         id: 'p-comm-approver',
-        name: 'تأییدکننده بازرگانی — نقش نمونه',
-        role: 'تأییدکننده بازرگانی — نقش نمونه',
+        name: 'تأییدکننده بازرگانی',
+        role: 'تأییدکننده بازرگانی',
         department: 'مدیریت بازرگانی',
       },
     };
@@ -323,7 +324,7 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
       activeCustomer.id,
       targetPerson,
       reassignReason.trim(),
-      activePersona.name
+      getPersonaDisplayName(activePersona)
     );
 
     onShowToast(
@@ -1862,9 +1863,9 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
                   onChange={(e) => setNewSalespersonId(e.target.value)}
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                 >
-                  <option value="p-sales">کارشناس فروش — نقش نمونه</option>
+                  <option value="p-sales">کارشناس فروش</option>
                   <option value="p-field-sales">آقای نادری (مسئول فروش مویرگی استان قم)</option>
-                  <option value="p-comm-approver">تأییدکننده بازرگانی — نقش نمونه</option>
+                  <option value="p-comm-approver">تأییدکننده بازرگانی</option>
                 </select>
               </FieldGroup>
 

@@ -1183,7 +1183,6 @@ export function validatePaymentCreationScope(
   };
 }
 
-
 /**
  * Dynamically resolves the payment request scope and permissions strictly matching
  * documented reality for the 12 demo personas.
@@ -1438,29 +1437,29 @@ export function cleanPersonNameString(rawName: string): string {
   let result = rawName;
 
   const replacements: [RegExp, string][] = [
-    [/مهندس آرش نیازی/g, 'مدیر سیستم — نقش نمونه'],
-    [/آرش نیازی/g, 'مدیر سیستم — نقش نمونه'],
+    [/مهندس آرش نیازی/g, 'مدیر سیستم'],
+    [/آرش نیازی/g, 'مدیر سیستم'],
     [/کامران داوودی/g, 'آرش'],
     [/محسن راد/g, 'آقای یوسفی'],
     [/مهندس حامد اسدی/g, 'آقای منتظری'],
     [/حامد اسدی/g, 'آقای منتظری'],
     [/سینا کریمی/g, 'آقای نادری'],
-    [/پروانه صالحی/g, 'کارشناس مالی — نقش نمونه'],
-    [/دکتر فرزاد شریفی/g, 'تأییدکننده مالی — نقش نمونه'],
-    [/فرزاد شریفی/g, 'تأییدکننده مالی — نقش نمونه'],
-    [/سعید محمدی/g, 'مجری خزانه‌داری — نقش نمونه'],
-    [/علیرضا تهرانی/g, 'کارشناس فروش — نقش نمونه'],
-    [/سهراب جوادیان/g, 'تأییدکننده بازرگانی — نقش نمونه'],
-    [/رضا میرزایی/g, 'مسئول انبار — نقش نمونه'],
-    [/مهندس نیما شایان/g, 'مسئول اطلاعات پایه — نقش نمونه'],
-    [/نیما شایان/g, 'مسئول اطلاعات پایه — نقش نمونه'],
+    [/پروانه صالحی/g, 'کارشناس مالی'],
+    [/دکتر فرزاد شریفی/g, 'تأییدکننده مالی'],
+    [/فرزاد شریفی/g, 'تأییدکننده مالی'],
+    [/سعید محمدی/g, 'مجری خزانه‌داری'],
+    [/علیرضا تهرانی/g, 'کارشناس فروش'],
+    [/سهراب جوادیان/g, 'تأییدکننده بازرگانی'],
+    [/رضا میرزایی/g, 'مسئول انبار'],
+    [/مهندس نیما شایان/g, 'مسئول اطلاعات پایه'],
+    [/نیما شایان/g, 'مسئول اطلاعات پایه'],
   ];
 
   for (const [regex, replacement] of replacements) {
     result = result.replace(regex, replacement);
   }
 
-  return result;
+  return stripRoleSampleSuffix(result);
 }
 
 /**
@@ -1472,7 +1471,7 @@ export function getDisplayPersonaRole(
   if (!personOrRole) return '';
   if (typeof personOrRole === 'object' && personOrRole.id) {
     const docPersona = getDocumentBasedPersonaById(personOrRole.id);
-    if (docPersona) return docPersona.jobTitle;
+    if (docPersona) return stripRoleSampleSuffix(docPersona.jobTitle);
   }
 
   const rawRole =
@@ -1486,22 +1485,22 @@ export function getDisplayPersonaRole(
     [/سرپرست لجستیک و انبارداری/g, 'مسئول لجستیک و هماهنگی خرید'],
     [/سرپرست لجستیک/g, 'مسئول لجستیک و هماهنگی خرید'],
     [/معاون عملیات و انبار/g, 'مدیرعامل'],
-    [/معاونت بازرگانی و فروش/g, 'تأییدکننده بازرگانی — نقش نمونه'],
-    [/معاونت بازرگانی/g, 'تأییدکننده بازرگانی — نقش نمونه'],
-    [/مدیر ارشد مالی/g, 'تأییدکننده مالی — نقش نمونه'],
-    [/مدیر مالی/g, 'تأییدکننده مالی — نقش نمونه'],
+    [/معاونت بازرگانی و فروش/g, 'تأییدکننده بازرگانی'],
+    [/معاونت بازرگانی/g, 'تأییدکننده بازرگانی'],
+    [/مدیر ارشد مالی/g, 'تأییدکننده مالی'],
+    [/مدیر مالی/g, 'تأییدکننده مالی'],
     [/کارشناس عملیات میدانی و فروش/g, 'مسئول فروش مویرگی استان قم'],
     [/سرپرست تأمین و زنجیره لجستیک/g, 'جانشین عملیاتی و رابط تأمین'],
-    [/کاربر آزمایشی محدود/g, 'کارآموز مهمان — نقش نمونه'],
-    [/کاربر سیستم/g, 'کارآموز مهمان — نقش نمونه'],
-    [/مدیر ارشد سیستم/g, 'مدیر سیستم — نقش نمونه'],
+    [/کاربر آزمایشی محدود/g, 'کارآموز مهمان'],
+    [/کاربر سیستم/g, 'کارآموز مهمان'],
+    [/مدیر ارشد سیستم/g, 'مدیر سیستم'],
   ];
 
   let result = rawRole;
   for (const [regex, replacement] of roleReplacements) {
     result = result.replace(regex, replacement);
   }
-  return result;
+  return stripRoleSampleSuffix(result);
 }
 
 /**

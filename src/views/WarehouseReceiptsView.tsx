@@ -35,6 +35,8 @@ import {
   validateWarehouseReceiptAction,
   adaptPersona,
   getDisplayPersonaName,
+  getPersonaDisplayName,
+  stripRoleSampleSuffix,
 } from '../runtime/documentBasedPersonas';
 
 interface WarehouseReceiptsViewProps {
@@ -484,7 +486,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
         creator: {
           id: activePersona.id,
           name: receiptActionCheck.actorAuditName,
-          role: activePersona.jobTitle,
+          role: stripRoleSampleSuffix(activePersona.jobTitle),
           department: activePersona.department,
         },
         isDelegated: isFallbackScenario,
@@ -2043,7 +2045,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                         </span>
                       </div>
                       <div className="text-slate-700 font-medium text-caption">
-                        {activePersona.name} ({activePersona.jobTitle})
+                        {getPersonaDisplayName(activePersona)}
                       </div>
                       <div className="text-caption text-slate-500">
                         مسئولیت: ثبت اوزان باسکول، بارنامه جاده‌ای و تطبیق اولیه ورود بار

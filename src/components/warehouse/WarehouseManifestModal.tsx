@@ -276,7 +276,7 @@ export const WarehouseManifestModal: React.FC<WarehouseManifestModalProps> = ({
             <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg text-center space-y-1">
               <span className="font-bold text-caption block text-slate-700">۱. صادرکننده و فروش</span>
               <span className="text-caption text-slate-500 block">
-                {getDisplayPersonaName(exitRecord.salesResponsible?.name) || 'کارشناس فروش — نقش نمونه'}
+                {getDisplayPersonaName(exitRecord.salesResponsible?.name) || 'کارشناس فروش'}
               </span>
               <div className="h-10 flex items-center justify-center text-caption text-emerald-700 font-bold">
                 ✓ امضا و تأیید شد
@@ -298,7 +298,7 @@ export const WarehouseManifestModal: React.FC<WarehouseManifestModalProps> = ({
             <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg text-center space-y-1">
               <span className="font-bold text-caption block text-slate-700">۳. مدیریت بازرگانی</span>
               <span className="text-caption text-slate-500 block">
-                تأییدکننده بازرگانی — نقش نمونه
+                تأییدکننده بازرگانی
               </span>
               <div className="h-10 flex items-center justify-center text-caption text-emerald-700 font-bold">
                 ✓ مصوب بازرگانی

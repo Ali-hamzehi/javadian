@@ -19,6 +19,7 @@ import { TextInput, SelectInput, FormField, TextareaInput } from '../components/
 import { Drawer, ModalDialog } from '../components/design-system/ModalAndDrawer';
 import { useToast } from '../components/design-system/ToastContext';
 import { formatRials, toPersianDigits } from '../utils/formatters';
+import { getPersonaDisplayName } from '../runtime/documentBasedPersonas';
 
 export type ProductCatalogSubRoute = 'products' | 'product_categories' | 'product_units' | 'pricing';
 
@@ -174,7 +175,7 @@ export const ProductCatalogView: React.FC<ProductCatalogViewProps> = ({
         minPermittedPriceRials: Number(newProdMinPrice) || 0,
         validFrom: '۱۴۰۴/۰۶/۰۱',
         validTo: '۱۴۰۴/۱۲/۲۹',
-        createdBy: `${activePersona.name} (${activePersona.jobTitle})`,
+        createdBy: getPersonaDisplayName(activePersona),
         createdAt: '۱۴۰۴/۰۶/۱۲',
         isActive: true,
       },
@@ -183,7 +184,7 @@ export const ProductCatalogView: React.FC<ProductCatalogViewProps> = ({
         {
           dateJalali: '۱۴۰۴/۰۶/۱۲',
           priceRials: Number(newProdRefPrice) || 0,
-          changedBy: activePersona.name,
+          changedBy: getPersonaDisplayName(activePersona),
           reason: 'ثبت اولیه کالا در کاتالوگ سامانه',
         },
       ],
@@ -264,7 +265,7 @@ export const ProductCatalogView: React.FC<ProductCatalogViewProps> = ({
       minPermittedPriceRials: newMinPriceInput,
       validFrom: effectiveStartDate || '۱۴۰۴/۰۹/۲۰',
       validTo: effectiveEndDate || '۱۴۰۴/۱۲/۲۹',
-      createdBy: `${activePersona.name} (${activePersona.jobTitle})`,
+      createdBy: getPersonaDisplayName(activePersona),
       createdAt: '۱۴۰۴/۰۹/۱۵',
       isActive: true,
     };
@@ -272,7 +273,7 @@ export const ProductCatalogView: React.FC<ProductCatalogViewProps> = ({
     const newHistoryItem = {
       dateJalali: effectiveStartDate || '۱۴۰۴/۰۹/۲۰',
       priceRials: newRefPriceInput,
-      changedBy: activePersona.name,
+      changedBy: getPersonaDisplayName(activePersona),
       reason: priceChangeReason || (isFutureRate ? 'تصویب نرخ آتی با موعد اجرا' : 'تعدیل نرخ روزانه مصوب کاتالوگ'),
     };
 

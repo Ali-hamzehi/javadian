@@ -144,7 +144,8 @@ export const RoleSelectorModal: React.FC<RoleSelectorModalProps> = ({
                     <div className="flex items-start gap-2.5 mb-2">
                       <Avatar
                         src={persona.avatar}
-                        alt={cleanName}
+                        alt=""
+                        aria-hidden="true"
                         className="w-10 h-10 rounded-full object-cover shrink-0 ring-1 ring-slate-200 mt-0.5"
                       />
                       <div className="min-w-0 flex-1">
@@ -183,6 +184,7 @@ export const RoleSelectorModal: React.FC<RoleSelectorModalProps> = ({
                       variant={isCurrent ? 'outline' : 'primary'}
                       size="sm"
                       onClick={() => onSelect(adaptPersona(persona))}
+                      aria-label={`انتخاب نقش ${cleanName} — ${isDocumented ? 'نقش سازمانی' : 'نقش نمونه'}`}
                       className="text-caption h-8 px-3.5 font-bold cursor-pointer"
                     >
                       <span>{isCurrent ? 'فعال' : 'انتخاب'}</span>

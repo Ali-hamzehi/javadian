@@ -43,6 +43,7 @@ interface TopBarProps {
   onSignOut?: () => void;
   pageTitle: string;
   breadcrumbs: string[];
+  initialPersonaMenuOpen?: boolean;
 }
 
 const CATEGORY_ICONS: Record<PersonaCategory, React.ComponentType<{ className?: string }>> = {
@@ -62,8 +63,9 @@ export const TopBar: React.FC<TopBarProps> = ({
   onSignOut,
   pageTitle = 'سامانه عملیات جوادیان',
   breadcrumbs = [],
+  initialPersonaMenuOpen = false,
 }) => {
-  const [isPersonaMenuOpen, setIsPersonaMenuOpen] = useState(false);
+  const [isPersonaMenuOpen, setIsPersonaMenuOpen] = useState(initialPersonaMenuOpen);
   const [isResponsibilityMenuOpen, setIsResponsibilityMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
@@ -301,6 +303,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                                 onSelectPersona(persona);
                                 setIsPersonaMenuOpen(false);
                               }}
+                              aria-label={`انتخاب نقش ${getPersonaDisplayName(persona)} — ${getPersonaTypeLabel(persona)}`}
                               className={`w-full p-2 rounded-lg text-right text-xs transition-colors flex items-start gap-2.5 cursor-pointer ${
                                 isSelected
                                   ? 'bg-primary-50 border border-primary-300 text-primary-950 font-bold'
@@ -309,7 +312,8 @@ export const TopBar: React.FC<TopBarProps> = ({
                             >
                               <Avatar
                                 src={persona.avatar}
-                                alt={getPersonaDisplayName(persona)}
+                                alt=""
+                                aria-hidden="true"
                                 className="w-7 h-7 rounded-full object-cover shrink-0 ring-1 ring-slate-200 mt-0.5"
                                 referrerPolicy="no-referrer"
                               />
@@ -356,7 +360,8 @@ export const TopBar: React.FC<TopBarProps> = ({
           >
             <Avatar
               src={activePersona.avatar}
-              alt={getPersonaDisplayName(adaptedActive)}
+              alt=""
+              aria-hidden="true"
               className="w-8 h-8 rounded-full object-cover ring-2 ring-primary-600"
               referrerPolicy="no-referrer"
             />

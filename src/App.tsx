@@ -1,5 +1,5 @@
 import { useWorkflowRevision, initializeWorkflow } from './runtime/workflow';
-import { adaptPersona, getPersonaDisplayName, getPersonaSubtitle, getPersonaTypeLabel } from './runtime/documentBasedPersonas';
+import { adaptPersona, getPersonaDisplayName, getPersonaSubtitle, getPersonaTypeLabel, stripRoleSampleSuffix } from './runtime/documentBasedPersonas';
 import { ArrowRight } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { MOCK_PERSONAS, NAV_ITEMS } from './data/mockData';
@@ -196,7 +196,7 @@ function AppContent() {
       });
     } else {
       addToast(`به پست اصلی بازگشتید`, {
-        description: `${activePersona.jobTitle}`,
+        description: `${getPersonaSubtitle(activePersona) || stripRoleSampleSuffix(activePersona.jobTitle)}`,
         tone: 'info',
       });
     }
@@ -215,8 +215,8 @@ function AppContent() {
             setActivePersona(canonical);
             setSessionNotice(null);
             setCurrentRoute(getPersonaLandingRoute(canonical));
-            addToast(`خوش آمدید، ${canonical.name}`, {
-              description: `سمت سازمانی: ${canonical.jobTitle}`,
+            addToast(`خوش آمدید، ${getPersonaDisplayName(canonical)}`, {
+              description: `سمت سازمانی: ${getPersonaSubtitle(canonical) || stripRoleSampleSuffix(canonical.jobTitle)}`,
               tone: 'success',
             });
           }}

@@ -23,6 +23,7 @@ import { TextInput, SelectInput, FormField, TextareaInput } from '../design-syst
 import { Modal } from '../design-system/ModalAndDrawer';
 import { Badge, PriorityBadge } from '../design-system/Badges';
 import { toPersianDigits, formatRials } from '../../utils/formatters';
+import { getPersonaDisplayName, getPersonaSubtitle, stripRoleSampleSuffix } from '../../runtime/documentBasedPersonas';
 
 interface AssignTaskModalProps {
   isOpen: boolean;
@@ -316,8 +317,8 @@ export const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
       // Roles
       creator: {
         id: activePersona.id,
-        name: activePersona.name,
-        role: activePersona.jobTitle,
+        name: getPersonaDisplayName(activePersona),
+        role: stripRoleSampleSuffix(activePersona.jobTitle),
         department: activePersona.department,
         avatar: activePersona.avatar,
       },
@@ -401,8 +402,8 @@ export const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
           timestampJalali: 'هم‌اکنون',
           actor: {
             id: activePersona.id,
-            name: activePersona.name,
-            role: activePersona.jobTitle,
+            name: getPersonaDisplayName(activePersona),
+            role: stripRoleSampleSuffix(activePersona.jobTitle),
             department: activePersona.department,
             avatar: activePersona.avatar,
           },
@@ -420,8 +421,8 @@ export const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
           timestampJalali: 'هم‌اکنون',
           assignedBy: {
             id: activePersona.id,
-            name: activePersona.name,
-            role: activePersona.jobTitle,
+            name: getPersonaDisplayName(activePersona),
+            role: stripRoleSampleSuffix(activePersona.jobTitle),
             department: activePersona.department,
           },
           assignedTo: {
@@ -443,8 +444,8 @@ export const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
           toStatus: 'open',
           actor: {
             id: activePersona.id,
-            name: activePersona.name,
-            role: activePersona.jobTitle,
+            name: getPersonaDisplayName(activePersona),
+            role: stripRoleSampleSuffix(activePersona.jobTitle),
             department: activePersona.department,
           },
           reason: 'صدور و ابلاغ کار به مجری',
@@ -457,8 +458,8 @@ export const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
               id: `c-init-${Date.now()}`,
               author: {
                 id: activePersona.id,
-                name: activePersona.name,
-                role: activePersona.jobTitle,
+                name: getPersonaDisplayName(activePersona),
+                role: stripRoleSampleSuffix(activePersona.jobTitle),
                 department: activePersona.department,
                 avatar: activePersona.avatar,
               },
@@ -508,7 +509,7 @@ export const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
             <div className="space-y-1">
               <h3 className="text-base font-bold text-slate-900">عدم دسترسی: ایجاد کار جدید مجاز نیست</h3>
               <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
-                کاربر جاری ({activePersona.name} — {activePersona.jobTitle}) دارای اختیار سیستمی ایجاد کار در سطح سازمان نیست. تعریف وظیفه نیازمند داشتن دسترسی «ایجاد کار» (WORK_CREATE) یا تفویض جانشینی مصوب است.
+                کاربر جاری ({getPersonaDisplayName(activePersona)}) دارای اختیار سیستمی ایجاد کار در سطح سازمان نیست. تعریف وظیفه نیازمند داشتن دسترسی «ایجاد کار» (WORK_CREATE) یا تفویض جانشینی مصوب است.
               </p>
             </div>
             <div className="pt-2">
@@ -781,8 +782,8 @@ export const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
                 <div className="p-3 bg-white rounded-lg border border-slate-200 flex items-center justify-between">
                   <div className="space-y-0.5">
                     <div className="text-caption text-slate-700 font-medium">ایجادکننده اولیه (شما):</div>
-                    <div className="font-bold text-slate-900">{activePersona.name}</div>
-                    <div className="text-slate-700 text-caption">{activePersona.jobTitle} — {activePersona.department}</div>
+                    <div className="font-bold text-slate-900">{getPersonaDisplayName(activePersona)}</div>
+                    <div className="text-slate-700 text-caption">{getPersonaSubtitle(activePersona) || stripRoleSampleSuffix(activePersona.jobTitle)} — {activePersona.department}</div>
                   </div>
                   <Badge variant="neutral">ثبت‌کننده (سیستمی)</Badge>
                 </div>

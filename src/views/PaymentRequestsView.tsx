@@ -34,6 +34,8 @@ import {
   validatePaymentCreationScope,
   getDisplayPersonaName,
   adaptPersona,
+  getPersonaDisplayName,
+  stripRoleSampleSuffix,
 } from '../runtime/documentBasedPersonas';
 import { Button } from '../components/design-system/Button';
 import { Drawer, ModalDialog } from '../components/design-system/ModalAndDrawer';
@@ -315,9 +317,9 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
     const auditEntry = {
       id: `aud-${Date.now()}`,
       timestampJalali: '۱۴۰۴/۰۶/۱۲ - ساعت ۱۲:۴۵',
-      actorName: activePersona.name,
+      actorName: getPersonaDisplayName(activePersona),
       action: 'افشای اطلاعات مالی و بانکی',
-      details: `کاربر ${activePersona.name} (${activePersona.jobTitle}) با موافقت امنیتی، شماره شبا و حساب کامل را مشاهده کرد.`,
+      details: `کاربر ${getPersonaDisplayName(activePersona)} با موافقت امنیتی، شماره شبا و حساب کامل را مشاهده کرد.`,
     };
 
     const updated = payments.map((p) =>
@@ -378,15 +380,15 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
     const auditEntry = {
       id: `aud-appr-${Date.now()}`,
       timestampJalali: '۱۴۰۴/۰۶/۱۲ - ساعت ۱۳:۰۰',
-      actorName: activePersona.name,
+      actorName: getPersonaDisplayName(activePersona),
       action: 'تأیید درخواست پرداخت',
-      details: `درخواست به مبلغ ${formatRials(selectedRecord.amountRials)} توسط ${activePersona.name} (${activePersona.jobTitle}) تأیید و آماده تخصیص خزانه‌داری شد.`,
+      details: `درخواست به مبلغ ${formatRials(selectedRecord.amountRials)} توسط ${getPersonaDisplayName(activePersona)} تأیید و آماده تخصیص خزانه‌داری شد.`,
     };
 
     const updatedRecord: PaymentRequestRecord = {
       ...selectedRecord,
       status: 'approved',
-      statusNote: `تأیید شد توسط ${activePersona.name}؛ ارسال به صف پرداخت خزانه‌داری`,
+      statusNote: `تأیید شد توسط ${getPersonaDisplayName(activePersona)}؛ ارسال به صف پرداخت خزانه‌داری`,
       auditLogs: [...selectedRecord.auditLogs, auditEntry],
     };
 
@@ -471,8 +473,8 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
     const executionData = {
       executor: {
         id: activePersona.id,
-        name: activePersona.name,
-        role: activePersona.jobTitle,
+        name: getPersonaDisplayName(activePersona),
+        role: stripRoleSampleSuffix(activePersona.jobTitle),
         department: activePersona.department,
       },
       executedAtJalali: executionDateJalali || '۱۴۰۴/۰۶/۱۲',
@@ -762,8 +764,8 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
           timestampJalali: 'هم‌اکنون',
           actor: {
             id: activePersona.id,
-            name: activePersona.name,
-            role: activePersona.jobTitle,
+            name: getPersonaDisplayName(activePersona),
+            role: stripRoleSampleSuffix(activePersona.jobTitle),
             department: activePersona.department,
           },
           title: 'ثبت و ارسال درخواست پرداخت به حسابداری',
@@ -846,7 +848,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
       <div className="p-3 bg-primary-50/70 border border-primary-200 rounded-xl flex flex-wrap items-center justify-between gap-2 text-xs">
         <div className="flex items-center gap-2 text-primary-950">
           <Shield className="w-4 h-4 text-primary-700 shrink-0" />
-          <span>حوزه اختیارات کاربر جاری ({activePersona.name} - {activePersona.jobTitle}):</span>
+          <span>حوزه اختیارات کاربر جاری ({getPersonaDisplayName(activePersona)}):</span>
           <strong className="bg-white px-2 py-0.5 rounded border border-primary-300 font-bold text-primary-800">
             {userScope.scopeBadgeText}
           </strong>
@@ -1346,7 +1348,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
                       ثبت‌کننده نمی‌تواند درخواست خودش را تأیید کند:
                     </span>
                     <p className="text-caption leading-relaxed">
-                      شما متقاضی این دستور پرداخت هستید ({activePersona.name}). طبق ضوابط سازمانی، امکان تأیید یا تسویه پرداخت توسط ثبت‌کننده وجود ندارد و سند باید توسط مقام مستقل بررسی شود.
+                      شما متقاضی این دستور پرداخت هستید ({getPersonaDisplayName(activePersona)}). طبق ضوابط سازمانی، امکان تأیید یا تسویه پرداخت توسط ثبت‌کننده وجود ندارد و سند باید توسط مقام مستقل بررسی شود.
                     </p>
                   </div>
                 </div>
@@ -1780,7 +1782,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
               <div className="space-y-1">
                 <span className="font-bold block">اخطار ثبت در دفتر وقایع امنیتی (Audit Warning)</span>
                 <p className="text-caption leading-relaxed">
-                  مشاهده یا رونوشت شماره شبا، شماره حساب یا کارت بانکی ذینفع در دفتر ثبت رویدادهای امنیتی با شناسه کاربری «{activePersona.name}»، آدرس شبکه و برچسب زمانی دقیق ثبت و ضبط می‌گردد.
+                  مشاهده یا رونوشت شماره شبا، شماره حساب یا کارت بانکی ذینفع در دفتر ثبت رویدادهای امنیتی با شناسه کاربری «{getPersonaDisplayName(activePersona)}»، آدرس شبکه و برچسب زمانی دقیق ثبت و ضبط می‌گردد.
                 </p>
               </div>
             </div>
@@ -1883,7 +1885,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
             <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 text-caption text-slate-600 flex items-center justify-between">
               <span>کارشناس مجری پرداخت:</span>
               <strong className="text-slate-900 font-bold">
-                {activePersona.name} ({activePersona.jobTitle})
+                {getPersonaDisplayName(activePersona)}
               </strong>
             </div>
           </div>
@@ -1946,7 +1948,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
             <div className="p-3 bg-primary-50 border border-primary-200 rounded-lg flex items-center justify-between text-primary-950">
               <div className="flex items-center gap-2">
                 <Shield className="w-4 h-4 text-primary-700 shrink-0" />
-                <span>حوزه اختیارات ثبت‌کننده ({activePersona.name}):</span>
+                <span>حوزه اختیارات ثبت‌کننده ({getPersonaDisplayName(activePersona)}):</span>
                 <strong className="bg-white px-2 py-0.5 rounded border border-primary-300">
                   {userScope.scopeBadgeText}
                 </strong>

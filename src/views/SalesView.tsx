@@ -6,7 +6,7 @@ import { MockPersona, SalesOrderDetails, SalesOrderItem } from '../types';
 import { MOCK_SALES_ORDERS } from '../data/mockSalesData';
 import { MOCK_CUSTOMERS, MOCK_PRODUCTS } from '../data/mockMasterData';
 import { mockSalesWarehouseStore } from '../runtime/workflow';
-import { getDisplayPersonaName } from '../runtime/documentBasedPersonas';
+import { getDisplayPersonaName, getPersonaDisplayName } from '../runtime/documentBasedPersonas';
 import { getChannelDisplayName } from '../utils/channelMapper';
 import { Button } from '../components/design-system/Button';
 import { TextInput, SelectInput, FormField, TextareaInput } from '../components/design-system/FormControls';
@@ -30,6 +30,8 @@ interface SalesViewProps {
   selectedRecordId?: string;
   onNavigateToRoute?: (route: string) => void;
   onNavigateToInboxRecord?: (code: string) => void;
+  initialCreateModalOpen?: boolean;
+  initialStep?: 1 | 2 | 3 | 4;
 }
 
 type SavedView = 'all' | 'mine' | 'pending_approval' | 'urgent' | 'needs_action';
@@ -79,6 +81,8 @@ export const SalesView: React.FC<SalesViewProps> = ({
   selectedRecordId,
   onNavigateToRoute,
   onNavigateToInboxRecord,
+  initialCreateModalOpen,
+  initialStep,
 }) => {
   const { addToast } = useToast();
 
@@ -118,10 +122,10 @@ export const SalesView: React.FC<SalesViewProps> = ({
   const [rejectReason, setRejectReason] = useState('عدم توجیه اقتصادی نرخ و ریسک بالای سقف اعتباری مشتری');
 
   // New Order Form Modal & Step-Based Mobile Wizard
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(initialCreateModalOpen || false);
   // Sales-order creation: sales.create only
   const canCreateOrder = activePersona.capabilities.includes('sales.create');
-  const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(initialStep || 1);
 
   // Form State
   const initialCust = customers[0] || MOCK_CUSTOMERS[0];
@@ -132,7 +136,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
       ? initialCust.locations[0].address
       : 'تهران، انبار کارفرما'
   );
-  const [formSalesResponsible, setFormSalesResponsible] = useState('تأییدکننده بازرگانی — نقش نمونه');
+  const [formSalesResponsible, setFormSalesResponsible] = useState('تأییدکننده بازرگانی');
   const [formPaymentTerms, setFormPaymentTerms] = useState('۳۰٪ نقد + ۷۰٪ چک صیادی ۳۰ روزه');
   const [formDeliveryTerms, setFormDeliveryTerms] = useState('تحویل درب انبار مرکزی کهریزک با ناوگان خریدار');
   const [formItems, setFormItems] = useState<{
@@ -158,7 +162,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
         ? initialCustomer.locations[0].address
         : 'تهران، انبار کارفرما'
     );
-    setFormSalesResponsible('تأییدکننده بازرگانی — نقش نمونه');
+    setFormSalesResponsible('تأییدکننده بازرگانی');
     setFormPaymentTerms('۳۰٪ نقد + ۷۰٪ چک صیادی ۳۰ روزه');
     setFormDeliveryTerms('تحویل درب انبار مرکزی کهریزک با ناوگان خریدار');
     const firstProduct = MOCK_PRODUCTS[0];
@@ -283,7 +287,10 @@ export const SalesView: React.FC<SalesViewProps> = ({
       customerId: selectedCust.id,
       channel: formChannel,
       creatorPersona: activePersona,
-      salesResponsibleId: formSalesResponsible.includes('سهراب') ? 'p-comm-approver' : 'p-sales',
+      salesResponsibleId:
+        formSalesResponsible.includes('سهراب') || formSalesResponsible.includes('تأییدکننده')
+          ? 'p-comm-approver'
+          : 'p-sales',
       salesResponsibleName: formSalesResponsible,
       deliveryAddress: formDeliveryAddress,
       paymentTerms: formPaymentTerms,
@@ -963,7 +970,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
                   <div className="p-3 bg-white rounded-lg border border-primary-100 space-y-1">
                     <span className="text-slate-500 text-caption block">مقام مستقل تأییدکننده (Approver):</span>
-                    <span className="font-bold text-slate-900">{getDisplayPersonaName(selectedOrder.currentApproverName) || 'تأییدکننده بازرگانی — نقش نمونه'}</span>
+                    <span className="font-bold text-slate-900">{getDisplayPersonaName(selectedOrder.currentApproverName) || 'تأییدکننده بازرگانی'}</span>
                     <span className="text-primary-700 text-caption block font-medium">مسئولیت بازرگانی، فروش و خط‌مشی قیمت‌گذاری</span>
                   </div>
 
@@ -1598,8 +1605,8 @@ export const SalesView: React.FC<SalesViewProps> = ({
                     value={formSalesResponsible}
                     onChange={(e) => setFormSalesResponsible(e.target.value)}
                     options={[
-                      { label: 'تأییدکننده بازرگانی — نقش نمونه', value: 'تأییدکننده بازرگانی — نقش نمونه' },
-                      { label: 'کارشناس فروش — نقش نمونه', value: 'کارشناس فروش — نقش نمونه' },
+                      { label: 'تأییدکننده بازرگانی', value: 'تأییدکننده بازرگانی' },
+                      { label: 'کارشناس فروش', value: 'کارشناس فروش' },
                       { label: 'آقای نادری (مسئول فروش مویرگی استان قم)', value: 'آقای نادری' },
                     ]}
                   />
@@ -1611,7 +1618,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                 <span className="text-slate-600 flex items-center gap-2">
                   <User className="w-3.5 h-3.5 text-primary-700" />
                   <span>ثبت‌کننده سفارش (کاربر فعلی سیستم):</span>
-                  <span className="font-bold text-primary-950">{activePersona.name} ({activePersona.jobTitle})</span>
+                  <span className="font-bold text-primary-950">{getPersonaDisplayName(activePersona)}</span>
                 </span>
                 <span className="text-caption text-primary-700 font-mono">تفکیک وظایف و منع خودتأییدی محفوظ است</span>
               </div>
@@ -1780,7 +1787,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                           </div>
                           <div>
                             <span className="text-amber-700 block">شرط تصویب:</span>
-                            <span className="font-bold text-amber-950">تأییدکننده بازرگانی — نقش نمونه</span>
+                            <span className="font-bold text-amber-950">تأییدکننده بازرگانی</span>
                           </div>
                         </div>
                       </div>
@@ -1845,7 +1852,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
               <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-xs space-y-1">
                 <span className="font-bold text-slate-800">تفکیک ثبت‌کننده از مسئول فروش:</span>
                 <p className="text-slate-500">
-                  ثبت‌کننده: «{activePersona.name}» (شما) • مسئول فروش: فردی که مسئولیت تحقق فروش و پاسخگویی تجاری را بر عهده دارد.
+                  ثبت‌کننده: «{getPersonaDisplayName(activePersona)}» (شما) • مسئول فروش: فردی که مسئولیت تحقق فروش و پاسخگویی تجاری را بر عهده دارد.
                 </p>
               </div>
 
@@ -1854,8 +1861,8 @@ export const SalesView: React.FC<SalesViewProps> = ({
                   value={formSalesResponsible}
                   onChange={(e) => setFormSalesResponsible(e.target.value)}
                   options={[
-                    { label: 'تأییدکننده بازرگانی — نقش نمونه', value: 'تأییدکننده بازرگانی — نقش نمونه' },
-                    { label: 'کارشناس فروش — نقش نمونه', value: 'کارشناس فروش — نقش نمونه' },
+                    { label: 'تأییدکننده بازرگانی', value: 'تأییدکننده بازرگانی' },
+                    { label: 'کارشناس فروش', value: 'کارشناس فروش' },
                     { label: 'آقای نادری (مسئول فروش مویرگی استان قم)', value: 'آقای نادری' },
                   ]}
                 />
@@ -1888,7 +1895,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                     <span>هشدار کنترل قیمت: سفارش نیازمند تأیید معاونت بازرگانی است</span>
                   </div>
                   <p className="text-xs text-rose-800 leading-relaxed">
-                    یک یا چند قلم دارای قیمت کمتر از کف مجاز هستند. این سفارش پس از ثبت با وضعیت <strong>«نیازمند تأیید قیمت»</strong> مشخص شده و تا پیش از تأیید <strong>تأییدکننده بازرگانی — نقش نمونه</strong>، امکان تأیید نهایی یا صدور خروج از انبار را ندارد.
+                    یک یا چند قلم دارای قیمت کمتر از کف مجاز هستند. این سفارش پس از ثبت با وضعیت <strong>«نیازمند تأیید قیمت»</strong> مشخص شده و تا پیش از تأیید <strong>تأییدکننده بازرگانی</strong>، امکان تأیید نهایی یا صدور خروج از انبار را ندارد.
                   </p>
 
                   <div className="pt-2 border-t border-rose-200">
@@ -1953,7 +1960,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
 
               {/* Self-Approval Reminder */}
               <div className="p-3 bg-slate-100 rounded-lg text-slate-600 text-caption leading-relaxed">
-                <strong>تأیید مستقل:</strong> ثبت‌کننده سفارش ({activePersona.name}) به دلیل اصل تفکیک وظایف، امکان تأیید نهایی این سفارش را نخواهد داشت.
+                <strong>تأیید مستقل:</strong> ثبت‌کننده سفارش ({getPersonaDisplayName(activePersona)}) به دلیل اصل تفکیک وظایف، امکان تأیید نهایی این سفارش را نخواهد داشت.
               </div>
             </div>
           )}

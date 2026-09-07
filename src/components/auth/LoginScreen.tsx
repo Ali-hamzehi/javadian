@@ -264,7 +264,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                         <div className="flex items-start gap-2.5 mb-2">
                           <Avatar
                             src={persona.avatar}
-                            alt={cleanName}
+                            alt=""
+                            aria-hidden="true"
                             className="w-10 h-10 rounded-full object-cover shrink-0 ring-1 ring-slate-200 mt-0.5"
                           />
                           <div className="min-w-0 flex-1">
@@ -326,7 +327,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                           variant="primary"
                           size="sm"
                           onClick={() => handleUserSelect(persona)}
-                          aria-label={`ورود با نقش ${cleanName}`}
+                          aria-label={`انتخاب نقش ${cleanName} — ${isDocumented ? 'نقش سازمانی' : 'نقش نمونه'}`}
                           className="text-caption h-8 px-3.5 font-bold cursor-pointer"
                         >
                           <span>ورود</span>
