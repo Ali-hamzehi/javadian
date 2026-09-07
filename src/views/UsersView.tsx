@@ -16,6 +16,7 @@ import { ModalDialog, Drawer } from '../components/design-system/ModalAndDrawer'
 import { useToast } from '../components/design-system/ToastContext';
 import { Forbidden403 } from '../components/design-system/SystemStates';
 import { Users, UserPlus, Search, Building2, Eye, EyeOff, RotateCcw, Send, Phone, Mail, AlertTriangle, CheckCircle2, ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import { toPersianDigits } from '../utils/formatters';
 
 interface UsersViewProps {
   activePersona: MockPersona;
@@ -219,8 +220,8 @@ export const UsersView: React.FC<UsersViewProps> = ({
               <Users className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-slate-800">کاربران و پرسنل سازمانی</h1>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <h1 className="page-title text-xl sm:text-2xl font-bold text-slate-800">کاربران و پرسنل سازمانی</h1>
+              <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
                 مدیریت اطلاعات هویتی، وضعیت حساب‌های کاربری و شناسنامه پرسنل شرکت جوادیان
               </p>
             </div>
@@ -245,10 +246,8 @@ export const UsersView: React.FC<UsersViewProps> = ({
       <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
         <Info className="w-5 h-5 text-amber-700 mt-0.5 shrink-0" />
         <div className="text-xs text-amber-900 leading-relaxed">
-          <span className="font-bold">اصل تفکیک معماری هویت و مجوز: </span>
-          انتساب واحد اداری و سمت سازمانی صرفاً مشخص‌کننده چارت پرسنلی است و تمامیت مدل دسترسی نمی‌باشد.
-          تعریف کاربر جدید به تنهایی هیچ‌گونه مجوز عملیاتی گسترده (نظیر تأیید خرید یا صدور خروج) ایجاد نمی‌کند؛
-          دسترسی‌ها صرفاً از طریق تخصیص در تب «مسئولیت‌ها و پست‌ها» یا «جانشینی و تفویض» فعال می‌گردند.
+          <span className="font-bold">تخصیص اختیارات و دسترسی‌ها: </span>
+          تعریف کاربر صرفاً جهت ثبت مشخصات پرسنلی است. تخصیص اختیارات و مجوزهای تأیید از طریق بخش‌های «مسئولیت‌ها و پست‌ها» یا «جانشینی و تفویض» انجام می‌شود.
         </div>
       </div>
 
@@ -422,7 +421,9 @@ export const UsersView: React.FC<UsersViewProps> = ({
                           <button
                             type="button"
                             onClick={() => setProfileUser(user)}
-                            className="px-3 py-1 text-caption bg-slate-100 text-slate-700 hover:bg-slate-200 rounded font-medium transition-colors"
+                            className="px-3 py-1.5 min-h-[36px] text-xs bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 rounded-lg border border-slate-200 font-semibold transition-colors inline-flex items-center justify-center cursor-pointer"
+                            title="مشاهده شناسنامه پرسنلی"
+                            aria-label="مشاهده شناسنامه پرسنلی"
                           >
                             شناسنامه
                           </button>
@@ -434,18 +435,20 @@ export const UsersView: React.FC<UsersViewProps> = ({
                               setTargetAccountState(user.accountState || 'active');
                               setStateChangeReason('');
                             }}
-                            className="px-2 py-1 text-caption bg-amber-50 text-amber-700 hover:bg-amber-100 rounded border border-amber-200 font-medium transition-colors"
+                            className="px-3 py-1.5 min-h-[36px] text-xs bg-amber-50 text-amber-800 hover:bg-amber-100 rounded-lg border border-amber-300 font-semibold transition-colors inline-flex items-center justify-center cursor-pointer"
                             title="تغییر وضعیت حساب"
-                           aria-label="تغییر وضعیت حساب">
+                            aria-label="تغییر وضعیت حساب"
+                          >
                             وضعیت
                           </button>
 
                           <button
                             type="button"
                             onClick={() => handleResetPassword(user)}
-                            className="p-1 text-slate-500 hover:text-primary-700 rounded transition-colors"
+                            className="p-2 min-h-[36px] min-w-[36px] inline-flex items-center justify-center text-slate-500 hover:text-primary-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
                             title="ارسال مجدد دعوت‌نامه / بازنشانی رمز"
-                           aria-label="ارسال مجدد دعوت‌نامه / بازنشانی رمز">
+                            aria-label="ارسال مجدد دعوت‌نامه / بازنشانی رمز"
+                          >
                             <RotateCcw className="w-3.5 h-3.5" />
                           </button>
                         </div>
@@ -533,7 +536,16 @@ export const UsersView: React.FC<UsersViewProps> = ({
         >
           <div className="space-y-5">
             {/* Step Indicators */}
-            <div className="flex items-center justify-between border-b border-slate-200 pb-3">
+            {/* Mobile Wizard Stepper */}
+            <div className="sm:hidden flex items-center justify-between p-2.5 bg-primary-50 rounded-xl border border-primary-200 text-xs font-bold text-primary-900 mb-3">
+              <span>مرحله {toPersianDigits(wizardStep)} از ۴</span>
+              <span className="text-primary-700 font-medium">
+                {['هویت و پرسنلی', 'ارتباطات و تماس', 'انتساب اولیه و وضعیت', 'بازبینی و تأیید'][wizardStep - 1]}
+              </span>
+            </div>
+
+            {/* Desktop Wizard Stepper */}
+            <div className="hidden sm:flex items-center justify-between border-b border-slate-200 pb-3">
               {[
                 { s: 1, label: '۱. هویت و پرسنلی' },
                 { s: 2, label: '۲. ارتباطات و تماس' },
@@ -891,7 +903,7 @@ export const UsersView: React.FC<UsersViewProps> = ({
                         <div className="font-bold text-slate-800 text-caption">{p.labelPersian}</div>
                         <div className="text-caption text-slate-500 mt-0.5">{p.description}</div>
                         {p.scopeConstraint && (
-                          <div className="text-caption text-primary-700 mt-0.5">قید: {p.scopeConstraint}</div>
+                          <div className="text-caption text-primary-700 mt-0.5">محدوده: {p.scopeConstraint}</div>
                         )}
                       </div>
                       <Badge

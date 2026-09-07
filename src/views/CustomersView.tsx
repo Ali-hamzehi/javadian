@@ -299,20 +299,20 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
     const salespersonsMap: Record<string, Person> = {
       'p-sales': {
         id: 'p-sales',
-        name: 'علیرضا تهرانی',
-        role: 'کارشناس ارشد فروش و بازرگانی',
+        name: 'کارشناس فروش — نقش نمونه',
+        role: 'کارشناس فروش — نقش نمونه',
         department: 'فروش و بازرگانی',
       },
-      'p-reg-sales': {
-        id: 'p-reg-sales',
-        name: 'مهندس بهنام کمالی',
-        role: 'مسئول فروش منطقه‌ای و میدانی',
-        department: 'فروش میدانی',
+      'p-field-sales': {
+        id: 'p-field-sales',
+        name: 'آقای نادری',
+        role: 'مسئول فروش مویرگی استان قم',
+        department: 'فروش مویرگی',
       },
       'p-comm-approver': {
         id: 'p-comm-approver',
-        name: 'سهراب جوادیان',
-        role: 'معاونت بازرگانی',
+        name: 'تأییدکننده بازرگانی — نقش نمونه',
+        role: 'تأییدکننده بازرگانی — نقش نمونه',
         department: 'مدیریت بازرگانی',
       },
     };
@@ -1862,9 +1862,9 @@ export const CustomersView: React.FC<CustomersViewProps> = ({
                   onChange={(e) => setNewSalespersonId(e.target.value)}
                   className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:outline-none"
                 >
-                  <option value="p-sales">علیرضا تهرانی (کارشناس ارشد فروش و بازرگانی)</option>
-                  <option value="p-reg-sales">مهندس بهنام کمالی (مسئول فروش منطقه‌ای و میدانی)</option>
-                  <option value="p-comm-approver">سهراب جوادیان (معاونت بازرگانی)</option>
+                  <option value="p-sales">کارشناس فروش — نقش نمونه</option>
+                  <option value="p-field-sales">آقای نادری (مسئول فروش مویرگی استان قم)</option>
+                  <option value="p-comm-approver">تأییدکننده بازرگانی — نقش نمونه</option>
                 </select>
               </FieldGroup>
 

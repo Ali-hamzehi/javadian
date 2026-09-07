@@ -413,3 +413,166 @@ export function getEmployeeOneLineSummary(records: OperationalRecord[], persona:
 
   return parts.join(' • ');
 }
+
+export interface EmployeeSummaryCounts {
+  toDo: number;
+  tracking: number;
+  blocked: number;
+  recentCompleted: number;
+}
+
+/**
+ * Returns the four clean, operational metrics for employee task-first header
+ */
+export function getEmployeeSummaryCounts(records: OperationalRecord[], persona: MockPersona): EmployeeSummaryCounts {
+  const toDos = filterEmployeeRecords(records, persona, 'to_do');
+  const tracking = filterEmployeeRecords(records, persona, 'tracking');
+  const history = filterEmployeeRecords(records, persona, 'history');
+
+  const blocked = toDos.filter((r) => r.status === 'blocked' || Boolean(r.blocker?.exists)).length;
+  const recentCompleted = history.filter((r) => r.status === 'completed').length;
+
+  return {
+    toDo: toDos.length,
+    tracking: tracking.length,
+    blocked,
+    recentCompleted,
+  };
+}
+
+/**
+ * Checks whether a route should be visible in navigation (Sidebar, MobileBottomNav, GlobalSearch)
+ * strictly respecting persona boundaries and avoiding unneeded managerial or financial clutter.
+ */
+export function isRouteVisibleForPersona(routeKey: string, persona: MockPersona): boolean {
+  if (!persona) return false;
+  const pId = persona.id;
+  const caps = persona.capabilities || [];
+
+  // Guest / No Access persona sees nothing in navigation
+  if (pId === 'p-no-access') {
+    return false;
+  }
+
+  // 1. Home / Inbox / Notifications
+  if (routeKey === 'inbox' || routeKey === 'notifications') {
+    return caps.includes('inbox.read');
+  }
+
+  // 2. Approvals: only for managers or users with genuine approval capabilities
+  if (routeKey === 'approvals') {
+    if (!persona.isManager) {
+      const hasApprCap = caps.some((c) =>
+        ['approvals.view', 'sales.approve', 'finance.payment_request.approve', 'pricing.approve', 'PRICE_BELOW_APPROVE'].includes(c)
+      );
+      if (!hasApprCap) return false;
+    }
+    return caps.includes('approvals.view') || persona.isManager;
+  }
+
+  // 3. Sales routes
+  if (routeKey === 'sales_orders' || routeKey === 'customers') {
+    return caps.includes('sales.read');
+  }
+  if (routeKey === 'pricing') {
+    return caps.includes('pricing.read') || caps.includes('product.view');
+  }
+  if (routeKey === 'sales_calls') {
+    return caps.includes('crm.write') || caps.includes('field.read');
+  }
+
+  // 4. Supply & Warehouse routes
+  if (routeKey === 'supply_requests') {
+    return caps.includes('supply.read');
+  }
+  if (routeKey === 'logistics') {
+    return caps.includes('supply.read');
+  }
+  if (routeKey === 'inventory_receipts') {
+    return caps.includes('inventory.read');
+  }
+  if (routeKey === 'inventory_dispatch') {
+    return caps.includes('inventory.read');
+  }
+
+  // 5. Payment requests (مالی عملیاتی)
+  // Strictly hidden for Sales Specialist (p-sales), Ordinary Warehouse (p-ordinary), and roles without payment scope
+  if (routeKey === 'payment_requests') {
+    if (pId === 'p-sales' || pId === 'p-ordinary' || pId === 'p-comm-approver' || pId === 'p-master-data') {
+      return false;
+    }
+    const hasFinanceCaps = caps.some((c) =>
+      ['finance.read', 'finance.payment_request.create', 'finance.payment_request.approve'].includes(c)
+    );
+    if (hasFinanceCaps) return true;
+
+    // Documented scope exceptions: Arash (freight), Naderi (Qom worker/driver), Yousefi & Montazeri (supplier)
+    if (pId === 'p-warehouse' || pId === 'p-field-sales' || pId === 'p-multi-delegate' || pId === 'p-ops-dir') {
+      return true;
+    }
+    return false;
+  }
+
+  // 6. Field operations
+  if (routeKey === 'visit_plans' || routeKey === 'field_followups') {
+    return caps.includes('field.read');
+  }
+  if (routeKey === 'field_manager') {
+    return persona.isManager && caps.includes('MANAGEMENT_VIEW');
+  }
+
+  // 7. Management & Supervision: STRICTLY hidden for non-managers
+  if (routeKey === 'ops_view' || routeKey === 'traceability' || routeKey === 'integration_errors') {
+    return persona.isManager && caps.includes('MANAGEMENT_VIEW');
+  }
+
+  // 8. Organization and Access: strictly admin / management
+  if (routeKey === 'org_users' || routeKey === 'access_matrix') {
+    return caps.includes('USER_MANAGE');
+  }
+  if (routeKey === 'org_responsibilities') {
+    return caps.includes('RESPONSIBILITY_MANAGE');
+  }
+  if (routeKey === 'org_delegations') {
+    return caps.includes('DELEGATION_MANAGE');
+  }
+  if (routeKey === 'design_system_showcase') {
+    return caps.includes('USER_MANAGE');
+  }
+
+  // 9. Base data / Master data
+  if (routeKey === 'products' || routeKey === 'product_categories' || routeKey === 'product_units') {
+    return caps.includes('product.view');
+  }
+  if (routeKey === 'suppliers') {
+    return caps.includes('supply.read');
+  }
+  if (routeKey === 'warehouses') {
+    return caps.includes('inventory.read');
+  }
+
+  return true;
+}
+
+/**
+ * Checks whether an entire navigation group is visible for the persona
+ */
+export function isNavGroupVisibleForPersona(groupId: string, persona: MockPersona): boolean {
+  if (!persona) return false;
+  if (persona.id === 'p-no-access') return false;
+
+  if (groupId === 'management') {
+    return Boolean(persona.isManager && persona.capabilities.includes('MANAGEMENT_VIEW'));
+  }
+  if (groupId === 'org_access') {
+    return Boolean(
+      persona.capabilities.includes('USER_MANAGE') ||
+      persona.capabilities.includes('RESPONSIBILITY_MANAGE') ||
+      persona.capabilities.includes('DELEGATION_MANAGE')
+    );
+  }
+  if (groupId === 'finance') {
+    return isRouteVisibleForPersona('payment_requests', persona);
+  }
+  return true;
+}

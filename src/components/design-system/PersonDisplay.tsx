@@ -2,6 +2,7 @@ import { Avatar } from './Avatar';
 import React from 'react';
 import { Person } from '../../types';
 import { ShieldAlert, User } from 'lucide-react';
+import { getDisplayPersonaName, getDisplayPersonaRole } from '../../runtime/documentBasedPersonas';
 
 interface PersonDisplayProps {
   person: Person;
@@ -27,7 +28,10 @@ export const PersonDisplay: React.FC<PersonDisplayProps> = ({
   };
 
   const actingDelegate = isDelegate || person.isActingDelegate;
-  const targetDelegator = delegatorName || person.delegatorName;
+  const rawDelegator = delegatorName || person.delegatorName;
+  const targetDelegator = rawDelegator ? getDisplayPersonaName(rawDelegator) : undefined;
+  const displayName = getDisplayPersonaName(person);
+  const displayRole = getDisplayPersonaRole(person);
 
   return (
     <div className={`flex items-center gap-3 ${className}`}>
@@ -35,7 +39,7 @@ export const PersonDisplay: React.FC<PersonDisplayProps> = ({
         {person.avatar ? (
           <Avatar
             src={person.avatar}
-            alt={person.name}
+            alt={displayName}
             className={`${avatarSizes[size]} rounded-full object-cover ring-1 ring-slate-200`}
             referrerPolicy="no-referrer"
           />
@@ -43,7 +47,7 @@ export const PersonDisplay: React.FC<PersonDisplayProps> = ({
           <div
             className={`${avatarSizes[size]} rounded-full bg-primary-100 text-primary-800 flex items-center justify-center font-bold`}
           >
-            {person.name ? person.name.slice(0, 1) : <User className="w-4 h-4" />}
+            {displayName ? displayName.slice(0, 1) : <User className="w-4 h-4" />}
           </div>
         )}
         {actingDelegate && (
@@ -58,7 +62,7 @@ export const PersonDisplay: React.FC<PersonDisplayProps> = ({
 
       <div className="flex flex-col min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-semibold text-slate-900 text-sm truncate">{person.name}</span>
+          <span className="font-semibold text-slate-900 text-sm truncate">{displayName}</span>
           {actingDelegate && (
             <span className="inline-flex items-center gap-0.5 bg-amber-50 text-amber-800 border border-amber-300 text-caption font-bold px-1.5 py-0.2 rounded">
               جانشین {targetDelegator}
@@ -67,7 +71,7 @@ export const PersonDisplay: React.FC<PersonDisplayProps> = ({
         </div>
         {showDetails && (
           <span className="text-xs text-slate-500 truncate">
-            {person.role} • {person.department}
+            {displayRole || person.role} • {person.department}
           </span>
         )}
       </div>

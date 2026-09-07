@@ -140,7 +140,7 @@ export const CompleteWorkItemModal: React.FC<CompleteWorkItemModalProps> = ({
               <span>انتخاب فایل سند / تصویر خروجی</span>
               <input type="file" className="hidden" onChange={handleAddMockFile} />
             </label>
-            <span className="text-caption text-slate-600">ذخیره موقت نمایشی — اتصال به سرور انجام نشده</span>
+            <span className="text-caption text-slate-500">حداکثر حجم فایل: ۱۰ مگابایت</span>
           </FieldGroup>
 
           {mockFiles.length > 0 && (

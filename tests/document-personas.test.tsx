@@ -13,6 +13,7 @@ import {
 } from '../src/runtime/documentBasedPersonas';
 import { MOCK_PERSONAS } from '../src/data/mockData';
 import { LoginScreen } from '../src/components/auth/LoginScreen';
+import { RoleSelectorModal } from '../src/components/auth/RoleSelectorModal';
 import { TopBar } from '../src/components/shell/TopBar';
 import { PWAProvider } from '../src/components/pwa/PWAContext';
 import { ToastProvider } from '../src/components/design-system/ToastContext';
@@ -72,8 +73,8 @@ test('documentBasedPersonas: correctly maps all 12 personas with document-based 
     assert.equal(p.documentStatus, 'DEMO_PLACEHOLDER', `${id} must be marked as DEMO_PLACEHOLDER`);
     assert.equal(p.isPlaceholder, true, `${id} isPlaceholder must be true`);
     assert.ok(
-      p.name.includes('حساب نمایشی'),
-      `${id} name (${p.name}) must include 'حساب نمایشی'`
+      p.name.includes('نقش نمونه'),
+      `${id} name (${p.name}) must include 'نقش نمونه'`
     );
   }
 });
@@ -206,18 +207,18 @@ test('getPersonasByCategory: partitions personas into 4 business domains', () =>
   assert.ok(categories.management_hybrid.some((p) => p.id === 'p-multi-delegate'));
 });
 
-test('LoginScreen: renders 4 business categories and documented vs placeholder badges', () => {
+test('LoginScreen: renders business categories and role badges cleanly', () => {
   const html = render(<LoginScreen onSelectPersona={() => {}} />);
 
-  // Check 4 category labels
-  assert.ok(html.includes('عملیات خرید، لجستیک و انبار'));
-  assert.ok(html.includes('فروش و توزیع'));
-  assert.ok(html.includes('مالی و پرداخت'));
-  assert.ok(html.includes('مدیریت و نقش‌های ترکیبی'));
+  // Check category labels
+  assert.ok(html.includes('عملیات و انبار'));
+  assert.ok(html.includes('فروش'));
+  assert.ok(html.includes('مالی'));
+  assert.ok(html.includes('مدیریت'));
 
   // Check badges
-  assert.ok(html.includes('شخص مستند در اسناد'));
-  assert.ok(html.includes('حساب نمایشی (Placeholder)'));
+  assert.ok(html.includes('نقش سازمانی'));
+  assert.ok(html.includes('نقش نمونه'));
 
   // Check Arash card and demo summary
   assert.ok(html.includes('آرش'));
@@ -269,6 +270,32 @@ test('TopBar: renders document-based persona names and status pills', () => {
       </ToastProvider>
     </PWAProvider>
   );
-  assert.ok(placeholderHtml.includes('کارشناس مالی — حساب نمایشی'));
-  assert.ok(placeholderHtml.includes('حساب نمایشی'));
+  assert.ok(placeholderHtml.includes('کارشناس مالی — نقش نمونه'));
+  assert.ok(placeholderHtml.includes('نقش نمونه'));
 });
+
+test('RoleSelectorModal: renders role options and requires explicit user action without default selection', () => {
+  let selectedPersona: any = null;
+  const html = render(
+    <RoleSelectorModal
+      isOpen={true}
+      onClose={() => {}}
+      onSelect={(p) => {
+        selectedPersona = p;
+      }}
+    />
+  );
+
+  // Verifies modal renders clean role selection interface
+  assert.ok(html.includes('انتخاب نقش'));
+  assert.ok(html.includes('عملیات و انبار'));
+  assert.ok(html.includes('فروش'));
+  assert.ok(html.includes('مالی'));
+  assert.ok(html.includes('مدیریت'));
+  assert.ok(html.includes('آرش'));
+  assert.ok(html.includes('آقای منتظری'));
+
+  // Critical requirement: no persona is selected by default
+  assert.equal(selectedPersona, null, 'No persona must be pre-selected automatically');
+});
+

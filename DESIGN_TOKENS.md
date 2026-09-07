@@ -21,12 +21,12 @@ Canonical implementation: `src/index.css`, with Tailwind 4 `@theme` tokens and s
 | text-secondary | #475569 | Secondary content |
 | text-muted | #64748B | Non-critical text on suitable light surfaces |
 | text-inverse | #FFFFFF | Dark surfaces |
-| success / success-surface | #15803D / #F0FDF4 | Successful business status |
-| warning / warning-surface | #B45309 / #FFFBEB | Pending/warning feedback |
-| danger / danger-surface | #B91C1C / #FEF2F2 | Blocked/destructive feedback |
-| info / info-surface | #1D4ED8 / #EFF6FF | Information/in-progress status |
+| success / success-surface | #0F766E / #F0FDFA | Successful business status (Teal) |
+| warning / warning-surface | #B45309 / #FFFBEB | Pending/warning feedback (Amber) |
+| danger / danger-surface | #B91C1C / #FEF2F2 | Blocked/destructive feedback (Red/Rose) |
+| info / info-surface | #1D4ED8 / #EFF6FF | Information/in-progress status (Blue) |
 
-Additional primary shades in the source support the existing range of utilities: 950 #042F2E, 900 #134E4A, 800 #115E59, 500 #14B8A6, 400 #2DD4BF, 300 #5EEAD4, 200 #99F6E4. Base control-border fallback is #94A3B8. Existing explicit error/focus utilities retain precedence.
+Additional primary shades in the source support the existing range of utilities: 950 #042F2E, 900 #134E4A, 800 #115E59, 500 #14B8A6, 400 #2DD4BF, 300 #5EEAD4, 200 #99F6E4. Base control-border fallback is #CBD5E1. Existing explicit error/focus utilities retain precedence.
 
 Primary buttons use primary-700 for readable white text; do not use primary-500 as a small white-text action. Shared integration/prototype badges have dashed borders and retain separate text/code. No lifecycle status values were changed.
 
@@ -36,30 +36,31 @@ Local Vazirmatn Arabic and Latin WOFF2 files remain at `/fonts/`. Document langu
 
 | Role | Desktop | Mobile/tablet below 1024px |
 |---|---|---|
-| Body | 14px | 16px |
-| Existing text-xs operational text | 13px | 16px |
-| text-sm / standard controls | 14px | 16px |
+| Body | 15px | 15–16px (0.96875rem) |
+| Operational critical text | 15–16px | 15–16px |
+| Button & Input controls | 14–15px (inputs: 15px) | Buttons: 15px, Inputs/Selects: 16px (no iOS auto-zoom) |
 | Field label token | 14px | 14px |
-| Caption/helper/badge | 12px | 12px |
-| App header page title | 24px | 20px |
-| Main section heading h2 | 20px | 20px |
-| Main subsection h3 | 18px | 18px |
+| Caption / Metadata / Badge | 13px (0.8125rem min) | 13–14px |
+| Page title (h1 / .page-title) | 24–26px (1.5625rem) | 21–22px (1.34375rem) |
+| Section heading (h2 / .section-title) | 19–20px (1.25rem) | 18–19px (1.15625rem) |
+| Card title (h3 / .card-title) | 16–18px (1.0625rem) | 16–17px (1.0625rem) |
 | Dialog title | 18px | 18px |
-| Desktop table | 13px minimum inherited scale | Card presentation |
+| Desktop table | 14px (0.875rem) | Card presentation (12px card gap) |
 
-Body/standard utility line height 1.6; captions/descriptions 1.7; native desktop table fallback 1.45. SVG field-route labels now use 14px and a scrollable 650px diagram so phone-width shrinking cannot make them microscopic. No arbitrary 8/9/10/11px text classes remain. Computed text size at zoom still needs browser verification.
+Persian text line height: 1.6 minimum across body and controls. In the mobile breakpoint, `text-xs` and `text-sm` are NOT globally overridden to 16px; typography strictly adheres to text roles (metadata remains 13–14px, inputs 16px, buttons 15px). No arbitrary 8/9/10/11/12px text classes remain in primary operational content.
 
 ## Dimensions, spacing and surfaces
 
 - Base spacing unit: 4px. Preferred steps 4, 8, 12, 16, 20, 24, 32, 40, 48px.
-- Common 6/10/14px gap/padding utilities migrated to 8/12/16px. Some legacy small adornment offsets remain; these are not business logic.
-- Small controls: 6px radius; standard inputs/buttons: 8px; cards: 12px; dialogs: 16px; full radius for badges/avatars/pills.
-- Desktop standard control: 44px; compact button: 40px; icon target: 40px.
-- Mobile input/button: 48px; general icon target: 44px; bottom-nav item: 48px minimum; bar: 64px plus bottom safe area.
+- Desktop page padding: 24px (1.5rem); Mobile page padding: 16px (1rem).
+- Mobile card gap: 12px (space-y-3 / gap-3); Section spacing: 24–32px (space-y-6 to space-y-8).
+- Small controls: 6px radius; standard inputs/buttons: 8px (radius-lg); cards: 12px (radius-xl); dialogs: 16px (radius-2xl); full radius for badges/avatars/pills.
+- Desktop standard control: 44px (2.75rem); compact button: 40px; icon target: 40px.
+- Mobile input/button: 48px (3rem); minimum mobile touch target: 44×44px (2.75rem); bottom-nav bar: 64px plus bottom safe area.
 - Table row token: 48px; cell padding/content can increase row height.
-- Main content maximum: 1280px. Modal/form widths remain bounded by the existing sm/md/lg/xl/2xl/full choices.
-- Sidebar expanded: 288px; collapsed: 72px. It is removed from layout below 1024px; the mobile drawer uses the full width available up to 384px.
-- Standard floating shadow: `0 12px 32px rgb(15 23 42 / 14%)`; panel/card shadows removed in the general migration. Floating menus, dialogs and banners retain elevation. Some legacy floating-menu utilities remain.
+- Main content maximum: 1280px (80rem). Modal/form widths remain bounded by sm/md/lg/xl/2xl/full choices.
+- Sidebar expanded: 260px (16.25rem); collapsed: 72px (4.5rem). Reduced from 288px to avoid cramped main content on 1366px screens.
+- Standard floating shadow: `0 8px 24px -4px rgb(15 23 42 / 12%)`; panel/card shadows restrained and soft.
 - Overlay: `rgb(15 23 42 / 60%)`.
 - z-index intent: header 20, sidebar 30, navigation 40, overlays 50; native dialogs use the browser top layer.
 - Safe areas use `env(safe-area-inset-*)`; dialogs use `100dvh`, bounded bodies and reachable headers/footers.

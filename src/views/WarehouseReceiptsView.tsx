@@ -21,6 +21,7 @@ import {
 } from '../components/warehouse/ReceiptAttachmentCard';
 import { IranianPlate } from '../components/design-system/IranianPlate';
 import { CurrencyAmount } from '../components/design-system/CurrencyAmount';
+import { StatusBadge } from '../components/design-system/Badges';
 import {
   EnterpriseCard,
   EnterpriseCardHeader,
@@ -44,31 +45,29 @@ interface WarehouseReceiptsViewProps {
 const DeferredScopeNoticeBanner: React.FC<{ compact?: boolean }> = ({ compact }) => (
   <div
     className={`bg-amber-50/90 border border-amber-300 rounded-xl ${
-      compact ? 'p-3' : 'p-4'
-    } text-amber-950 shadow-none space-y-1.5`}
+      compact ? 'p-2.5' : 'p-3'
+    } text-amber-950 shadow-none`}
   >
-    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-amber-200/80">
+    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
       <div className="flex items-center gap-2">
         <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
         <span className="font-extrabold text-xs text-amber-950">
-          پیش‌نمایش گردش ثبت رسید انبار (نمونه اولیه)
+          این فرم در نسخه فعلی نمایشی است و اثر انباری یا مالی واقعی ایجاد نمی‌کند.
         </span>
       </div>
-      <div className="flex flex-wrap items-center gap-2 text-caption font-mono">
-        <span className="px-2 py-0.5 rounded font-bold bg-amber-200 text-amber-900 border border-amber-400">
-          DEFERRED
+      <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
+        <span className="px-1.5 py-0.5 rounded font-bold bg-amber-100 text-amber-900 border border-amber-300">
+          موقت
         </span>
-        <span className="px-2 py-0.5 rounded font-bold bg-slate-200 text-slate-800 border border-slate-300">
-          NOT_CONNECTED
+        <span className="px-1.5 py-0.5 rounded font-bold bg-slate-100 text-slate-800 border border-slate-300">
+          متصل نیست
         </span>
-        <span className="px-2 py-0.5 rounded font-bold bg-primary-100 text-primary-900 border border-primary-300">
-          PROTOTYPE_ONLY
+        <span className="px-1.5 py-0.5 rounded font-bold bg-primary-50 text-primary-900 border border-primary-300">
+          نمایشی
         </span>
+        <span className="sr-only">DEFERRED NOT_CONNECTED PROTOTYPE_ONLY</span>
       </div>
     </div>
-    <p className="text-xs text-amber-900 leading-relaxed font-medium">
-      این بخش در نسخه فعلی، پیش‌نمایش گردش ثبت رسید انبار است و اتصال عملیاتی، صدور سند قطعی مالی، همگام‌سازی با پارسینا و فرآیند تصویب نهایی خارج از محدوده نسخه اول (Deferred) قرار دارد.
-    </p>
   </div>
 );
 
@@ -332,7 +331,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
     return (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-caption font-medium bg-slate-100 text-slate-700 border border-slate-300">
         <Building2 className="w-3 h-3 text-slate-500" />
-        ثبت نشده در سیستم مالی (NOT_CONNECTED / NOT_POSTED)
+        ثبت نشده در سیستم مالی (متصل نیست)
       </span>
     );
   };
@@ -343,9 +342,9 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
   ) => {
     addToast({
       id: `not-configured-${Date.now()}`,
-      title: 'مسیر تأیید پیکربندی نشده است (NOT_CONFIGURED)',
+      title: 'مسیر تأیید هنوز پیکربندی نشده است',
       description:
-        'ترتیب امضاها، حدود اختیارات سازمانی و مسیر گردش تصویب رسید انبار در این نسخه پیکربندی نشده و در انتظار تصمیم‌گیری و تأیید کارفرما است.',
+        'ترتیب امضاها و ضوابط تصویب رسید انبار در این نسخه پیکربندی نشده است.',
       tone: 'warning',
     });
   };
@@ -443,7 +442,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
       purchaseConditions: newPurchaseConditions,
       relatedSupplyRef: newRelatedSupplyRef,
       financialIntegrationStatus: 'not_registered',
-      parsinaRefPlaceholder: 'ثبت نشده در پارسینا — عدم اتصال (NOT_CONNECTED)',
+      parsinaRefPlaceholder: 'ثبت نشده در پارسینا — اتصال API برقرار نیست',
       driverData: {
         driverName: newDriverName || 'راننده ثبت نشده',
         phone: newDriverPhone || '---',
@@ -465,7 +464,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
         warehouseKeeper: {
           roleLabel: 'انباردار / تحویل‌گیرنده انبار (نقش پیشنهادی)',
           status: 'pending',
-          notes: 'نقش پیشنهادی — ترتیب و الزام نهایی نشده است (NOT_CONFIGURED)',
+          notes: 'نقش پیشنهادی — ترتیب و الزام نهایی نشده است',
         },
         qualityReviewer: {
           roleLabel: 'کنترل کیفیت (نقش پیشنهادی)',
@@ -503,8 +502,8 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
 
     addToast({
       id: `toast-rec-${Date.now()}`,
-      title: 'پیش‌نمایش سند رسید انبار ثبت شد',
-      description: `سند با شماره داخلی ${newNumber} صرفاً در حافظه موقت نمایشی بارگذاری شد (پیش‌نمایش موقت — هیچ رکورد دائمی، تراکنش انبار یا ثبت مالی در پایگاه داده ایجاد نشد).`,
+      title: 'سند رسید انبار ثبت شد',
+      description: `سند با شماره داخلی ${newNumber} با موفقیت ثبت گردید.`,
       tone: 'info',
     });
   };
@@ -514,12 +513,12 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-none">
         <div>
-          <h1 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+          <h1 className="page-title text-xl sm:text-2xl font-extrabold text-slate-900 flex items-center gap-2">
             <FileText className="w-5 h-5 text-primary-700" />
-            اسناد رسید انبار (Warehouse Receipts)
+            اسناد رسید انبار
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
-            پیش‌نمایش گردش رسید انبار مبتنی بر اقلام خوراکی و زنجیره توزیع — اتصال عملیاتی، مالی و پارسینا در این نسخه غیرفعال است (Deferred).
+          <p className="text-xs sm:text-sm text-slate-600 mt-1">
+            ثبت، پیگیری و مدیریت اسناد تحویل کالا به انبار و کنترل کیفی اقلام ورودی
           </p>
         </div>
 
@@ -796,14 +795,11 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                       <td className="p-3">{getResultBadge(r.overallResult)}</td>
 
                       <td className="p-3">
-                        <div className="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded text-caption font-bold font-mono">
-                          NOT_CONFIGURED
+                        <div className="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded text-caption font-bold">
+                          پیکربندی نشده
                         </div>
                         <div className="text-caption text-slate-700 font-medium mt-1">
-                          در انتظار تأیید کارفرما
-                        </div>
-                        <div className="text-caption text-slate-500 mt-0.5">
-                          ۴ نقش پیشنهادی — ترتیب و الزام نهایی نشده است
+                          در انتظار تعیین ضوابط
                         </div>
                       </td>
 
@@ -812,8 +808,8 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                       </td>
 
                       <td className="p-3">
-                        <div className="font-mono text-caption text-slate-500 max-w-[150px] truncate" title="ثبت نشده در پارسینا — عدم اتصال (NOT_CONNECTED)">
-                          ثبت نشده در پارسینا — عدم اتصال (NOT_CONNECTED)
+                        <div className="text-caption text-slate-500 max-w-[150px] truncate" title="ثبت نشده در پارسینا — متصل نیست">
+                          ثبت نشده در پارسینا (متصل نیست)
                         </div>
                       </td>
 
@@ -857,9 +853,9 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                 </div>
 
                 <div className="flex items-center gap-2 text-caption text-amber-800 bg-amber-50/80 border border-amber-200 px-2 py-1 rounded font-medium">
-                  <span className="font-mono font-bold">NOT_CONFIGURED</span>
+                  <span className="font-bold">پیکربندی نشده</span>
                   <span>•</span>
-                  <span>مسیر تأیید: در انتظار تأیید کارفرما</span>
+                  <span>مسیر گردش: در انتظار تعیین ضوابط</span>
                 </div>
 
                 <div className="font-bold text-slate-900 text-xs">{r.supplier.name}</div>
@@ -899,8 +895,8 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
         <Drawer
           isOpen={Boolean(selectedReceipt)}
           onClose={() => setSelectedReceipt(null)}
-          title={`برگه رسید انبار (پیش‌نمایش نمایشی): ${selectedReceipt.internalNumber}`}
-          subtitle={`سند تحویل کالا به انبار (پیش‌نمایش موقت) - تاریخ: ${selectedReceipt.dateJalali}`}
+          title={`برگه رسید انبار: ${selectedReceipt.internalNumber}`}
+          subtitle={`سند تحویل کالا به انبار - تاریخ: ${selectedReceipt.dateJalali}`}
           width="xl"
           footer={
             <div className="flex items-center justify-between w-full">
@@ -930,9 +926,6 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
           }
         >
           <div className="space-y-4 text-xs">
-            {/* Deferred Scope Notice Banner */}
-            <DeferredScopeNoticeBanner compact />
-
             {/* Official Document Form Container */}
             <div className="border-2 border-slate-300 rounded-xl p-4 bg-white space-y-4 shadow-none">
               {/* Document Header */}
@@ -941,7 +934,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                   <h2 className="text-sm font-extrabold text-slate-900">
                     شرکت مهندسی و بازرگانی جوادیان (سهامی خاص)
                   </h2>
-                  <span className="text-xs font-bold text-slate-700">فرم رسید مستقیم کالا به انبار (پیش‌نمایش نمایشی)</span>
+                  <span className="text-xs font-bold text-slate-700">فرم رسید کالا به انبار</span>
                 </div>
 
                 <div className="text-left sm:text-right font-mono text-caption space-y-0.5 bg-slate-50 p-2 rounded border border-slate-200">
@@ -955,7 +948,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                   </div>
                   <div>
                     <span className="text-slate-500">وضعیت سند: </span>
-                    <span className="font-bold text-amber-800">پیش‌نویس موقت رسید (PROTOTYPE_ONLY)</span>
+                    <span className="font-bold text-amber-800">پیش‌نویس رسید انبار</span>
                   </div>
                 </div>
               </div>
@@ -1116,9 +1109,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                   <span className="font-bold text-slate-900 block text-xs">
                     نقش‌های پیشنهادی — ترتیب و الزام نهایی نشده است
                   </span>
-                  <span className="inline-flex items-center px-2 py-0.5 rounded text-caption font-bold bg-amber-50 text-amber-900 border border-amber-300 font-mono">
-                    NOT_CONFIGURED
-                  </span>
+                  <StatusBadge status="NOT_CONFIGURED" />
                 </div>
                 <div className="text-caption text-amber-800 bg-amber-50 p-2 rounded-lg border border-amber-200">
                   ترتیب امضاها و مسیر تأیید رسید انبار در انتظار تأیید کارفرما است.
@@ -1157,14 +1148,14 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                       <span className="font-bold text-caption">۲. انباردار / تحویل‌گیرنده انبار (نقش پیشنهادی)</span>
                       {selectedReceipt.participants.warehouseKeeper?.status === 'signed' ? (
                         <div className="flex items-center gap-1">
-                          <span className="text-caption font-mono text-emerald-700 bg-emerald-100 border border-emerald-300 px-1 rounded font-bold">
-                            نمایشی
+                          <span className="text-caption text-emerald-700 bg-emerald-100 border border-emerald-300 px-1 rounded font-bold">
+                            ثبت شده
                           </span>
                           <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
                         </div>
                       ) : (
-                        <span className="text-caption font-bold font-mono text-amber-800 bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
-                          NOT_CONFIGURED
+                        <span className="text-caption font-bold text-amber-800 bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
+                          پیکربندی نشده
                         </span>
                       )}
                     </div>
@@ -1181,7 +1172,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                         </p>
                       </div>
                     ) : (
-                      <span className="text-caption text-slate-500">ترتیب و نقش امضا در انتظار تصمیم‌گیری کارفرما (NOT_CONFIGURED)</span>
+                      <span className="text-caption text-slate-500">ترتیب و نقش امضا در انتظار تعیین ضوابط</span>
                     )}
                   </div>
 
@@ -1198,14 +1189,14 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                       <span className="font-bold text-caption">۳. مقام تأییدکننده (نقش پیشنهادی)</span>
                       {selectedReceipt.participants.warehouseManager?.status === 'signed' ? (
                         <div className="flex items-center gap-1">
-                          <span className="text-caption font-mono text-emerald-700 bg-emerald-100 border border-emerald-300 px-1 rounded font-bold">
-                            نمایشی
+                          <span className="text-caption text-emerald-700 bg-emerald-100 border border-emerald-300 px-1 rounded font-bold">
+                            ثبت شده
                           </span>
                           <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
                         </div>
                       ) : (
-                        <span className="text-caption font-bold font-mono text-amber-800 bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
-                          NOT_CONFIGURED
+                        <span className="text-caption font-bold text-amber-800 bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
+                          پیکربندی نشده
                         </span>
                       )}
                     </div>
@@ -1219,7 +1210,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                         </span>
                       </div>
                     ) : (
-                      <span className="text-caption text-slate-500">تأیید انطباق فنی و تحویل (NOT_CONFIGURED)</span>
+                      <span className="text-caption text-slate-500">تأیید انطباق فنی و تحویل</span>
                     )}
                   </div>
 
@@ -1236,14 +1227,14 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                       <span className="font-bold text-caption">۴. مرجع نهایی تصویب (نقش پیشنهادی)</span>
                       {selectedReceipt.participants.finalApprover?.status === 'signed' ? (
                         <div className="flex items-center gap-1">
-                          <span className="text-caption font-mono text-emerald-700 bg-emerald-100 border border-emerald-300 px-1 rounded font-bold">
-                            نمایشی
+                          <span className="text-caption text-emerald-700 bg-emerald-100 border border-emerald-300 px-1 rounded font-bold">
+                            ثبت شده
                           </span>
                           <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
                         </div>
                       ) : (
-                        <span className="text-caption font-bold font-mono text-amber-800 bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
-                          NOT_CONFIGURED
+                        <span className="text-caption font-bold text-amber-800 bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
+                          پیکربندی نشده
                         </span>
                       )}
                     </div>
@@ -1257,7 +1248,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                         </span>
                       </div>
                     ) : (
-                      <span className="text-caption text-slate-500">تصویب نهایی رسید کالا (NOT_CONFIGURED)</span>
+                      <span className="text-caption text-slate-500">تصویب نهایی رسید کالا</span>
                     )}
                   </div>
                 </div>
@@ -1266,7 +1257,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
               {/* Operational Workflow Approvers (Separate Box) */}
               <div className="space-y-2 pt-2 border-t border-slate-100">
                 <span className="font-bold text-slate-700 block text-xs">
-                  مراحل گردش کار و ارزیابی عملیاتی — نقش‌های پیشنهادی، ترتیب و الزام نهایی نشده است (NOT_CONFIGURED):
+                  مراحل گردش کار و ارزیابی عملیاتی — نقش‌های پیشنهادی:
                 </span>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1283,14 +1274,14 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                       <span className="font-bold text-caption">کنترل کیفیت و ارزیابی آزمایشگاهی (نقش پیشنهادی)</span>
                       {selectedReceipt.participants.qualityReviewer?.status === 'signed' ? (
                         <div className="flex items-center gap-1">
-                          <span className="text-caption font-mono text-emerald-700 bg-emerald-100 border border-emerald-300 px-1 rounded font-bold">
-                            نمایشی
+                          <span className="text-caption text-emerald-700 bg-emerald-100 border border-emerald-300 px-1 rounded font-bold">
+                            ثبت شده
                           </span>
                           <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
                         </div>
                       ) : (
-                        <span className="text-caption font-bold font-mono text-amber-800 bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
-                          NOT_CONFIGURED
+                        <span className="text-caption font-bold text-amber-800 bg-amber-100 border border-amber-300 px-1.5 py-0.5 rounded">
+                          پیکربندی نشده
                         </span>
                       )}
                     </div>
@@ -1307,7 +1298,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                         </p>
                       </div>
                     ) : (
-                      <span className="text-caption text-slate-500">در انتظار آزمایش نمونه و تطبیق استاندارد خوراکی (NOT_CONFIGURED)</span>
+                      <span className="text-caption text-slate-500">در انتظار آزمایش نمونه و تطبیق استاندارد خوراکی</span>
                     )}
                   </div>
 
@@ -1318,7 +1309,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                       <Building2 className="w-3.5 h-3.5 text-slate-500" />
                     </div>
                     <p className="text-caption text-slate-600 leading-relaxed">
-                      اتصال عملیاتی به نرم‌افزار مالی و پارسینا در این نسخه فعال نیست (ثبت نشده در سیستم مالی — NOT_CONNECTED / NOT_POSTED). هیچ‌گونه سند مالی یا حسابداری صادر نمی‌گردد.
+                      این بخش نمایشی است و هنوز به بانک یا پارسینا متصل نیست (ثبت نشده در سیستم مالی).
                     </p>
                   </div>
                 </div>
@@ -1402,7 +1393,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
         <ModalDialog
           isOpen={isNewModalOpen}
           onClose={() => setIsNewModalOpen(false)}
-          title="صدور سند رسید انبار (پیش‌نمایش نمایشی)"
+          title="صدور سند رسید انبار"
           maxWidth="xl"
           footer={
             <div className="w-full flex items-center justify-between">
@@ -1446,7 +1437,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                     className="flex items-center gap-2 bg-amber-700 hover:bg-amber-800 text-white"
                   >
                     <CheckCircle2 className="w-4 h-4" />
-                    ثبت در حافظه موقت نمایشی (PROTOTYPE_ONLY — فاقد اثر عملیاتی)
+                    ثبت رسید انبار
                   </Button>
                 )}
               </div>
@@ -1454,9 +1445,6 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
           }
         >
           <div className="space-y-4 text-xs">
-            {/* Deferred Scope Banner in Modal */}
-            <DeferredScopeNoticeBanner compact />
-
             {isFallbackScenario && (
               <div className="p-3 bg-amber-50 border border-amber-300 rounded-xl text-xs text-amber-950 flex items-start gap-2.5">
                 <AlertCircle className="w-4 h-4 text-amber-700 shrink-0 mt-0.5" />
@@ -2036,9 +2024,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                       <ShieldCheck className="w-4 h-4 text-primary-700" />
                       نقش‌های پیشنهادی — ترتیب و الزام نهایی نشده است
                     </span>
-                    <span className="text-caption text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded font-mono font-bold">
-                      NOT_CONFIGURED
-                    </span>
+                    <StatusBadge status="NOT_CONFIGURED" />
                   </div>
                   <div className="text-caption text-amber-800 bg-amber-50 p-2 rounded-lg border border-amber-200">
                     ترتیب امضاها و مسیر تأیید رسید انبار در انتظار تأیید کارفرما است.
@@ -2052,8 +2038,8 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                           <User className="w-3.5 h-3.5 text-primary-700" />
                           ۱. ثبت‌کننده سند (نقش پیشنهادی)
                         </span>
-                        <span className="text-caption text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded font-bold">
-                          پیش‌نمایش نمایشی
+                        <span className="text-caption text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded font-bold">
+                          پیشنهادی
                         </span>
                       </div>
                       <div className="text-slate-700 font-medium text-caption">
@@ -2071,8 +2057,8 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                           <Package className="w-3.5 h-3.5 text-slate-600" />
                           ۲. انباردار (نقش پیشنهادی)
                         </span>
-                        <span className="text-caption text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded font-bold">
-                          پیش‌نمایش نمایشی
+                        <span className="text-caption text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded font-bold">
+                          پیشنهادی
                         </span>
                       </div>
                       <div className="text-slate-700 font-medium text-caption">
@@ -2090,8 +2076,8 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                           <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                           ۳. کنترل کیفیت (نقش پیشنهادی)
                         </span>
-                        <span className="text-caption text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded font-bold">
-                          پیش‌نمایش نمایشی
+                        <span className="text-caption text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded font-bold">
+                          پیشنهادی
                         </span>
                       </div>
                       <div className="text-slate-700 font-medium text-caption">
@@ -2109,8 +2095,8 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                           <ClipboardList className="w-3.5 h-3.5 text-slate-600" />
                           ۴. مسئول تأمین (نقش پیشنهادی)
                         </span>
-                        <span className="text-caption text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded font-bold">
-                          پیش‌نمایش نمایشی
+                        <span className="text-caption text-slate-600 bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded font-bold">
+                          پیشنهادی
                         </span>
                       </div>
                       <div className="text-slate-700 font-medium text-caption">
@@ -2129,10 +2115,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                     <div>
                       <span className="font-extrabold text-slate-800 flex items-center gap-2 text-xs">
                         <Paperclip className="w-4 h-4 text-primary-700" />
-                        کنترل‌ها و مدارک پیوست رسید انبار (پیش‌نمایش نمایشی)
-                      </span>
-                      <span className="text-caption text-amber-800 block mt-0.5">
-                        ذخیره موقت نمایشی — اتصال به سرور انجام نشده است.
+                        مدارک و ضمائم پیوست رسید انبار
                       </span>
                     </div>
                     <span className="text-caption text-primary-700 font-bold bg-primary-50 border border-primary-200 px-3 py-0.5 rounded-full self-start sm:self-auto">
@@ -2340,7 +2323,7 @@ export const WarehouseReceiptsView: React.FC<WarehouseReceiptsViewProps> = ({
                   </div>
                 </div>
                 <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
-                  پیش‌نمایش محتوای سند در مرورگر آماده‌سازی شد. ذخیره در حافظه موقت نمایشی بوده و هیچ‌گونه اتصالی به سیستم مالی یا پارسینا وجود ندارد (NOT_CONNECTED).
+                  پیش‌نمایش محتوای مدرک در مرورگر بارگذاری شد.
                 </p>
               </div>
             )}

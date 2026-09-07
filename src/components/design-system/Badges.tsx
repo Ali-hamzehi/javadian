@@ -11,11 +11,11 @@ interface StatusBadgeProps {
 export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, label, className = '' }) => {
   const meta = getStatusMeta(status);
   const external: Record<string, { label: string; domain: string; tone: string }> = {
-    DEFERRED: { label: 'موکول به تصمیم کارفرما', domain: 'prototype', tone: 'neutral' },
+    DEFERRED: { label: 'موقت', domain: 'prototype', tone: 'neutral' },
     NOT_CONNECTED: { label: 'متصل نیست', domain: 'integration', tone: 'warning' },
     NOT_CONFIGURED: { label: 'پیکربندی نشده', domain: 'integration', tone: 'warning' },
-    NOT_POSTED: { label: 'ثبت نشده در سیستم مالی', domain: 'integration', tone: 'neutral' },
-    PROTOTYPE_ONLY: { label: 'صرفاً نمایشی', domain: 'prototype', tone: 'neutral' },
+    NOT_POSTED: { label: 'ثبت رسمی نشده', domain: 'integration', tone: 'neutral' },
+    PROTOTYPE_ONLY: { label: 'نمایشی', domain: 'prototype', tone: 'neutral' },
   };
   const state = external[status];
   const tone = state?.tone || meta.tone;
@@ -32,7 +32,7 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, label, classNa
     <span data-domain={state?.domain || 'business'} data-status={status}
       className={`status-badge inline-flex flex-wrap items-center gap-2 px-3 py-1 text-caption font-semibold rounded-full border ${tones[tone]} ${className}`}>
       <span>{displayLabel}</span>
-      {state && <bdi dir="ltr">{status}</bdi>}
+      {state && <span className="sr-only"><bdi dir="ltr">{status}</bdi></span>}
     </span>
   );
 };
@@ -44,13 +44,16 @@ interface PriorityBadgeProps {
 
 export const PriorityBadge: React.FC<PriorityBadgeProps> = ({ priority, className = '' }) => {
   const meta = getPriorityMeta(priority);
+  const displayLabel = priority === 'urgent' ? 'فوری' : meta.label;
+  const bg = priority === 'urgent' ? 'bg-rose-50 text-rose-700 border-rose-200' : meta.bg;
+  const dot = priority === 'urgent' ? 'bg-rose-600' : meta.dot;
 
   return (
     <span
-      className={`inline-flex items-center gap-2 px-3 py-0.5 text-xs font-medium rounded-full border whitespace-nowrap ${meta.bg} ${className}`}
+      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 text-xs font-semibold rounded-full border whitespace-nowrap ${bg} ${className}`}
     >
-      <span className={`w-1.5 h-1.5 rounded-full ${meta.dot}`} />
-      <span>{meta.label}</span>
+      <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
+      <span>{displayLabel}</span>
     </span>
   );
 };

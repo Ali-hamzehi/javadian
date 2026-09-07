@@ -134,8 +134,8 @@ export const ResponsibilitiesView: React.FC<ResponsibilitiesViewProps> = ({ acti
               <Layers className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-slate-800">مسئولیت‌ها و پست‌های سازمانی</h1>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <h1 className="page-title text-xl sm:text-2xl font-bold text-slate-800">مسئولیت‌ها و پست‌های سازمانی</h1>
+              <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
                 تفکیک عناوین چارت سازمانی از حوزه‌های صلاحیت عملیاتی، چندمسئولیتی پرسنل و ممیزی اختیارات
               </p>
             </div>
@@ -168,7 +168,7 @@ export const ResponsibilitiesView: React.FC<ResponsibilitiesViewProps> = ({ acti
             اختیارات عملیاتی (نظیر صدور رسید انبار، هماهنگی بارنامه، تسویه کرایه یا تأیید تخفیف) از طریق «حوزه‌های مسئولیت» به فرد واگذار می‌شوند.
           </div>
           <div className="text-caption text-teal-800">
-            مدیران می‌توانند بدون تغییر ساختار سازمانی یا اختراع عناوین شغلی کاذب، چندین حوزه مسئولیت با بازه زمانی معین را به یک همکار بسپارند (مانند همکار چندمسئولیتی «محسن راد» یا تفویض تسویه کرایه به «کامران داوودی»).
+            مدیران می‌توانند بدون تغییر ساختار سازمانی یا اختراع عناوین شغلی کاذب، چندین حوزه مسئولیت با بازه زمانی معین را به یک همکار بسپارند (مانند همکار چندمسئولیتی «آقای یوسفی» یا مسئولیت کرایه حمل برای «آرش»).
           </div>
         </div>
       </div>
@@ -281,7 +281,7 @@ export const ResponsibilitiesView: React.FC<ResponsibilitiesViewProps> = ({ acti
                             {resp?.scopeConstraints && (
                               <div className="text-caption text-primary-700 mt-0.5">
                                 {resp.scopeConstraints.paymentCategory && (
-                                  <div>قید رده: {resp.scopeConstraints.paymentCategory}</div>
+                                  <div>محدوده رده: {resp.scopeConstraints.paymentCategory}</div>
                                 )}
                                 {resp.scopeConstraints.maxAmountRials && (
                                   <div>سقف: {resp.scopeConstraints.maxAmountRials.toLocaleString('fa-IR')} ریال</div>
@@ -325,7 +325,9 @@ export const ResponsibilitiesView: React.FC<ResponsibilitiesViewProps> = ({ acti
                                   setRevokingAssignment(asg);
                                   setRevokeReason('');
                                 }}
-                                className="px-3 py-1 text-caption bg-rose-50 text-rose-700 hover:bg-rose-100 rounded border border-rose-200 font-medium transition-colors"
+                                className="px-3 py-1.5 min-h-[36px] text-xs bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-lg border border-rose-300 font-semibold transition-colors inline-flex items-center justify-center cursor-pointer"
+                                title="لغو مسئولیت سازمانی"
+                                aria-label="لغو مسئولیت سازمانی"
                               >
                                 لغو مسئولیت
                               </button>
@@ -535,7 +537,7 @@ export const ResponsibilitiesView: React.FC<ResponsibilitiesViewProps> = ({ acti
                   </div>
                   {selectedResp.scopeConstraints && (
                     <div className="text-caption text-slate-500 pt-1 border-t border-slate-200">
-                      دامنه و قید:{' '}
+                      دامنه و محدوده:{' '}
                       {selectedResp.scopeConstraints.paymentCategory || selectedResp.scopeConstraints.region || 'ندارد'}
                     </div>
                   )}
@@ -650,7 +652,15 @@ export const ResponsibilitiesView: React.FC<ResponsibilitiesViewProps> = ({ acti
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">دامنه پیش‌فرض:</span>
-                <span>{selectedRespArea.defaultScope}</span>
+                <span className="font-medium text-slate-800">
+                  {selectedRespArea.defaultScope === 'organization'
+                    ? 'کل سازمان'
+                    : selectedRespArea.defaultScope === 'unit'
+                    ? 'واحد سازمانی'
+                    : selectedRespArea.defaultScope === 'self'
+                    ? 'شخصی'
+                    : selectedRespArea.defaultScope}
+                </span>
               </div>
             </div>
 

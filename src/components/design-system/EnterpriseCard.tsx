@@ -91,7 +91,7 @@ export const EnterpriseCardHeader: React.FC<EnterpriseCardHeaderProps> = ({
             )}
             {badge}
           </div>
-          <h3 className="font-extrabold text-sm text-slate-900 leading-snug truncate">
+          <h3 className="card-title font-extrabold text-base text-slate-900 leading-snug truncate">
             {title}
           </h3>
           {subtitle && (

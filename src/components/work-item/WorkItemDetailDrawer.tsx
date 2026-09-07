@@ -44,7 +44,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import { toPersianDigits } from '../../utils/formatters';
-import { getDisplayPersonaName } from '../../runtime/documentBasedPersonas';
+import { getDisplayPersonaName, getDisplayPersonaRole } from '../../runtime/documentBasedPersonas';
 
 interface WorkItemDetailDrawerProps {
   isOpen: boolean;
@@ -290,7 +290,7 @@ export const WorkItemDetailDrawer: React.FC<WorkItemDetailDrawerProps> = ({
                       onClick={() => setIsUnblocking(true)}
                       leftIcon={<CheckCircle2 className="w-4 h-4" />}
                     >
-                      رفع مانع و بازگشت به کار
+                      رفع مانع و ادامه کار
                     </Button>
                   )}
                   {allowed.can_report_blocker && (
@@ -353,14 +353,14 @@ export const WorkItemDetailDrawer: React.FC<WorkItemDetailDrawerProps> = ({
               <div className="flex items-center gap-2">
                 <span className="text-slate-500">مسئول فعلی:</span>
                 <span className="font-bold text-primary-800 bg-primary-100/70 px-2 py-0.5 rounded">
-                  {getDisplayPersonaName(currentAssignee)}{currentAssignee.role ? ` (${currentAssignee.role})` : ''}
+                  {getDisplayPersonaName(currentAssignee)}{currentAssignee.role ? ` (${getDisplayPersonaRole(currentAssignee)})` : ''}
                 </span>
-                <span className="text-caption text-slate-400">از {currentAssignee.heldSinceJalali || 'هم‌اکنون'}</span>
+                <span className="text-caption text-slate-600 font-medium">از {currentAssignee.heldSinceJalali || 'هم‌اکنون'}</span>
               </div>
 
               {record.dueDateJalali && (
                 <div className="flex items-center gap-1.5 text-slate-600">
-                  <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                  <Calendar className="w-3.5 h-3.5 text-slate-500" />
                   <span>مهلت: <strong className="text-slate-900">{record.dueDateJalali}</strong></span>
                 </div>
               )}
@@ -399,7 +399,7 @@ export const WorkItemDetailDrawer: React.FC<WorkItemDetailDrawerProps> = ({
               <div className="p-3 bg-amber-50 border border-amber-300 rounded-lg text-amber-950 text-xs flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
                 <div className="leading-relaxed">
-                  <span className="font-bold">منع خودتأییدی: </span>
+                  <span className="font-bold">تأیید درخواست خودتان مجاز نیست: </span>
                   <span>
                     شما ثبت‌کننده این سند هستید ({getDisplayPersonaName(record.creator)}). تأیید باید توسط مقام مستقل ({getDisplayPersonaName(record.approver) || 'مدیر مربوطه'}) انجام شود.
                   </span>
@@ -583,7 +583,7 @@ export const WorkItemDetailDrawer: React.FC<WorkItemDetailDrawerProps> = ({
                     setIsUnblocking(false);
                   }}
                 >
-                  رفع مانع و بازگشت به کار
+                  رفع مانع و ادامه کار
                 </Button>
                 <Button variant="ghost" size="sm" onClick={() => setIsUnblocking(false)}>
                   انصراف
@@ -654,17 +654,19 @@ export const WorkItemDetailDrawer: React.FC<WorkItemDetailDrawerProps> = ({
               >
                 یادداشت‌ها ({toPersianDigits(record.comments.length)})
               </button>
-              <button
-                type="button"
-                onClick={() => setActiveTab('attachments')}
-                className={`px-3 py-2 rounded-t-lg font-medium whitespace-nowrap transition-colors ${
-                  activeTab === 'attachments'
-                    ? 'border-b-2 border-primary-600 text-primary-700 font-bold bg-primary-50/50'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                پیوست‌ها ({toPersianDigits(record.attachments.length)})
-              </button>
+              {record.attachments && record.attachments.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('attachments')}
+                  className={`px-3 py-2 rounded-t-lg font-medium whitespace-nowrap transition-colors ${
+                    activeTab === 'attachments'
+                      ? 'border-b-2 border-primary-600 text-primary-700 font-bold bg-primary-50/50'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  پیوست‌ها ({toPersianDigits(record.attachments.length)})
+                </button>
+              )}
             </div>
 
             {/* TAB: SUMMARY & PARTICIPANTS */}
@@ -694,26 +696,26 @@ export const WorkItemDetailDrawer: React.FC<WorkItemDetailDrawerProps> = ({
                   <div className="p-3 bg-white rounded-lg border border-slate-200 space-y-1">
                     <div className="text-caption text-slate-500">ثبت‌کننده اولیه:</div>
                     <div className="font-bold text-slate-900">{getDisplayPersonaName(record.creator)}</div>
-                    <div className="text-caption text-slate-600">{record.creator.role} ({record.creator.department})</div>
+                    <div className="text-caption text-slate-600">{getDisplayPersonaRole(record.creator)} ({record.creator.department})</div>
                   </div>
 
                   <div className="p-3 bg-white rounded-lg border border-slate-200 space-y-1">
                     <div className="text-caption text-slate-500">صاحب کار (پاسخگو):</div>
                     <div className="font-bold text-slate-900">{getDisplayPersonaName(record.owner) || getDisplayPersonaName(record.creator)}</div>
-                    <div className="text-caption text-slate-600">{record.owner?.role || record.creator.role}</div>
+                    <div className="text-caption text-slate-600">{getDisplayPersonaRole(record.owner || record.creator)}</div>
                   </div>
 
                   <div className="p-3 bg-primary-50/50 rounded-lg border border-primary-100 space-y-1">
                     <div className="text-caption text-primary-800 font-semibold">مجری کنونی (اکنون دست کیست؟):</div>
                     <div className="font-bold text-slate-900">{getDisplayPersonaName(currentAssignee)}</div>
-                    <div className="text-caption text-slate-600">{currentAssignee.role}</div>
+                    <div className="text-caption text-slate-600">{getDisplayPersonaRole(currentAssignee)}</div>
                   </div>
 
                   {record.approver && (
                     <div className="p-3 bg-white rounded-lg border border-slate-200 space-y-1">
                       <div className="text-caption text-slate-500">تأییدکننده مسئول:</div>
                       <div className="font-bold text-slate-900">{getDisplayPersonaName(record.approver)}</div>
-                      <div className="text-caption text-slate-600">{record.approver.role}</div>
+                      <div className="text-caption text-slate-600">{getDisplayPersonaRole(record.approver)}</div>
                     </div>
                   )}
                 </div>

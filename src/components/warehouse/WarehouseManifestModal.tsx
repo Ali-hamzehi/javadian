@@ -7,6 +7,7 @@ import { ModalDialog } from '../design-system/ModalAndDrawer';
 import { Button } from '../design-system/Button';
 import { useToast } from '../design-system/ToastContext';
 import { formatRials, toPersianDigits, formatNumber } from '../../utils/formatters';
+import { getDisplayPersonaName } from '../../runtime/documentBasedPersonas';
 
 interface WarehouseManifestModalProps {
   isOpen: boolean;
@@ -59,7 +60,7 @@ export const WarehouseManifestModal: React.FC<WarehouseManifestModalProps> = ({
     <ModalDialog
       isOpen={isOpen}
       onClose={onClose}
-      title="پیش‌نمایش و چاپ حواله رسمی خروج از انبار (Official Dispatch Manifest)"
+      title="حواله خروج از انبار"
       width="xl"
       footer={
         <div className="flex items-center justify-between w-full">
@@ -68,7 +69,7 @@ export const WarehouseManifestModal: React.FC<WarehouseManifestModalProps> = ({
           </Button>
           <Button variant="primary" size="sm" onClick={handlePrint}>
             <Printer className="w-4 h-4 ml-1" />
-            چاپ حواله رسمی انبار
+            چاپ حواله انبار
           </Button>
         </div>
       }
@@ -275,7 +276,7 @@ export const WarehouseManifestModal: React.FC<WarehouseManifestModalProps> = ({
             <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg text-center space-y-1">
               <span className="font-bold text-caption block text-slate-700">۱. صادرکننده و فروش</span>
               <span className="text-caption text-slate-500 block">
-                {exitRecord.salesResponsible?.name || 'سهراب جوادیان'}
+                {getDisplayPersonaName(exitRecord.salesResponsible?.name) || 'کارشناس فروش — نقش نمونه'}
               </span>
               <div className="h-10 flex items-center justify-center text-caption text-emerald-700 font-bold">
                 ✓ امضا و تأیید شد
@@ -286,7 +287,7 @@ export const WarehouseManifestModal: React.FC<WarehouseManifestModalProps> = ({
             <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg text-center space-y-1">
               <span className="font-bold text-caption block text-slate-700">۲. مسئول انبار و بارگیری</span>
               <span className="text-caption text-slate-500 block">
-                {exitRecord.dispatchActor?.person.name || 'کامران داوودی'}
+                {getDisplayPersonaName(exitRecord.dispatchActor?.person.name) || 'آرش'}
               </span>
               <div className="h-10 flex items-center justify-center text-caption text-emerald-700 font-bold">
                 {exitRecord.status === 'dispatched' ? '✓ ترخیص فیزیکی انجام شد' : 'در انتظار خروج فیزیکی'}
@@ -297,7 +298,7 @@ export const WarehouseManifestModal: React.FC<WarehouseManifestModalProps> = ({
             <div className="p-3 bg-slate-50 border border-slate-200 rounded-lg text-center space-y-1">
               <span className="font-bold text-caption block text-slate-700">۳. مدیریت بازرگانی</span>
               <span className="text-caption text-slate-500 block">
-                سهراب جوادیان
+                تأییدکننده بازرگانی — نقش نمونه
               </span>
               <div className="h-10 flex items-center justify-center text-caption text-emerald-700 font-bold">
                 ✓ مصوب بازرگانی

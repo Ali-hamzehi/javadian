@@ -9,6 +9,8 @@ import {
   getAuthorizedRequestTypes,
   filterEmployeeRecords,
   getEmployeeOneLineSummary,
+  isRouteVisibleForPersona,
+  isNavGroupVisibleForPersona,
 } from '../src/utils/roleExperience';
 import { InboxView } from '../src/views/InboxView';
 import { PaymentRequestsView } from '../src/views/PaymentRequestsView';
@@ -175,6 +177,61 @@ test('local persistence functions safely handle storage operations and mock brow
     assert.equal(reloaded, true);
   } finally {
     delete (globalThis as any).window;
+  }
+});
+
+test('acceptance scenarios: employee experience header, tabs, empty state and role-aware navigation', () => {
+  const arash = MOCK_PERSONAS.find((p) => p.id === 'p-warehouse')!;
+  const ordinaryWh = MOCK_PERSONAS.find((p) => p.id === 'p-ordinary')!;
+  const salesSpec = MOCK_PERSONAS.find((p) => p.id === 'p-sales')!;
+  const naderi = MOCK_PERSONAS.find((p) => p.id === 'p-field-sales')!;
+  const guest = MOCK_PERSONAS.find((p) => p.id === 'p-no-access')!;
+
+  // A. Arash: clean task-first view
+  const arashInboxHtml = render(
+    <ToastProvider>
+      <InboxView activePersona={arash} />
+    </ToastProvider>
+  );
+  assert.ok(arashInboxHtml.includes('برای انجام'));
+  assert.ok(arashInboxHtml.includes('برای پیگیری'));
+  assert.ok(arashInboxHtml.includes('مسدود'));
+  assert.ok(arashInboxHtml.includes('انجام‌شده اخیر'));
+  assert.ok(arashInboxHtml.includes('سابقه'));
+  assert.ok(!arashInboxHtml.includes('کارتابل من (اقدام جاری)'));
+
+  // B. Warehouse Staff (مسئول انبار — نقش نمونه): no financial menu or payment scope
+  assert.equal(isRouteVisibleForPersona('payment_requests', ordinaryWh), false);
+  assert.equal(isNavGroupVisibleForPersona('finance', ordinaryWh), false);
+  assert.equal(isRouteVisibleForPersona('inventory_receipts', ordinaryWh), true);
+  assert.equal(isRouteVisibleForPersona('ops_view', ordinaryWh), false);
+
+  // C. Sales Specialist (کارشناس فروش — نقش نمونه): no payment/finance menu, sales visible
+  assert.equal(isRouteVisibleForPersona('payment_requests', salesSpec), false);
+  assert.equal(isNavGroupVisibleForPersona('finance', salesSpec), false);
+  assert.equal(isRouteVisibleForPersona('sales_orders', salesSpec), true);
+  assert.equal(isRouteVisibleForPersona('customers', salesSpec), true);
+  assert.equal(isRouteVisibleForPersona('ops_view', salesSpec), false);
+
+  // D. Mr. Naderi: field sales & scoped payments visible; management hidden
+  assert.equal(isRouteVisibleForPersona('sales_orders', naderi), true);
+  assert.equal(isRouteVisibleForPersona('sales_calls', naderi), true);
+  assert.equal(isRouteVisibleForPersona('visit_plans', naderi), true);
+  assert.equal(isRouteVisibleForPersona('payment_requests', naderi), true);
+  assert.equal(isRouteVisibleForPersona('ops_view', naderi), false);
+
+  // E. Guest (کارآموز مهمان — نقش نمونه): all routes hidden
+  assert.equal(isRouteVisibleForPersona('inbox', guest), false);
+  assert.equal(isRouteVisibleForPersona('sales_orders', guest), false);
+  assert.equal(isRouteVisibleForPersona('payment_requests', guest), false);
+  assert.equal(isNavGroupVisibleForPersona('management', guest), false);
+
+  // F. No ordinary employee sees managerial routes
+  for (const emp of [arash, ordinaryWh, salesSpec, naderi, guest]) {
+    assert.equal(isRouteVisibleForPersona('ops_view', emp), false);
+    assert.equal(isRouteVisibleForPersona('traceability', emp), false);
+    assert.equal(isRouteVisibleForPersona('integration_errors', emp), false);
+    assert.equal(isNavGroupVisibleForPersona('management', emp), false);
   }
 });
 

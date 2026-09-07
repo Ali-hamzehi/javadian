@@ -298,16 +298,16 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
         },
         currentOwner: {
           id: 'p-comm-approver',
-          name: 'سهراب جوادیان',
-          role: 'مدیر بازرگانی و ناظر داده‌های پایه',
+          name: 'تأییدکننده بازرگانی — نقش نمونه',
+          role: 'تأییدکننده بازرگانی — نقش نمونه',
           department: 'معاونت بازرگانی',
           heldSinceJalali: 'هم‌اکنون',
           durationHours: 0,
         },
         currentAssignee: {
           id: 'p-comm-approver',
-          name: 'سهراب جوادیان',
-          role: 'مدیر بازرگانی و ناظر داده‌های پایه',
+          name: 'تأییدکننده بازرگانی — نقش نمونه',
+          role: 'تأییدکننده بازرگانی — نقش نمونه',
           department: 'معاونت بازرگانی',
         },
         status: 'in_progress',
@@ -318,8 +318,8 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
         statusSinceJalali: 'هم‌اکنون',
         nextAction: {
           title: 'بررسی مدارک هویتی و تصویب تغییر نشانی/تلفن در پایگاه مشتریان',
-          responsibleRole: 'مدیر بازرگانی و ناظر داده‌های پایه',
-          responsiblePersonName: 'سهراب جوادیان',
+          responsibleRole: 'تأییدکننده بازرگانی — نقش نمونه',
+          responsiblePersonName: 'تأییدکننده بازرگانی — نقش نمونه',
           dueJalali: '۱۴۰۴/۰۶/۱۲',
           suggestedAction: 'review',
         },
@@ -624,8 +624,8 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
       },
       currentOwner: {
         id: 'p-fin-spec',
-        name: 'پروانه صالحی',
-        role: 'کارشناس حسابداری و دریافت/پرداخت',
+        name: 'کارشناس مالی — نقش نمونه',
+        role: 'کارشناس مالی — نقش نمونه',
         department: 'امور مالی و خزانه‌داری',
         avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80',
         heldSinceJalali: 'هم‌اکنون',
@@ -633,8 +633,8 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
       },
       currentAssignee: {
         id: 'p-fin-spec',
-        name: 'پروانه صالحی',
-        role: 'کارشناس حسابداری و دریافت/پرداخت',
+        name: 'کارشناس مالی — نقش نمونه',
+        role: 'کارشناس مالی — نقش نمونه',
         department: 'امور مالی و خزانه‌داری',
         avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80',
         heldSinceJalali: 'هم‌اکنون',
@@ -668,8 +668,8 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
       blocker: null,
       nextAction: {
         title: 'استعلام حسابداری و تایید وصول وجه',
-        responsibleRole: 'کارشناس حسابداری و دریافت/پرداخت',
-        responsiblePersonName: 'پروانه صالحی',
+        responsibleRole: 'کارشناس مالی — نقش نمونه',
+        responsiblePersonName: 'کارشناس مالی — نقش نمونه',
         dueJalali: '۱۴۰۴/۰۶/۱۲',
         suggestedAction: 'review',
       },
@@ -823,6 +823,16 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
 
     if (convertTargetType === 'followup' || convertTargetType === 'task') {
       const taskCode = `TSK-1404-${Math.floor(1000 + Math.random() * 9000)}`;
+      
+      const channelLabel =
+        selectedIntake.channel === 'phone'
+          ? 'تلفنی'
+          : selectedIntake.channel === 'whatsapp'
+          ? 'واتساپ'
+          : selectedIntake.channel === 'in_person'
+          ? 'حضوری'
+          : selectedIntake.channel;
+
       const taskRecord: OperationalRecord = {
         id: `rec-intk-${Date.now()}`,
         code: taskCode,
@@ -831,7 +841,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
         typeLabel: 'پیگیری منشأ کانال ارتباطی',
         itemSummary: `موضوع پیام: ${selectedIntake.summary} • منبع: ${selectedIntake.originalReference}`,
         unit: 'فروش و امور مشتریان',
-        tags: [selectedIntake.channel, selectedIntake.senderCompany, 'پیگیری پیام'],
+        tags: [channelLabel, selectedIntake.senderCompany, 'پیگیری پیام'],
         salesChannel: selectedIntake.channel === 'phone' ? 'phone' : selectedIntake.channel === 'whatsapp' ? 'whatsapp' : 'other',
         relatedRecords: [],
         creator: {
@@ -877,7 +887,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
               role: activePersona.jobTitle,
               department: activePersona.department,
             },
-            title: `تبدیل پیام دریافتی (${selectedIntake.channel}) به اقدام عملیاتی`,
+            title: `تبدیل پیام دریافتی (${channelLabel}) به اقدام عملیاتی`,
             note: `اصل پیام: ${selectedIntake.summary}`,
             type: 'creation',
           },
@@ -916,7 +926,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
       );
 
       addToast(`پیام با موفقیت به پیگیری تبدیل و به کارتابل «${targetEmployee.name}» منتقل شد`, {
-        description: `کد وظیفه: ${taskCode} • حفظ ردپای کانال: ${selectedIntake.channel}`,
+        description: `کد وظیفه: ${taskCode} • حفظ ردپای کانال: ${channelLabel}`,
         tone: 'success',
       });
     } else {
@@ -1151,8 +1161,8 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
                     className="border border-slate-300 rounded px-2 py-1 text-xs bg-white text-slate-800"
                   >
                     <option value="all">همه ویزیتورها</option>
-                    <option value="سینا کریمی">سینا کریمی (تهران)</option>
-                    <option value="علیرضا تهرانی">علیرضا تهرانی (اصفهان)</option>
+                    <option value="آقای نادری">آقای نادری (استان قم)</option>
+                    <option value="کارشناس فروش — نقش نمونه">کارشناس فروش — نقش نمونه</option>
                   </select>
                 </div>
               )}
@@ -2007,7 +2017,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
           <div className="space-y-3.5 text-xs">
             <div className="p-3 bg-primary-50 text-primary-950 rounded-lg border border-primary-200 leading-relaxed">
               <strong>گردش کار مالی:</strong> این فیش مستقیماً جهت کنترل و تطبیق بانکی به کارتابل خزانه‌داری
-              (سرکار خانم پروانه صالحی) ارسال می‌شود. ویزیتور صلاحیت تأیید مالی ندارد.
+              (کارشناس مالی — نقش نمونه) ارسال می‌شود. ویزیتور صلاحیت تأیید مالی ندارد.
             </div>
 
             {receiptError && (

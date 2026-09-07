@@ -373,12 +373,12 @@ export const DesignSystemShowcaseView: React.FC = () => {
               نشان مالکیت پرونده (Ownership Badge) با مدت توقف و جانشینی
             </h3>
             <div className="flex items-center gap-3 flex-wrap">
-              <OwnershipBadge ownerName="کامران داوودی" durationHours={4} />
+              <OwnershipBadge ownerName="آرش" durationHours={4} />
               <OwnershipBadge
-                ownerName="محسن راد"
+                ownerName="آقای یوسفی"
                 durationHours={18}
                 isDelegated={true}
-                delegatorName="مهندس اسدی"
+                delegatorName="آرش"
               />
             </div>
           </div>
@@ -394,7 +394,7 @@ export const DesignSystemShowcaseView: React.FC = () => {
                 <PersonDisplay
                   person={sampleRecord.currentOwner}
                   isDelegate={true}
-                  delegatorName="مهندس حامد اسدی"
+                  delegatorName="آقای منتظری"
                 />
               </div>
             </div>
@@ -484,8 +484,8 @@ export const DesignSystemShowcaseView: React.FC = () => {
           {/* Concurrency Conflict State */}
           <ConflictState
             currentValue="تأیید با تخفیف ۵ درصدی و موعد پرداخت ۴۵ روزه"
-            serverValue="تأیید مشروط به تسویه نقدی کامل توسط دکتر شریفی"
-            modifiedBy="دکتر فرزاد شریفی (مدیر مالی)"
+            serverValue="تأیید مشروط به تسویه نقدی کامل توسط تأییدکننده مالی"
+            modifiedBy="تأییدکننده مالی — نقش نمونه"
             onResolve={(action) =>
               addToast(
                 action === 'overwrite' ? 'تغییرات شما بازنویسی شد' : 'داده‌های سرور همگام‌سازی شد',

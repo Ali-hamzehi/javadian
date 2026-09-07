@@ -1,6 +1,7 @@
 import React from 'react';
 import { TimelineEvent } from '../../types';
 import { PersonDisplay } from './PersonDisplay';
+import { getDisplayPersonaRole } from '../../runtime/documentBasedPersonas';
 import {
   FilePlus,
   ArrowLeftRight,
@@ -76,7 +77,7 @@ export const Timeline: React.FC<TimelineProps> = ({ events, className = '' }) =>
 
             <div className="mt-2 flex items-center gap-2">
               <PersonDisplay person={evt.actor} size="sm" showDetails={false} />
-              <span className="text-caption text-slate-500">({evt.actor.role})</span>
+              <span className="text-caption text-slate-500">({getDisplayPersonaRole(evt.actor)})</span>
             </div>
 
             {evt.note && (

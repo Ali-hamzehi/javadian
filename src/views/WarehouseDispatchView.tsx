@@ -7,6 +7,7 @@ import {
   MockPersona,
 } from '../types';
 import { mockSalesWarehouseStore } from '../runtime/workflow';
+import { getDisplayPersonaName } from '../runtime/documentBasedPersonas';
 import { Button } from '../components/design-system/Button';
 import { Drawer } from '../components/design-system/ModalAndDrawer';
 import { useToast } from '../components/design-system/ToastContext';
@@ -171,11 +172,11 @@ export const WarehouseDispatchView: React.FC<WarehouseDispatchViewProps> = ({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-none">
         <div>
-          <h1 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+          <h1 className="page-title text-xl sm:text-2xl font-extrabold text-slate-900 flex items-center gap-2">
             <PackageCheck className="w-5 h-5 text-primary-700" />
-            خروج از انبار و تحویل سفارش‌ها (Warehouse Exit & Dispatch)
+            خروج از انبار و تحویل سفارش‌ها
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs sm:text-sm text-slate-600 mt-1">
             ارتباط مستقیم با سفارش‌های فروش تأییدشده، تطبیق مقادیر درخواستی و ارسالی، استعلام لحظه‌ای موجودی و ترخیص کالا
           </p>
         </div>
@@ -188,7 +189,7 @@ export const WarehouseDispatchView: React.FC<WarehouseDispatchViewProps> = ({
             className="flex items-center gap-2 font-bold shadow-none cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            صدور حواله خروج / پیش‌نویس جدید
+            صدور حواله خروج
           </Button>
         </div>
       </div>
@@ -751,17 +752,17 @@ export const WarehouseDispatchView: React.FC<WarehouseDispatchViewProps> = ({
                   {
                     roleKey: 'sales_responsible' as const,
                     roleLabel: 'مسئول فروش',
-                    defaultName: selectedExit.salesResponsible?.name || 'سهراب جوادیان',
+                    defaultName: getDisplayPersonaName(selectedExit.salesResponsible?.name) || 'کارشناس فروش — نقش نمونه',
                   },
                   {
                     roleKey: 'management' as const,
                     roleLabel: 'مدیریت بازرگانی',
-                    defaultName: 'سهراب جوادیان',
+                    defaultName: 'تأییدکننده بازرگانی — نقش نمونه',
                   },
                   {
                     roleKey: 'ceo' as const,
                     roleLabel: 'مدیریت عامل (اختیاری)',
-                    defaultName: 'مدیرعامل / هیئت مدیره',
+                    defaultName: 'آقای منتظری',
                   },
                 ].map((slot) => {
                   const sig = selectedExit.approvalSignatures?.find((s) => s.roleKey === slot.roleKey);

@@ -283,10 +283,10 @@ export const ManualIntakeView: React.FC<ManualIntakeViewProps> = ({
                 <MessageSquare className="w-5 h-5" />
               </span>
               <h1 className="text-base sm:text-lg font-black text-slate-900">
-                درگاه تبدیل دستی تماس و پیام به کار رسمی (Manual Intake)
+                ثبت تعاملات و پیام‌های ورودی
               </h1>
               <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-700">
-                بدون ادعای اتصال خودکار به پلتفرم‌ها (No Spy / Real APIs)
+                ثبت دستی تعاملات
               </span>
             </div>
             <p className="text-xs text-slate-600 leading-relaxed">
@@ -301,7 +301,7 @@ export const ManualIntakeView: React.FC<ManualIntakeViewProps> = ({
             onClick={() => setIsCreateModalOpen(true)}
             leftIcon={<Plus className="w-4 h-4" />}
           >
-            ثبت تماس / پیام ورودی جدید
+            ثبت تعامل جدید
           </Button>
         </div>
 

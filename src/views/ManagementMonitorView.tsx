@@ -1,6 +1,6 @@
 import { FieldGroup } from '../components/design-system/FieldGroup';
 import React, { useState } from 'react';
-import { BarChart3, AlertOctagon, Clock, CheckCircle, CheckCircle2, Filter, Server, MapPin, ExternalLink, ShieldCheck, Zap, ShoppingBag, Truck, CreditCard, Database, ArrowLeft, GitBranch, UserCheck, ChevronDown, ChevronUp, Link2, HelpCircle, Bell, AlertTriangle } from 'lucide-react';
+import { BarChart3, AlertOctagon, Clock, CheckCircle, CheckCircle2, Filter, Server, MapPin, ExternalLink, ShieldCheck, Activity, ShoppingBag, Truck, CreditCard, Database, ArrowLeft, GitBranch, UserCheck, ChevronDown, ChevronUp, Link2, HelpCircle, Bell, AlertTriangle } from 'lucide-react';
 import { MockPersona, OperationalDrillRecord, OperationalUnit, TraceabilityStep } from '../types';
 import { MOCK_OPERATIONAL_DRILL_RECORDS } from '../data/mockOperationsPrompt4';
 import { DETERMINISTIC_TRACEABILITY_SCENARIO } from '../data/mockTraceabilityScenario';
@@ -178,7 +178,7 @@ export const ManagementMonitorView: React.FC<ManagementMonitorViewProps> = ({
         <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
           کاربر گرامی ({activePersona.name})، مشاهده دیده‌بان عملیاتی و پایش گلوگاه‌های سازمان نیازمند
           دسترسی <span className="font-mono font-bold text-slate-800">MANAGEMENT_VIEW</span> است. لطفاً
-          از بخش بالای صفحه، نقش کاربری را به یکی از مدیران (مانند سهراب جوادیان یا مدیر سیستم) تغییر
+          از بخش بالای صفحه، نقش کاربری را به یکی از مدیران (مانند آقای منتظری یا مدیر سیستم) تغییر
           دهید.
         </p>
       </div>
@@ -195,7 +195,7 @@ export const ManagementMonitorView: React.FC<ManagementMonitorViewProps> = ({
               <span className="p-2 bg-primary-50 text-primary-700 rounded-lg">
                 <BarChart3 className="w-5 h-5" />
               </span>
-              <h1 className="text-base sm:text-lg font-black text-slate-900">
+              <h1 className="page-title text-xl sm:text-2xl font-black text-slate-900">
                 دیده‌بان عملیاتی مدیریت و پایش گلوگاه‌ها
               </h1>
               <span className="text-xs font-bold px-3 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -217,7 +217,7 @@ export const ManagementMonitorView: React.FC<ManagementMonitorViewProps> = ({
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <Zap className="w-3.5 h-3.5 text-primary-700" />
+              <Activity className="w-3.5 h-3.5 text-primary-700" />
               <span>نمای عملیات و گلوگاه‌ها</span>
             </button>
 
@@ -261,156 +261,108 @@ export const ManagementMonitorView: React.FC<ManagementMonitorViewProps> = ({
       {/* ================= MODE 1: OPERATIONAL MONITOR ================= */}
       {activeMode === 'ops_view' && (
         <>
-          {/* Overview Sections (8 Prominent Clickable KPI Cards) */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {/* 1. Waiting Approvals */}
+          {/* Overview Sections (4 Core Clickable KPI Cards for Executive Overview) */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {/* 1. Waiting Decisions */}
             <div
-              onClick={() => openDrillModal('تأییدهای معطل مانده (Waiting Approvals)', waitingApprovals)}
-              className="bg-white rounded-xl border border-amber-200 p-4 hover:border-amber-400 transition-all cursor-pointer shadow-none hover:shadow-sm group"
+              onClick={() => {
+                setFilterStatus('waiting_approval');
+                setFilterUnit('all');
+              }}
+              className={`bg-white rounded-xl border p-4 transition-all cursor-pointer shadow-none hover:shadow-xs group ${
+                filterStatus === 'waiting_approval'
+                  ? 'border-primary-500 bg-primary-50/50 ring-2 ring-primary-200'
+                  : 'border-slate-200 hover:border-primary-300'
+              }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-amber-900">تأییدهای معطل مانده</span>
-                <Clock className="w-4 h-4 text-amber-600  transition-transform" />
+                <span className="text-xs font-bold text-slate-800">تصمیم‌های در انتظار</span>
+                <Clock className="w-4 h-4 text-primary-700" />
               </div>
               <div className="mt-2 flex items-baseline gap-2">
-                <span className="text-2xl font-black text-amber-900">{toPersianDigits(waitingApprovals.length)}</span>
-                <span className="text-caption text-amber-700">پرونده رسمی</span>
+                <span className="text-2xl font-black text-primary-900">{toPersianDigits(waitingApprovals.length)}</span>
+                <span className="text-caption text-slate-500">پرونده منتظر تصمیم</span>
               </div>
-              <span className="mt-2 text-caption text-amber-600 flex items-center gap-1 font-semibold">
-                <span>مشاهده پرونده‌ها و رفع مانع</span>
+              <span className="mt-2 text-caption text-primary-700 flex items-center gap-1 font-semibold">
+                <span>فیلتر و مشاهده لیست</span>
                 <ArrowLeft className="w-3 h-3" />
               </span>
             </div>
 
             {/* 2. Blocked Work */}
             <div
-              onClick={() => openDrillModal('کارهای مسدودشده (Blocked Work)', blockedRecords)}
-              className="bg-white rounded-xl border border-rose-200 p-4 hover:border-rose-400 transition-all cursor-pointer shadow-none hover:shadow-sm group"
+              onClick={() => {
+                setFilterStatus('blocked');
+                setFilterUnit('all');
+              }}
+              className={`bg-white rounded-xl border p-4 transition-all cursor-pointer shadow-none hover:shadow-xs group ${
+                filterStatus === 'blocked'
+                  ? 'border-rose-500 bg-rose-50/50 ring-2 ring-rose-200'
+                  : 'border-slate-200 hover:border-rose-300'
+              }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-rose-900">کارهای مسدودشده</span>
-                <AlertOctagon className="w-4 h-4 text-rose-600  transition-transform" />
+                <span className="text-xs font-bold text-rose-900">کارهای مسدود</span>
+                <AlertOctagon className="w-4 h-4 text-rose-600" />
               </div>
               <div className="mt-2 flex items-baseline gap-2">
                 <span className="text-2xl font-black text-rose-900">{toPersianDigits(blockedRecords.length)}</span>
-                <span className="text-caption text-rose-700">گلوگاه فعال</span>
+                <span className="text-caption text-rose-700">دارای مانع یا توقف</span>
               </div>
               <span className="mt-2 text-caption text-rose-600 flex items-center gap-1 font-semibold">
-                <span>بررسی دلایل کسری و اعتبار</span>
+                <span>فیلتر و مشاهده لیست</span>
                 <ArrowLeft className="w-3 h-3" />
               </span>
             </div>
 
             {/* 3. Overdue Work */}
             <div
-              onClick={() => openDrillModal('کارهای دارای تأخیر زمانی (Overdue Work)', overdueRecords)}
-              className="bg-white rounded-xl border border-sky-200 p-4 hover:border-sky-400 transition-all cursor-pointer shadow-none hover:shadow-sm group"
+              onClick={() => {
+                setFilterStatus('overdue');
+                setFilterUnit('all');
+              }}
+              className={`bg-white rounded-xl border p-4 transition-all cursor-pointer shadow-none hover:shadow-xs group ${
+                filterStatus === 'overdue'
+                  ? 'border-amber-500 bg-amber-50/50 ring-2 ring-amber-200'
+                  : 'border-slate-200 hover:border-amber-300'
+              }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-sky-900">دارای تأخیر زمانی</span>
-                <Clock className="w-4 h-4 text-sky-600  transition-transform" />
+                <span className="text-xs font-bold text-amber-900">کارهای معوق</span>
+                <Clock className="w-4 h-4 text-amber-600" />
               </div>
               <div className="mt-2 flex items-baseline gap-2">
-                <span className="text-2xl font-black text-sky-900">{toPersianDigits(overdueRecords.length)}</span>
-                <span className="text-caption text-sky-700">ترابری و اقدام</span>
+                <span className="text-2xl font-black text-amber-900">{toPersianDigits(overdueRecords.length)}</span>
+                <span className="text-caption text-amber-700">سررسید گذشته</span>
               </div>
-              <span className="mt-2 text-caption text-sky-600 flex items-center gap-1 font-semibold">
-                <span>پیگیری تردد و وصول</span>
+              <span className="mt-2 text-caption text-amber-700 flex items-center gap-1 font-semibold">
+                <span>فیلتر و مشاهده لیست</span>
                 <ArrowLeft className="w-3 h-3" />
               </span>
             </div>
 
-            {/* 4. Sales & Price Exceptions */}
+            {/* 4. Team Tracking */}
             <div
-              onClick={() => openDrillModal('استثنائات قیمت و فروش زیر کف (Price Exceptions)', priceExceptions)}
-              className="bg-white rounded-xl border border-primary-200 p-4 hover:border-primary-400 transition-all cursor-pointer shadow-none hover:shadow-sm group"
+              onClick={() => {
+                setFilterStatus('all');
+                setFilterUnit('all');
+              }}
+              className={`bg-white rounded-xl border p-4 transition-all cursor-pointer shadow-none hover:shadow-xs group ${
+                filterStatus === 'all' && filterUnit === 'all'
+                  ? 'border-sky-500 bg-sky-50/50 ring-2 ring-sky-200'
+                  : 'border-slate-200 hover:border-sky-300'
+              }`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-primary-900">استثنای قیمت و کف نرخ</span>
-                <ShoppingBag className="w-4 h-4 text-primary-700  transition-transform" />
+                <span className="text-xs font-bold text-sky-900">پیگیری تیم</span>
+                <Activity className="w-4 h-4 text-sky-600" />
               </div>
               <div className="mt-2 flex items-baseline gap-2">
-                <span className="text-2xl font-black text-primary-900">{toPersianDigits(priceExceptions.length)}</span>
-                <span className="text-caption text-primary-700">سفارش نیازمند تأیید</span>
+                <span className="text-2xl font-black text-sky-900">{toPersianDigits(records.length)}</span>
+                <span className="text-caption text-sky-700">کل پرونده‌های تیم</span>
               </div>
-              <span className="mt-2 text-caption text-primary-700 flex items-center gap-1 font-semibold">
-                <span>بررسی توجیه بازرگانی</span>
-                <ArrowLeft className="w-3 h-3" />
-              </span>
-            </div>
-
-            {/* 5. Supply & Logistics */}
-            <div
-              onClick={() => openDrillModal('تأمین مواد اولیه و لجستیک ناوگان', supplyLogistics)}
-              className="bg-white rounded-xl border border-amber-200 p-4 hover:border-amber-400 transition-all cursor-pointer shadow-none hover:shadow-sm group"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-amber-900">تأمین و لجستیک</span>
-                <Truck className="w-4 h-4 text-amber-600  transition-transform" />
-              </div>
-              <div className="mt-2 flex items-baseline gap-2">
-                <span className="text-2xl font-black text-amber-900">{toPersianDigits(supplyLogistics.length)}</span>
-                <span className="text-caption text-amber-700">بار و استعلام</span>
-              </div>
-              <span className="mt-2 text-caption text-amber-600 flex items-center gap-1 font-semibold">
-                <span>کنترل وضعیت ناوگان</span>
-                <ArrowLeft className="w-3 h-3" />
-              </span>
-            </div>
-
-            {/* 6. Warehouse Receipts & Exits */}
-            <div
-              onClick={() => openDrillModal('رسید انبار، باسکول و ترخیص کالا', warehouseInOut)}
-              className="bg-white rounded-xl border border-emerald-200 p-4 hover:border-emerald-400 transition-all cursor-pointer shadow-none hover:shadow-sm group"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-emerald-900">رسید و خروج انبار</span>
-                <Database className="w-4 h-4 text-emerald-600  transition-transform" />
-              </div>
-              <div className="mt-2 flex items-baseline gap-2">
-                <span className="text-2xl font-black text-emerald-900">{toPersianDigits(warehouseInOut.length)}</span>
-                <span className="text-caption text-emerald-700">عملیات انبارداری</span>
-              </div>
-              <span className="mt-2 text-caption text-emerald-600 flex items-center gap-1 font-semibold">
-                <span>تطبیق باسکول و کنترل کیفی</span>
-                <ArrowLeft className="w-3 h-3" />
-              </span>
-            </div>
-
-            {/* 7. Payment Requests */}
-            <div
-              onClick={() => openDrillModal('درخواست‌های پرداخت و تسویه مالی', paymentsAwaiting)}
-              className="bg-white rounded-xl border border-blue-200 p-4 hover:border-blue-400 transition-all cursor-pointer shadow-none hover:shadow-sm group"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-blue-900">درخواست‌های پرداخت</span>
-                <CreditCard className="w-4 h-4 text-blue-600  transition-transform" />
-              </div>
-              <div className="mt-2 flex items-baseline gap-2">
-                <span className="text-2xl font-black text-blue-900">{toPersianDigits(paymentsAwaiting.length)}</span>
-                <span className="text-caption text-blue-700">حواله در صف</span>
-              </div>
-              <span className="mt-2 text-caption text-blue-600 flex items-center gap-1 font-semibold">
-                <span>مشاهده توکن و امضای مالی</span>
-                <ArrowLeft className="w-3 h-3" />
-              </span>
-            </div>
-
-            {/* 8. Field Visits & Follow-ups */}
-            <div
-              onClick={() => openDrillModal('ویزیت‌های میدانی و پیگیری‌های معوق', fieldFollowups)}
-              className="bg-white rounded-xl border border-teal-200 p-4 hover:border-teal-400 transition-all cursor-pointer shadow-none hover:shadow-sm group"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-teal-900">ویزیت‌ها و پیگیری‌ها</span>
-                <MapPin className="w-4 h-4 text-teal-600  transition-transform" />
-              </div>
-              <div className="mt-2 flex items-baseline gap-2">
-                <span className="text-2xl font-black text-teal-900">{toPersianDigits(fieldFollowups.length)}</span>
-                <span className="text-caption text-teal-700">پیگیری مشتریان</span>
-              </div>
-              <span className="mt-2 text-caption text-teal-600 flex items-center gap-1 font-semibold">
-                <span>پیگیری وصول چک و سفارش</span>
+              <span className="mt-2 text-caption text-sky-700 flex items-center gap-1 font-semibold">
+                <span>نمایش همه پرونده‌ها</span>
                 <ArrowLeft className="w-3 h-3" />
               </span>
             </div>
@@ -422,16 +374,26 @@ export const ManagementMonitorView: React.FC<ManagementMonitorViewProps> = ({
               <div>
                 <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
                   <Filter className="w-4 h-4 text-primary-700" />
-                  <span>دریل‌داون ساختاریافته: سازمان → فرآیند → فرد → پرونده عملیاتی</span>
+                  <span>لیست پرونده‌های عملیاتی و وضعیت پیگیری</span>
                 </h3>
                 <p className="text-xs text-slate-500 mt-0.5">
-                  پاسخ تفکیکی به وضعیت هر پرونده، علت توقف، دارنده فعلی اقدام و ثبت تصمیم مدیریتی مستقیم
+                  پایش وضعیت پرونده‌ها، متصدی فعلی، علت توقف و ثبت تصمیمات و یادآوری‌ها
                 </p>
               </div>
 
-              <span className="text-xs font-mono bg-white px-3 py-1 rounded border border-slate-200 text-slate-700 font-bold self-start sm:self-auto">
-                {toPersianDigits(filteredRecords.length)} پرونده تحت پایش
-              </span>
+              <div className="flex items-center gap-2">
+                {filterStatus !== 'all' && (
+                  <button
+                    onClick={() => setFilterStatus('all')}
+                    className="text-xs text-rose-600 hover:text-rose-800 font-semibold cursor-pointer"
+                  >
+                    حذف فیلتر وضعیت
+                  </button>
+                )}
+                <span className="text-xs font-mono bg-white px-3 py-1 rounded border border-slate-200 text-slate-700 font-bold self-start sm:self-auto">
+                  {toPersianDigits(filteredRecords.length)} پرونده تحت پایش
+                </span>
+              </div>
             </div>
 
             {/* Filter Controls */}
@@ -469,14 +431,14 @@ export const ManagementMonitorView: React.FC<ManagementMonitorViewProps> = ({
                 className="p-1.5 rounded border border-slate-200 bg-white"
               >
                 <option value="all">همه مسئولین</option>
-                <option value="علیرضا تهرانی (کارشناس فروش)">علیرضا تهرانی</option>
-                <option value="خانم مقدم (کارشناس فروش و تأمین)">خانم مقدم</option>
-                <option value="مهرداد کاظمی (لجستیک)">مهرداد کاظمی</option>
-                <option value="حمید صالحی (سرپرست انبار)">حمید صالحی</option>
-                <option value="رضا امینی (انباردار)">رضا امینی</option>
-                <option value="پروانه صالحی (کارشناس حسابداری)">پروانه صالحی</option>
-                <option value="سینا کریمی (ویزیتور فروش)">سینا کریمی</option>
-                <option value="نیما فرهادی (مدیر سیستم)">نیما فرهادی</option>
+                <option value="آرش (مسئول لجستیک)">آرش</option>
+                <option value="آقای نادری (مسئول فروش قم)">آقای نادری</option>
+                <option value="آقای یوسفی (جانشین عملیاتی)">آقای یوسفی</option>
+                <option value="آقای منتظری (مدیرعامل)">آقای منتظری</option>
+                <option value="کارشناس فروش — نقش نمونه">کارشناس فروش — نقش نمونه</option>
+                <option value="کارشناس مالی — نقش نمونه">کارشناس مالی — نقش نمونه</option>
+                <option value="تأییدکننده بازرگانی — نقش نمونه">تأییدکننده بازرگانی — نقش نمونه</option>
+                <option value="تأییدکننده مالی — نقش نمونه">تأییدکننده مالی — نقش نمونه</option>
               </select>
 
               <select
@@ -578,7 +540,7 @@ export const ManagementMonitorView: React.FC<ManagementMonitorViewProps> = ({
                         {/* Who currently has the ball badge */}
                         <div className="bg-amber-50/80 border border-amber-200 px-3 py-1 rounded-lg text-right">
                           <span className="text-caption text-amber-800 font-semibold block">
-                            توپ دست کیست؟ (متصدی فعلی)
+                            مسئول اقدام فعلی
                           </span>
                           <span className="font-bold text-amber-950 text-xs">
                             {item.currentAssigneeName || item.ownerName}
@@ -1013,7 +975,7 @@ export const ManagementMonitorView: React.FC<ManagementMonitorViewProps> = ({
                     <span className="font-semibold text-slate-800">ثبت نشده در سیستم مالی</span>
                   </div>
                   <div className="pt-2 border-t border-slate-100 text-slate-600 leading-relaxed">
-                    اتصال به نرم‌افزار مالی پس از آماده‌شدن نسخه وب و API فعال خواهد شد.
+                    این بخش نمایشی است و هنوز به بانک یا پارسینا متصل نیست.
                   </div>
                 </div>
               </div>
@@ -1169,13 +1131,13 @@ export const ManagementMonitorView: React.FC<ManagementMonitorViewProps> = ({
                 onChange={(e) => setNewAssigneeName(e.target.value)}
                 className="w-full p-2 rounded-lg border border-slate-200 bg-white"
               >
-                <option value="سهراب جوادیان (معاونت بازرگانی)">سهراب جوادیان (معاونت بازرگانی)</option>
-                <option value="علیرضا تهرانی (کارشناس فروش)">علیرضا تهرانی (کارشناس فروش)</option>
-                <option value="خانم مقدم (کارشناس تأمین)">خانم مقدم (کارشناس تأمین)</option>
-                <option value="مهرداد کاظمی (لجستیک)">مهرداد کاظمی (لجستیک)</option>
-                <option value="حمید صالحی (سرپرست انبار)">حمید صالحی (سرپرست انبار)</option>
-                <option value="دکتر فرزاد شریفی (مدیر مالی)">دکتر فرزاد شریفی (مدیر مالی)</option>
-                <option value="نیما فرهادی (مدیر سیستم)">نیما فرهادی (مدیر سیستم)</option>
+                <option value="تأییدکننده بازرگانی — نقش نمونه">تأییدکننده بازرگانی — نقش نمونه</option>
+                <option value="کارشناس فروش — نقش نمونه">کارشناس فروش — نقش نمونه</option>
+                <option value="آقای یوسفی (جانشین عملیاتی و رابط تأمین)">آقای یوسفی (جانشین عملیاتی و رابط تأمین)</option>
+                <option value="آرش (مسئول لجستیک و هماهنگی خرید)">آرش (مسئول لجستیک و هماهنگی خرید)</option>
+                <option value="تأییدکننده مالی — نقش نمونه">تأییدکننده مالی — نقش نمونه</option>
+                <option value="کارشناس مالی — نقش نمونه">کارشناس مالی — نقش نمونه</option>
+                <option value="مدیر سیستم — نقش نمونه">مدیر سیستم — نقش نمونه</option>
               </select>
             </FieldGroup>
 
