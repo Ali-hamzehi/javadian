@@ -62,7 +62,7 @@ export const MasterDataView: React.FC<MasterDataViewProps> = ({
   const [newCustNationalId, setNewCustNationalId] = useState('');
   const [newCustEconomicCode, setNewCustEconomicCode] = useState('');
   const [newCustPhone, setNewCustPhone] = useState('');
-  const [newCustSalesperson, setNewCustSalesperson] = useState('کارشناس فروش — نقش نمونه');
+  const [newCustSalesperson, setNewCustSalesperson] = useState('کارشناس فروش');
   const [newCustCreditLimit, setNewCustCreditLimit] = useState(10000000000);
 
   // Create Product Modal State

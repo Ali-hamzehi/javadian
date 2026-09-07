@@ -3,6 +3,7 @@ import { DialogSurface } from '../design-system/DialogSurface';
 import { Button } from '../design-system/Button';
 import { MockPersona } from '../../types';
 import { getAuthorizedRequestTypes, RequestTypeOption } from '../../utils/roleExperience';
+import { stripRoleSampleSuffix } from '../../runtime/documentBasedPersonas';
 import {
   ShoppingBag,
   Boxes,
@@ -56,7 +57,7 @@ export const SubmitRequestModal: React.FC<SubmitRequestModalProps> = ({
             <div>
               <h2 className="text-sm font-bold text-slate-900">ثبت درخواست جدید</h2>
               <p className="text-caption text-slate-500">
-                اقدامات مجاز برای سمت شما: {activePersona.jobTitle}
+                اقدامات مجاز برای سمت شما: {stripRoleSampleSuffix(activePersona.jobTitle)}
               </p>
             </div>
           </div>

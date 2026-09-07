@@ -20,6 +20,7 @@ import { ModalDialog, Drawer } from '../components/design-system/ModalAndDrawer'
 import { useToast } from '../components/design-system/ToastContext';
 import { formatNumber } from '../utils/formatters';
 import { Briefcase, Calendar, HelpCircle, Plus, UserPlus, CheckCircle2, Building2, UserX } from 'lucide-react';
+import { getPersonaDisplayName, stripRoleSampleSuffix } from '../runtime/documentBasedPersonas';
 
 interface OrgAccessViewProps {
   initialTab?: 'org_users' | 'org_responsibilities' | 'org_delegations' | 'access_matrix';
@@ -137,8 +138,8 @@ export const OrgAccessView: React.FC<OrgAccessViewProps> = ({
       code: `DEL-1404-${Math.floor(10 + Math.random() * 90)}`,
       delegator: {
         id: activePersona.id,
-        name: activePersona.name,
-        role: activePersona.jobTitle,
+        name: getPersonaDisplayName(activePersona),
+        role: stripRoleSampleSuffix(activePersona.jobTitle),
         department: 'معاونت بازرگانی / عملیات',
       },
       delegatee: {
@@ -629,7 +630,7 @@ export const OrgAccessView: React.FC<OrgAccessViewProps> = ({
       >
         <div className="space-y-3 text-xs">
           <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-caption leading-relaxed">
-            تفویض‌کننده رسمی: <span className="font-bold">{activePersona.name} ({activePersona.jobTitle})</span>. کلیه اقدامات جانشین در لاگ‌های امنیتی با ذکر نام هر دو نفر ثبت می‌گردد.
+            تفویض‌کننده رسمی: <span className="font-bold">{getPersonaDisplayName(activePersona)}</span>. کلیه اقدامات جانشین در لاگ‌های امنیتی با ذکر نام هر دو نفر ثبت می‌گردد.
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

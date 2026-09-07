@@ -22,6 +22,7 @@ import { useToast } from '../components/design-system/ToastContext';
 import { ConflictState, OfflineBanner } from '../components/design-system/SystemStates';
 import { toPersianDigits, formatRials } from '../utils/formatters';
 import { getChannelDisplayName } from '../utils/channelMapper';
+import { getPersonaDisplayName, stripRoleSampleSuffix } from '../runtime/documentBasedPersonas';
 
 interface FieldSalesViewProps {
   activePersona: MockPersona;
@@ -149,7 +150,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
       );
     }
     if (visitorFilter !== 'all') {
-      return visits.filter((v) => v.assignedSalespersonName === visitorFilter);
+      return visits.filter((v) => v.assignedSalespersonName === visitorFilter || (visitorFilter === 'کارشناس فروش' && v.assignedSalespersonName === 'کارشناس فروش — نقش نمونه'));
     }
     return visits;
   }, [visits, activePersona, isVisitorPersona, visitorFilter]);
@@ -293,22 +294,22 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
         tags: ['داده پایه', 'مشتری', 'اصلاح پروفایل', selectedVisit.customerName],
         creator: {
           id: activePersona.id,
-          name: activePersona.name,
-          role: activePersona.jobTitle,
+          name: getPersonaDisplayName(activePersona),
+          role: stripRoleSampleSuffix(activePersona.jobTitle),
           department: activePersona.department,
         },
         currentOwner: {
           id: 'p-comm-approver',
-          name: 'تأییدکننده بازرگانی — نقش نمونه',
-          role: 'تأییدکننده بازرگانی — نقش نمونه',
+          name: 'تأییدکننده بازرگانی',
+          role: 'تأییدکننده بازرگانی',
           department: 'معاونت بازرگانی',
           heldSinceJalali: 'هم‌اکنون',
           durationHours: 0,
         },
         currentAssignee: {
           id: 'p-comm-approver',
-          name: 'تأییدکننده بازرگانی — نقش نمونه',
-          role: 'تأییدکننده بازرگانی — نقش نمونه',
+          name: 'تأییدکننده بازرگانی',
+          role: 'تأییدکننده بازرگانی',
           department: 'معاونت بازرگانی',
         },
         status: 'in_progress',
@@ -319,8 +320,8 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
         statusSinceJalali: 'هم‌اکنون',
         nextAction: {
           title: 'بررسی مدارک هویتی و تصویب تغییر نشانی/تلفن در پایگاه مشتریان',
-          responsibleRole: 'تأییدکننده بازرگانی — نقش نمونه',
-          responsiblePersonName: 'تأییدکننده بازرگانی — نقش نمونه',
+          responsibleRole: 'تأییدکننده بازرگانی',
+          responsiblePersonName: 'تأییدکننده بازرگانی',
           dueJalali: '۱۴۰۴/۰۶/۱۲',
           suggestedAction: 'review',
         },
@@ -625,8 +626,8 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
       },
       currentOwner: {
         id: 'p-fin-spec',
-        name: 'کارشناس مالی — نقش نمونه',
-        role: 'کارشناس مالی — نقش نمونه',
+        name: 'کارشناس مالی',
+        role: 'کارشناس مالی',
         department: 'امور مالی و خزانه‌داری',
         avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80',
         heldSinceJalali: 'هم‌اکنون',
@@ -634,8 +635,8 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
       },
       currentAssignee: {
         id: 'p-fin-spec',
-        name: 'کارشناس مالی — نقش نمونه',
-        role: 'کارشناس مالی — نقش نمونه',
+        name: 'کارشناس مالی',
+        role: 'کارشناس مالی',
         department: 'امور مالی و خزانه‌داری',
         avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80',
         heldSinceJalali: 'هم‌اکنون',
@@ -655,8 +656,8 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
           timestampJalali: 'هم‌اکنون',
           actor: {
             id: activePersona.id,
-            name: activePersona.name,
-            role: activePersona.jobTitle,
+            name: getPersonaDisplayName(activePersona),
+            role: stripRoleSampleSuffix(activePersona.jobTitle),
             department: activePersona.department,
           },
           title: 'ثبت فیش واریز توسط ویزیتور و ارسال به امور مالی',
@@ -669,8 +670,8 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
       blocker: null,
       nextAction: {
         title: 'استعلام حسابداری و تایید وصول وجه',
-        responsibleRole: 'کارشناس مالی — نقش نمونه',
-        responsiblePersonName: 'کارشناس مالی — نقش نمونه',
+        responsibleRole: 'کارشناس مالی',
+        responsiblePersonName: 'کارشناس مالی',
         dueJalali: '۱۴۰۴/۰۶/۱۲',
         suggestedAction: 'review',
       },
@@ -967,7 +968,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-base sm:text-lg font-black text-slate-900">عملیات فروش میدانی و CRM</h1>
                 <span className="text-xs bg-primary-50 text-primary-700 border border-primary-200 font-bold px-2 py-0.5 rounded-md">
-                  {activePersona.name} ({activePersona.jobTitle})
+                  {getPersonaDisplayName(activePersona)}
                 </span>
                 {isVisitorPersona && (
                   <span className="text-caption bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-md">
@@ -1156,7 +1157,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
                   >
                     <option value="all">همه ویزیتورها</option>
                     <option value="آقای نادری">آقای نادری (استان قم)</option>
-                    <option value="کارشناس فروش — نقش نمونه">کارشناس فروش — نقش نمونه</option>
+                    <option value="کارشناس فروش">کارشناس فروش</option>
                   </select>
                 </div>
               )}
@@ -2011,7 +2012,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
           <div className="space-y-3.5 text-xs">
             <div className="p-3 bg-primary-50 text-primary-950 rounded-lg border border-primary-200 leading-relaxed">
               <strong>گردش کار مالی:</strong> این فیش مستقیماً جهت کنترل و تطبیق بانکی به کارتابل خزانه‌داری
-              (کارشناس مالی — نقش نمونه) ارسال می‌شود. ویزیتور صلاحیت تأیید مالی ندارد.
+              (کارشناس مالی) ارسال می‌شود. ویزیتور صلاحیت تأیید مالی ندارد.
             </div>
 
             {receiptError && (

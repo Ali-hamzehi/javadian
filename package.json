@@ -10,7 +10,7 @@
     "clean": "rm -rf dist server.js",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test tests/regression.test.tsx tests/ui.test.tsx tests/workflow.test.tsx tests/employee-experience.test.tsx tests/document-personas.test.tsx"
+    "test": "node --import tsx --test tests/regression.test.tsx tests/ui.test.tsx tests/workflow.test.tsx tests/employee-experience.test.tsx tests/document-personas.test.tsx tests/ux-consistency-7fixes.test.tsx"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

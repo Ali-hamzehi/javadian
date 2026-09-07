@@ -7,6 +7,7 @@ import { toPersianDigits } from '../../utils/formatters';
 import { isRouteVisibleForPersona, isNavGroupVisibleForPersona } from '../../utils/roleExperience';
 import { usePWA } from '../pwa/PWAContext';
 import { DialogSurface } from '../design-system/DialogSurface';
+import { getPersonaDisplayName, getPersonaSubtitle, getPersonaTypeLabel } from '../../runtime/documentBasedPersonas';
 
 interface SidebarProps {
   currentRoute: string;
@@ -70,10 +71,34 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentRoute, onNavigate, acti
           </div>;
         })}
       </nav>
-      {!compact && <div className="p-3 border-t border-slate-800 text-caption text-slate-300 safe-bottom">
-        {isInstallable && <button type="button" onClick={() => { onCloseMobile?.(); setShowInstallGuide(true); }} className="w-full flex items-center gap-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white p-3 mb-3 cursor-pointer"><Download className="w-5 h-5" />نصب برنامه</button>}
-        <p>{activePersona.department}</p><p className="font-bold text-white">{activePersona.jobTitle}</p>
-      </div>}
+      {!compact && (
+        <div className="p-3 border-t border-slate-800 text-caption text-slate-300 safe-bottom">
+          {isInstallable && (
+            <button
+              type="button"
+              onClick={() => {
+                onCloseMobile?.();
+                setShowInstallGuide(true);
+              }}
+              className="w-full flex items-center gap-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white p-3 mb-3 cursor-pointer"
+            >
+              <Download className="w-5 h-5" />
+              نصب برنامه
+            </button>
+          )}
+          <div className="flex items-center justify-between gap-2 mb-1">
+            <span className="text-caption text-slate-400 truncate">
+              {getPersonaSubtitle(activePersona) || activePersona.department}
+            </span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded font-medium shrink-0 bg-slate-800 text-slate-300 border border-slate-700">
+              {getPersonaTypeLabel(activePersona)}
+            </span>
+          </div>
+          <p className="font-bold text-white text-sm truncate">
+            {getPersonaDisplayName(activePersona)}
+          </p>
+        </div>
+      )}
     </aside>
   );
   return <>

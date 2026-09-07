@@ -8,6 +8,7 @@ import { Button } from '../components/design-system/Button';
 import { Modal } from '../components/design-system/ModalAndDrawer';
 import { useToast } from '../components/design-system/ToastContext';
 import { toPersianDigits, formatRials } from '../utils/formatters';
+import { getPersonaDisplayName } from '../runtime/documentBasedPersonas';
 
 interface ManagementMonitorViewProps {
   activePersona: MockPersona;
@@ -176,7 +177,7 @@ export const ManagementMonitorView: React.FC<ManagementMonitorViewProps> = ({
         </div>
         <h2 className="text-base font-bold text-slate-900">عدم دسترسی به دیده‌بان مدیریتی</h2>
         <p className="text-xs text-slate-600 max-w-md mx-auto leading-relaxed">
-          کاربر گرامی ({activePersona.name})، مشاهده دیده‌بان عملیاتی و پایش گلوگاه‌های سازمان نیازمند
+          کاربر گرامی ({getPersonaDisplayName(activePersona)})، مشاهده دیده‌بان عملیاتی و پایش گلوگاه‌های سازمان نیازمند
           دسترسی <span className="font-mono font-bold text-slate-800">MANAGEMENT_VIEW</span> است. لطفاً
           از بخش بالای صفحه، نقش کاربری را به یکی از مدیران (مانند آقای منتظری یا مدیر سیستم) تغییر
           دهید.
@@ -435,10 +436,10 @@ export const ManagementMonitorView: React.FC<ManagementMonitorViewProps> = ({
                 <option value="آقای نادری (مسئول فروش قم)">آقای نادری</option>
                 <option value="آقای یوسفی (جانشین عملیاتی)">آقای یوسفی</option>
                 <option value="آقای منتظری (مدیرعامل)">آقای منتظری</option>
-                <option value="کارشناس فروش — نقش نمونه">کارشناس فروش — نقش نمونه</option>
-                <option value="کارشناس مالی — نقش نمونه">کارشناس مالی — نقش نمونه</option>
-                <option value="تأییدکننده بازرگانی — نقش نمونه">تأییدکننده بازرگانی — نقش نمونه</option>
-                <option value="تأییدکننده مالی — نقش نمونه">تأییدکننده مالی — نقش نمونه</option>
+                <option value="کارشناس فروش">کارشناس فروش</option>
+                <option value="کارشناس مالی">کارشناس مالی</option>
+                <option value="تأییدکننده بازرگانی">تأییدکننده بازرگانی</option>
+                <option value="تأییدکننده مالی">تأییدکننده مالی</option>
               </select>
 
               <select
@@ -1131,13 +1132,13 @@ export const ManagementMonitorView: React.FC<ManagementMonitorViewProps> = ({
                 onChange={(e) => setNewAssigneeName(e.target.value)}
                 className="w-full p-2 rounded-lg border border-slate-200 bg-white"
               >
-                <option value="تأییدکننده بازرگانی — نقش نمونه">تأییدکننده بازرگانی — نقش نمونه</option>
-                <option value="کارشناس فروش — نقش نمونه">کارشناس فروش — نقش نمونه</option>
+                <option value="تأییدکننده بازرگانی">تأییدکننده بازرگانی</option>
+                <option value="کارشناس فروش">کارشناس فروش</option>
                 <option value="آقای یوسفی (جانشین عملیاتی و رابط تأمین)">آقای یوسفی (جانشین عملیاتی و رابط تأمین)</option>
                 <option value="آرش (مسئول لجستیک و هماهنگی خرید)">آرش (مسئول لجستیک و هماهنگی خرید)</option>
-                <option value="تأییدکننده مالی — نقش نمونه">تأییدکننده مالی — نقش نمونه</option>
-                <option value="کارشناس مالی — نقش نمونه">کارشناس مالی — نقش نمونه</option>
-                <option value="مدیر سیستم — نقش نمونه">مدیر سیستم — نقش نمونه</option>
+                <option value="تأییدکننده مالی">تأییدکننده مالی</option>
+                <option value="کارشناس مالی">کارشناس مالی</option>
+                <option value="مدیر سیستم">مدیر سیستم</option>
               </select>
             </FieldGroup>
 

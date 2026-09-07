@@ -29,6 +29,7 @@ import {
   getPersonaDisplayName,
   getPersonaTypeLabel,
   getPersonaSubtitle,
+  stripRoleSampleSuffix,
 } from '../runtime/documentBasedPersonas';
 import {
   Search,
@@ -377,8 +378,8 @@ export const InboxView: React.FC<InboxViewProps> = ({
   // Operational Action Handlers
   const actorObj: Person = {
     id: activePersona.id,
-    name: activePersona.name,
-    role: activePersona.jobTitle,
+    name: getPersonaDisplayName(activePersona),
+    role: stripRoleSampleSuffix(activePersona.jobTitle),
     department: activePersona.department,
     avatar: activePersona.avatar,
   };
@@ -404,7 +405,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
     severity: 'warning' | 'critical',
     plan?: string
   ) => {
-    mockRepository.raiseBlocker(recordId, activePersona.name, reason, severity);
+    mockRepository.raiseBlocker(recordId, getPersonaDisplayName(activePersona), reason, severity);
     if (plan) {
       const rec = mockRepository.getRecordById(recordId);
       if (rec && rec.blocker) {
@@ -415,7 +416,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
   };
 
   const handleResolveBlocker = (recordId: string, note: string) => {
-    mockRepository.resolveBlocker(recordId, activePersona.name, note);
+    mockRepository.resolveBlocker(recordId, getPersonaDisplayName(activePersona), note);
     addToast('مانع برطرف شد و کار به چرخه اقدام بازگشت.', { tone: 'success' });
   };
 
