@@ -109,7 +109,7 @@ export const RecordDispatchModal: React.FC<RecordDispatchModalProps> = ({
           </Button>
           <Button variant="primary" size="sm" onClick={handleSubmit}>
             <CheckCircle2 className="w-4 h-4 ml-1" />
-            ثبت قطعی در کارتابل انبار
+            ثبت قطعی در بخش انبار
           </Button>
         </div>
       }

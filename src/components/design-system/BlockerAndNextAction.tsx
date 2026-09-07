@@ -111,7 +111,7 @@ export const NextActionPanel: React.FC<NextActionPanelProps> = ({
       case 'review':
         return 'ثبت بررسی و نتیجه';
       default:
-        return 'اقدام در کارتابل';
+        return 'اقدام در کارهای من';
     }
   };
 

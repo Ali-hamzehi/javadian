@@ -403,7 +403,7 @@ export const DOCUMENT_BASED_PERSONAS_CONFIG: Record<
     documentedPosition: 'کارشناس فروش (عنوان شغلی عمومی دمو)',
     documentedResponsibility: 'افراد فعال در سطح فروش می‌توانند فرم خروج از انبار/پیش‌نویس فاکتور فروش را ایجاد کنند. بدون اختیار مدیریتی یا مالی عمومی.',
     activityScope: 'ایجاد خروج انبار/پیش‌نویس فاکتور فروش؛ بدون اختیار مدیریتی یا مالی عمومی',
-    demoGoal: 'ثبت سفارش فروش، صدور پیش‌فاکتور، ایجاد پیش‌نویس خروج کالا و پیگیری در کارتابل «برای پیگیری»',
+    demoGoal: 'ثبت سفارش فروش، صدور پیش‌فاکتور، ایجاد پیش‌نویس خروج کالا و پیگیری در کارهای من «برای پیگیری»',
     documentedEvidenceSource: 'تعریف‌شده در چارت سازمانی — نقش نمونه',
     paymentScope: {
       canCreate: false,
@@ -525,9 +525,9 @@ export const DOCUMENT_BASED_PERSONAS_CONFIG: Record<
     category: 'finance_payments',
     categoryTitle: 'مالی و پرداخت',
     documentedPosition: 'تأییدکننده مالی و خزانه‌داری (عنوان نقش دمو)',
-    documentedResponsibility: 'بررسی و تأیید اسناد پرداخت، تصمیم‌گیری در کارتابل «تصمیم‌های من»، و ثبت شواهد تسویه واقعی (شماره پیگیری و فیش بانکی).',
+    documentedResponsibility: 'بررسی و تأیید اسناد پرداخت، تصمیم‌گیری در کارهای من «تصمیم‌های من»، و ثبت شواهد تسویه واقعی (شماره پیگیری و فیش بانکی).',
     activityScope: 'بررسی و تأیید اسناد مالی و ارجاع به خزانه‌داری دمو؛ عدم انتساب به شخص واقعی',
-    demoGoal: 'بررسی مستقل کارتابل پرداخت‌ها، تأیید یا عودت اسناد و ثبت تسویه دستی بدون ایجاد پرداخت‌های متفرقه',
+    demoGoal: 'بررسی مستقل کارهای من پرداخت‌ها، تأیید یا عودت اسناد و ثبت تسویه دستی بدون ایجاد پرداخت‌های متفرقه',
     documentedEvidenceSource: 'تأییدکننده مالی جهت تکمیل گردش‌کار — نقش نمونه',
     paymentScope: {
       canCreate: false,
@@ -564,7 +564,7 @@ export const DOCUMENT_BASED_PERSONAS_CONFIG: Record<
       'payment_requests',
     ],
     demoScenarios: [
-      'بررسی درخواست‌های پرداخت در کارتابل تصمیم‌های در انتظار',
+      'بررسی درخواست‌های پرداخت در تصمیم‌های در انتظار',
       'تصمیم‌گیری تأیید، عودت برای اصلاح یا رد پرداخت',
       'ثبت اطلاعات تسویه بانکی (شماره پیگیری و تاریخ واریز)',
     ],
@@ -589,7 +589,7 @@ export const DOCUMENT_BASED_PERSONAS_CONFIG: Record<
     documentedPosition: 'کارشناس عملیات انبار (نقش نمونه)',
     documentedResponsibility: 'عملیات انبار لازم برای سناریوی دمو؛ کاردکس و موجودی کالا؛ بدون دسترسی مالی یا مدیریتی.',
     activityScope: 'عملیات انبار لازم برای سناریوی دمو؛ نام شخص واقعی فرض نشود',
-    demoGoal: 'مشاهده کارتابل ساده کارمندی (برای انجام و برای پیگیری)، کنترل موجودی اقلام بدون شلوغی مدیریتی',
+    demoGoal: 'مشاهده کارهای من ساده کارمندی (برای انجام و برای پیگیری)، کنترل موجودی اقلام بدون شلوغی مدیریتی',
     documentedEvidenceSource: 'تعریف‌شده در چارت سازمانی انبار — نقش نمونه',
     paymentScope: {
       canCreate: false,
@@ -602,13 +602,13 @@ export const DOCUMENT_BASED_PERSONAS_CONFIG: Record<
       canCreate: false,
       isPrimary: false,
       isFallback: false,
-      description: 'صرفاً مشاهده کاردکس و کارتابل انبار',
+      description: 'صرفاً مشاهده کاردکس و بخش انبار',
     },
     warehouseReceiptScope: {
       canCreate: false,
       isPrimary: false,
       isFallback: false,
-      description: 'صرفاً مشاهده کاردکس و کارتابل انبار',
+      description: 'صرفاً مشاهده کاردکس و بخش انبار',
     },
     managementScope: {
       isManager: false,
@@ -648,7 +648,7 @@ export const DOCUMENT_BASED_PERSONAS_CONFIG: Record<
     documentedPosition: 'تأییدکننده بازرگانی (نقش تفکیک وظایف دمو)',
     documentedResponsibility: 'بررسی و تأیید مستقل سفارش‌های فروش ثبت‌شده توسط فروشندگان؛ بررسی موارد دارای مغایرت قیمت یا تخفیف خارج از ضابطه.',
     activityScope: 'بررسی و تأیید مستقل سفارش‌های فروش؛ بدون ایجاد سفارش شخصی و بدون نقض تفکیک وظایف',
-    demoGoal: 'بررسی کارتابل «تصمیم‌های من» برای سفارش‌های فروش ثبت‌شده و اعمال تصمیم مستقل (تأیید، عودت یا رد)',
+    demoGoal: 'بررسی کارهای من «تصمیم‌های من» برای سفارش‌های فروش ثبت‌شده و اعمال تصمیم مستقل (تأیید، عودت یا رد)',
     documentedEvidenceSource: 'تأییدکننده بازرگانی برای تفکیک وظایف — نقش نمونه',
     paymentScope: {
       canCreate: false,
@@ -687,7 +687,7 @@ export const DOCUMENT_BASED_PERSONAS_CONFIG: Record<
       'pricing',
     ],
     demoScenarios: [
-      'بررسی سفارش‌های زیر قیمت مصوب در کارتابل تصمیم‌های در انتظار',
+      'بررسی سفارش‌های زیر قیمت مصوب در تصمیم‌های در انتظار',
       'تصویب یا رد مستقل تخفیف‌های تجاری بر اساس تفکیک وظایف',
       'کنترل مغایرت‌های قیمت و اعتبارسنجی خریداران',
     ],

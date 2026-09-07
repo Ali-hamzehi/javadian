@@ -909,7 +909,7 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
     addToast({
       id: `toast-${Date.now()}`,
       title: 'پیش‌نویس ذخیره شد',
-      description: `درخواست تأمین با کد پیش‌نویس ${supplyRequest.code} ذخیره گردید (فاقد ارجاع به کارتابل و فاقد وضعیت ورود کالا).`,
+      description: `درخواست تأمین با کد پیش‌نویس ${supplyRequest.code} ذخیره گردید (فاقد ارجاع به کارهای من و فاقد وضعیت ورود کالا).`,
       tone: 'info',
     });
   };
@@ -987,7 +987,7 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
     addToast({
       id: `toast-${Date.now()}`,
       title: '«ثبت و ارجاع» با موفقیت انجام شد',
-      description: `درخواست تأمین ${supplyRequest.code} ثبت و وظیفه مسئولانه ${workItem?.code} در کارتابل سازمانی به ${supplyRequest.currentAssignee?.name} ارجاع گردید.`,
+      description: `درخواست تأمین ${supplyRequest.code} ثبت و وظیفه مسئولانه ${workItem?.code} در سامانه عملیات به ${supplyRequest.currentAssignee?.name} ارجاع گردید.`,
       tone: 'success',
     });
   };
@@ -1035,7 +1035,7 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
             درخواست‌های تأمین کالا و ملزومات
           </h1>
           <p className="text-xs sm:text-sm text-slate-600 mt-1">
-            سفارش‌گذاری ناشی از کسری انبار یا نیاز عملیاتی، تفکیک ثبت‌کننده/صاحب‌کار/مجری و ارجاع مستقیم به کارتابل وظایف
+            سفارش‌گذاری ناشی از کسری انبار یا نیاز عملیاتی، تفکیک ثبت‌کننده/صاحب‌کار/مجری و ارجاع مستقیم به فهرست وظایف
           </p>
         </div>
 
@@ -1285,7 +1285,7 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
                     <td className="p-3">
                       <div className="flex items-center gap-2 text-slate-500">
                         {r.linkedWorkItemId && (
-                          <span title="دارای وظیفه در کارتابل">
+                          <span title="دارای وظیفه در کارهای من">
                             <CheckSquare className="w-3.5 h-3.5 text-primary-700" />
                           </span>
                         )}
@@ -1443,7 +1443,7 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
                     className="cursor-pointer flex items-center gap-1"
                   >
                     <CheckSquare className="w-3.5 h-3.5 text-primary-700" />
-                    مشاهده وظیفه در کارتابل
+                    مشاهده وظیفه در کارهای من
                   </Button>
                 )}
               </div>
@@ -1487,10 +1487,10 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
 
               {/* 3. WorkItem Status */}
               <div className="bg-slate-50 border border-slate-200 p-3 rounded-lg">
-                <span className="text-slate-500 block text-caption font-semibold mb-1">۳. وضعیت وظیفه در کارتابل</span>
+                <span className="text-slate-500 block text-caption font-semibold mb-1">۳. وضعیت وظیفه در کارهای من</span>
                 {selectedRecord.status === 'draft' ? (
                   <span className="inline-flex items-center px-2 py-0.5 rounded text-caption font-medium bg-slate-100 text-slate-500 border border-slate-200">
-                    فاقد وظیفه کارتابلی (پیش‌نویس)
+                    فاقد وظیفه عملیاتی (پیش‌نویس)
                   </span>
                 ) : selectedRecord.status === 'supplied' ? (
                   <span className="inline-flex items-center px-2 py-0.5 rounded text-caption font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
@@ -1504,7 +1504,7 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
                   <div>
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-caption font-bold bg-primary-50 text-primary-700 border border-primary-200">
                       <CheckSquare className="w-3 h-3 text-primary-700" />
-                      در جریان در کارتابل
+                      در جریان در کارهای من
                     </span>
                     {selectedRecord.linkedWorkItemId && (
                       <span className="block font-mono text-caption text-primary-700 mt-1">
@@ -1669,12 +1669,12 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
               <div className="flex items-center justify-between">
                 <span className="font-bold text-amber-900 text-xs flex items-center gap-2">
                   <Clock className="w-3.5 h-3.5 text-amber-700" />
-                  اقدام مسئولانه بعدی و کارتابل گیرنده
+                  اقدام مسئولانه بعدی و کارهای من گیرنده
                 </span>
                 <span className="font-mono text-caption font-bold text-amber-950 bg-amber-100/80 px-2 py-0.5 rounded border border-amber-200">
-                  کارتابل:{' '}
+                  کارهای من:{' '}
                   {selectedRecord.status === 'draft'
-                    ? 'فاقد کارتابل (پیش‌نویس ارجاع نشده)'
+                    ? 'فاقد کارهای من (پیش‌نویس ارجاع نشده)'
                     : selectedRecord.status === 'cancelled'
                     ? 'بایگانی مختومه'
                     : selectedRecord.status === 'supplied'
@@ -1870,7 +1870,7 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
                   <CheckSquare className="w-4 h-4 text-primary-700" />
                   <div>
                     <span className="font-bold text-primary-900 block text-xs">
-                      وظیفه مسئولانه در کارتابل سازمانی ایجاد شد
+                      وظیفه مسئولانه در سامانه عملیات ایجاد شد
                     </span>
                     <span className="text-caption text-primary-700 font-mono">
                       شناسه تسک: {selectedRecord.linkedWorkItemId}
@@ -1884,7 +1884,7 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
                     onClick={() => onNavigateToRoute('inbox', selectedRecord.linkedWorkItemId)}
                     className="cursor-pointer flex items-center gap-1"
                   >
-                    رفتن به کارتابل
+                    رفتن به کارهای من
                     <ExternalLink className="w-3 h-3" />
                   </Button>
                 )}
@@ -2657,7 +2657,7 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
               <div className="mt-2 text-caption bg-primary-50/60 p-2 rounded text-primary-900 flex items-center gap-2 border border-primary-100">
                 <Info className="w-3.5 h-3.5 text-primary-700 shrink-0" />
                 <span>
-                  نکته: در صورت ذخیره به عنوان <strong>«پیش‌نویس»</strong>، هیچ وظیفه‌ای در کارتابل ایجاد نخواهد شد و پرونده بدون مجری باقی می‌ماند. با انتخاب <strong>«ثبت و ارجاع»</strong>، وظیفه فوراً به کارتابل ارجاع می‌گردد.
+                  نکته: در صورت ذخیره به عنوان <strong>«پیش‌نویس»</strong>، هیچ وظیفه‌ای در کارهای من ایجاد نخواهد شد و پرونده بدون مجری باقی می‌ماند. با انتخاب <strong>«ثبت و ارجاع»</strong>، وظیفه فوراً به کارهای من ارجاع می‌گردد.
                 </span>
               </div>
             </div>

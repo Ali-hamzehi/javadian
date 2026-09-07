@@ -769,7 +769,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
             department: activePersona.department,
           },
           title: 'ثبت و ارسال درخواست پرداخت به حسابداری',
-          note: 'ایجاد کارتابل تطبیق اسناد مالی',
+          note: 'ایجاد کارهای من تطبیق اسناد مالی',
           type: 'creation',
         },
       ],
@@ -785,7 +785,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
     addToast({
       id: `toast-new-${Date.now()}`,
       title: 'درخواست پرداخت صادر شد',
-      description: `درخواست ${newCode} به مبلغ ${formatRials(numAmount)} ثبت شد و به کارتابل امور مالی ارسال گردید.`,
+      description: `درخواست ${newCode} به مبلغ ${formatRials(numAmount)} ثبت شد و به امور مالی ارسال گردید.`,
       tone: 'success',
     });
   };

@@ -44,6 +44,7 @@ interface TopBarProps {
   pageTitle: string;
   breadcrumbs: string[];
   initialPersonaMenuOpen?: boolean;
+  initialUserMenuOpen?: boolean;
 }
 
 const CATEGORY_ICONS: Record<PersonaCategory, React.ComponentType<{ className?: string }>> = {
@@ -64,10 +65,11 @@ export const TopBar: React.FC<TopBarProps> = ({
   pageTitle = 'سامانه عملیات جوادیان',
   breadcrumbs = [],
   initialPersonaMenuOpen = false,
+  initialUserMenuOpen = false,
 }) => {
   const [isPersonaMenuOpen, setIsPersonaMenuOpen] = useState(initialPersonaMenuOpen);
   const [isResponsibilityMenuOpen, setIsResponsibilityMenuOpen] = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(initialUserMenuOpen);
 
   const personaRef = useRef<HTMLDivElement>(null);
   const respRef = useRef<HTMLDivElement>(null);
@@ -107,7 +109,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         <button
           type="button"
           onClick={onOpenMobileMenu}
-          className="lg:hidden p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
+          className="lg:hidden p-2 min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
           aria-label="باز کردن منوی ناوبری"
         >
           <Menu className="w-5 h-5" />
@@ -136,7 +138,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         <button
           type="button"
           onClick={onOpenSearch}
-          className="hidden sm:flex items-center gap-2 px-2.5 py-1.5 text-xs text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg border border-slate-200/80 transition-colors cursor-pointer"
+          className="hidden sm:flex items-center gap-2 px-2.5 py-1.5 min-h-[40px] text-xs text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg border border-slate-200/80 transition-colors cursor-pointer"
           title="جستجوی سریع (Ctrl+K)"
           aria-label="جستجوی سراسری (Ctrl+K)"
         >
@@ -151,13 +153,13 @@ export const TopBar: React.FC<TopBarProps> = ({
         <button
           type="button"
           onClick={onOpenNotifications}
-          className="relative p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
-          title="کارتابل و اعلان‌ها"
-          aria-label="کارتابل و اعلان‌ها"
+          className="relative p-2 min-w-[44px] min-h-[44px] inline-flex items-center justify-center text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+          title="کارهای من و اعلان‌ها"
+          aria-label="کارهای من و اعلان‌ها"
         >
           <Bell className="w-4 h-4" />
           {hasUrgent && (
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-600 animate-pulse" />
+            <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-600 animate-pulse" />
           )}
         </button>
 
@@ -356,7 +358,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             aria-label="منوی کاربر"
             aria-expanded={isUserMenuOpen}
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-            className="flex items-center gap-1 p-1 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+            className="flex items-center justify-center p-1 min-w-[44px] min-h-[44px] hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
           >
             <Avatar
               src={activePersona.avatar}
@@ -486,7 +488,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                     }}
                   >
                     <LogOut className="w-3.5 h-3.5 ml-2" />
-                    خروج از سامانه
+                    خروج از حساب کاربری
                   </Button>
                 </div>
               )}

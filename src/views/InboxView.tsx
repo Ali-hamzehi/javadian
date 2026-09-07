@@ -552,7 +552,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
     if (targetRec?.linkedBusinessRecord?.category === 'sales_order') {
       const soId = targetRec.linkedBusinessRecord.id;
       if (mockSalesWarehouseStore.getSalesOrderById(soId)?.linkedWorkItemId !== recordId) {
-        addToast('این نگارش منسوخ است؛ کارتابل نسخه جاری را باز کنید.', { tone: 'danger' });
+        addToast('این نگارش منسوخ است؛ کارهای من نسخه جاری را باز کنید.', { tone: 'danger' });
         return;
       }
       const orderCode = targetRec.linkedBusinessRecord.code;
@@ -1234,8 +1234,8 @@ export const InboxView: React.FC<InboxViewProps> = ({
                 mode={managerTab}
                 onOpenDrawer={(id) => setActiveRecordId(id)}
                 onApprove={(id) => handleApproveCompletion(id)}
-                onReturn={(id) => handleReturnWork(id, 'عودت از کارتابل تصمیم‌گیری مدیر')}
-                onReject={(id) => handleRejectWork(id, 'رد از کارتابل تصمیم‌گیری مدیر')}
+                onReturn={(id) => handleReturnWork(id, 'عودت از میز تصمیم‌گیری مدیر')}
+                onReject={(id) => handleRejectWork(id, 'رد از میز تصمیم‌گیری مدیر')}
               />
             ))}
           </div>
@@ -1251,8 +1251,8 @@ export const InboxView: React.FC<InboxViewProps> = ({
               mode={managerTab}
               onOpenDrawer={(id) => setActiveRecordId(id)}
               onApprove={(id) => handleApproveCompletion(id)}
-              onReturn={(id) => handleReturnWork(id, 'عودت از کارتابل تصمیم‌گیری مدیر')}
-              onReject={(id) => handleRejectWork(id, 'رد از کارتابل تصمیم‌گیری مدیر')}
+              onReturn={(id) => handleReturnWork(id, 'عودت از میز تصمیم‌گیری مدیر')}
+              onReject={(id) => handleRejectWork(id, 'رد از میز تصمیم‌گیری مدیر')}
             />
           ))}
         </div>

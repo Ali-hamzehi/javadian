@@ -804,7 +804,7 @@ export const ManualIntakeView: React.FC<ManualIntakeViewProps> = ({
               {
                 type: 'sales_order',
                 title: 'پیش‌نویس سفارش فروش (Sales Order Draft)',
-                desc: 'ایجاد قرارداد و پیش‌فاکتور رسمی در کارتابل فروش',
+                desc: 'ایجاد قرارداد و پیش‌فاکتور رسمی در بخش فروش',
               },
               {
                 type: 'followup',
@@ -814,7 +814,7 @@ export const ManualIntakeView: React.FC<ManualIntakeViewProps> = ({
               {
                 type: 'payment_request',
                 title: 'درخواست / فیش پرداخت مالی (Payment Draft)',
-                desc: 'ارجاع فیش یا مطالبه مالی به کارتابل خزانه‌داری',
+                desc: 'ارجاع فیش یا مطالبه مالی به امور مالی و پرداخت',
               },
               {
                 type: 'supply_logistics',
@@ -823,7 +823,7 @@ export const ManualIntakeView: React.FC<ManualIntakeViewProps> = ({
               },
               {
                 type: 'general_task',
-                title: 'وظیفه عمومی کارتابل (General Work Task)',
+                title: 'وظیفه عمومی کارهای من (General Work Task)',
                 desc: 'اقدام اجرایی داخلی با تعیین مهلت برای همکاران',
               },
             ].map((opt) => (

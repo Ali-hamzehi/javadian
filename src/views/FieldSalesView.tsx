@@ -562,7 +562,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
       );
     }
 
-    addToast(`وظیفه پیگیری در کارتابل «${selectedEmployee.name}» ثبت شد`, {
+    addToast(`وظیفه پیگیری در کارهای من «${selectedEmployee.name}» ثبت شد`, {
       description: `کد پیگیری: ${taskCode} • موعد: ${followupDueDate}`,
       tone: 'success',
     });
@@ -679,7 +679,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
 
     mockRepository.createRecord(financeRecord);
 
-    addToast('فیش واریزی با موفقیت به کارتابل مالی ارسال گردید', {
+    addToast('فیش واریزی با موفقیت به امور مالی ارسال گردید', {
       description: 'ویزیتور صلاحیت تأیید مالی ندارد؛ فیش جهت کنترل به امور مالی ارجاع شد.',
       tone: 'info',
     });
@@ -920,7 +920,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
         )
       );
 
-      addToast(`پیام با موفقیت به پیگیری تبدیل و به کارتابل «${targetEmployee.name}» منتقل شد`, {
+      addToast(`پیام با موفقیت به پیگیری تبدیل و به کارهای من «${targetEmployee.name}» منتقل شد`, {
         description: `کد وظیفه: ${taskCode} • حفظ ردپای کانال: ${channelLabel}`,
         tone: 'success',
       });
@@ -977,7 +977,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
                 )}
               </div>
               <p className="text-xs text-slate-500 mt-0.5">
-                ثبت رویدادمحور ویزیت، صدور پیش‌نویس، واگذاری پیگیری در کارتابل و حفظ حریم خصوصی پرسنل
+                ثبت رویدادمحور ویزیت، صدور پیش‌نویس، واگذاری پیگیری در کارهای من و حفظ حریم خصوصی پرسنل
               </p>
             </div>
           </div>
@@ -1112,7 +1112,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
             }`}
           >
             <FileText className="w-4 h-4" />
-            کارتابل پیگیری‌های میدانی
+            کارهای من پیگیری‌های میدانی
           </button>
 
           {isManagerOrAdmin && (
@@ -1415,7 +1415,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
                             }}
                             leftIcon={<Calendar className="w-3 h-3 text-amber-600" />}
                           >
-                            ثبت پیگیری (کارتابل پرسنل)
+                            ثبت پیگیری (کارهای پرسنل)
                           </Button>
                         </div>
 
@@ -1659,7 +1659,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
                           }}
                           leftIcon={<Calendar className="w-3 h-3 text-amber-600" />}
                         >
-                          تبدیل به پیگیری (کارتابل پرسنل)
+                          تبدیل به پیگیری (کارهای پرسنل)
                         </Button>
 
                         <Button
@@ -1698,14 +1698,14 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
         </div>
       )}
 
-      {/* 4. TAB CONTENT 3: «کارتابل پیگیری‌های میدانی» */}
+      {/* 4. TAB CONTENT 3: «کارهای من پیگیری‌های میدانی» */}
       {activeTab === 'field_followups' && (
         <div className="bg-white rounded-xl border border-slate-200 p-4 sm:p-6 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-black text-slate-900">کارتابل پیگیری‌های حاصل از ویزیت‌های حضوری</h3>
+              <h3 className="text-base font-black text-slate-900">کارهای من پیگیری‌های حاصل از ویزیت‌های حضوری</h3>
               <p className="text-xs text-slate-500 mt-0.5">
-                تعهدات ثبت‌شده در جلسات حضوری که به وظیفه در کارتابل پرسنل تبدیل شده‌اند
+                تعهدات ثبت‌شده در جلسات حضوری که به وظیفه در کارهای پرسنل تبدیل شده‌اند
               </p>
             </div>
             <Button
@@ -1714,7 +1714,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
               onClick={() => onNavigateToRoute && onNavigateToRoute('inbox')}
               leftIcon={<ExternalLink className="w-3.5 h-3.5" />}
             >
-              مشاهده در کارتابل عمومی
+              مشاهده در کارهای من
             </Button>
           </div>
 
@@ -1739,7 +1739,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
                   </div>
 
                   <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-md shrink-0">
-                    ثبت در کارتابل
+                    ثبت در کارهای من
                   </span>
                 </div>
               ))}
@@ -2011,7 +2011,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
         >
           <div className="space-y-3.5 text-xs">
             <div className="p-3 bg-primary-50 text-primary-950 rounded-lg border border-primary-200 leading-relaxed">
-              <strong>گردش کار مالی:</strong> این فیش مستقیماً جهت کنترل و تطبیق بانکی به کارتابل خزانه‌داری
+              <strong>گردش کار مالی:</strong> این فیش مستقیماً جهت کنترل و تطبیق بانکی به امور مالی و پرداخت
               (کارشناس مالی) ارسال می‌شود. ویزیتور صلاحیت تأیید مالی ندارد.
             </div>
 
@@ -2089,12 +2089,12 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
         <Modal
           isOpen={true}
           onClose={() => setActiveModal(null)}
-          title="ثبت پیگیری و واگذاری وظیفه در کارتابل پرسنل"
+          title="ثبت پیگیری و واگذاری وظیفه در کارهای پرسنل"
           size="md"
         >
           <div className="space-y-3.5 text-xs">
             <div className="p-3 bg-emerald-50 text-emerald-950 rounded-lg border border-emerald-200">
-              این پیگیری مستقیماً به عنوان یک سند کاری در <strong>«کارتابل من»</strong> کارمند انتخابی ظاهر خواهد شد.
+              این پیگیری مستقیماً به عنوان یک سند کاری در <strong>«کارهای من»</strong> کارمند انتخابی ظاهر خواهد شد.
             </div>
 
             {followupError && (
@@ -2159,7 +2159,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
                 انصراف
               </Button>
               <Button size="sm" variant="primary" onClick={handleSaveFollowup}>
-                ثبت در کارتابل پرسنل
+                ثبت در کارهای پرسنل
               </Button>
             </div>
           </div>
@@ -2284,7 +2284,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
                 onChange={(e) => setConvertTargetType(e.target.value as any)}
                 className="w-full p-2 rounded-lg border border-slate-300 text-xs bg-white text-slate-800"
               >
-                <option value="followup">پیگیری در کارتابل پرسنل (Follow-up)</option>
+                <option value="followup">پیگیری در کارهای پرسنل (Follow-up)</option>
                 <option value="draft_order">پیش‌نویس سفارش فروش (Draft Order)</option>
                 <option value="task">وظیفه و اقدام عملیاتی (General Task)</option>
               </select>

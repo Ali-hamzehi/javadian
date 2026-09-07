@@ -100,7 +100,7 @@ export const ManagementMonitorView: React.FC<ManagementMonitorViewProps> = ({
   const handleSendReminder = (rec: OperationalDrillRecord) => {
     const targetPerson = rec.currentAssigneeName || rec.ownerName;
     addToast(`پیام یادآوری فوری برای «${targetPerson}» ارسال شد`, {
-      description: `پیگیری پرونده ${rec.code} در کارتابل و پیامک سازمانی متصدی ثبت شد.`,
+      description: `پیگیری پرونده ${rec.code} در کارهای من و پیامک سازمانی متصدی ثبت شد.`,
       tone: 'info',
     });
   };
@@ -122,7 +122,7 @@ export const ManagementMonitorView: React.FC<ManagementMonitorViewProps> = ({
     );
 
     addToast(`متصدی پرونده ${reassigningRecord.code} تغییر یافت`, {
-      description: `پرونده به «${newAssigneeName}» ارجاع و در کارتابل وی مستقر گردید.`,
+      description: `پرونده به «${newAssigneeName}» ارجاع و در کارهای من وی مستقر گردید.`,
       tone: 'success',
     });
 

@@ -34,7 +34,7 @@ export const PWALaunchSplash: React.FC<{ onFinish?: () => void }> = ({ onFinish 
           سامانه عملیات جوادیان
         </h1>
         <p className="text-xs text-slate-300 mt-1">
-          کارتابل سازمانی، زنجیره تأمین و لجستیک
+          مدیریت عملیات، زنجیره تأمین و لجستیک
         </p>
 
         <div className="w-32 h-1 bg-slate-800 rounded-full mt-6 overflow-hidden">

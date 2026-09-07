@@ -49,7 +49,7 @@ const CAPABILITY_CATALOG: CapabilityMeta[] = [
   },
   {
     key: 'sales.read',
-    namePersian: 'مشاهده کارتابل سفارشات و قراردادها',
+    namePersian: 'مشاهده کارهای من سفارشات و قراردادها',
     category: 'فروش و قیمت‌گذاری',
     action: 'VIEW',
     defaultScope: 'UNIT',
@@ -134,7 +134,7 @@ const CAPABILITY_CATALOG: CapabilityMeta[] = [
   // Management
   {
     key: 'approvals.view',
-    namePersian: 'دسترسی به کارتابل تصمیم‌گیری و امضا',
+    namePersian: 'دسترسی به تأییدهای من و امضا',
     category: 'مدیریت و حاکمیت',
     action: 'APPROVE',
     defaultScope: 'ORGANIZATION',

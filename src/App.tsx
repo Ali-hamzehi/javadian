@@ -241,8 +241,11 @@ function AppContent() {
     const routeDef = APP_ROUTES[currentRoute as AppRouteKey];
     if (routeDef) {
       return {
-        title: routeDef.title,
-        breadcrumbs: [routeDef.breadcrumbs[0], routeDef.breadcrumbs[1]],
+        title: routeDef.title.replace(/کارتابل/g, 'کارهای من'),
+        breadcrumbs: [
+          routeDef.breadcrumbs[0]?.replace(/کارتابل/g, 'کارهای من') || '',
+          routeDef.breadcrumbs[1]?.replace(/کارتابل/g, 'کارهای من') || '',
+        ],
       };
     }
     for (const group of NAV_ITEMS) {
@@ -250,8 +253,11 @@ function AppContent() {
         const sub = group.subItems.find((s) => s.routeKey === currentRoute);
         if (sub) {
           return {
-            title: sub.title,
-            breadcrumbs: [group.title, sub.title],
+            title: sub.title.replace(/کارتابل/g, 'کارهای من'),
+            breadcrumbs: [
+              group.title.replace(/کارتابل/g, 'کارهای من'),
+              sub.title.replace(/کارتابل/g, 'کارهای من'),
+            ],
           };
         }
       }
