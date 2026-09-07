@@ -91,10 +91,57 @@ function isCurrentApproval(actor: Parameters<typeof repository.isActionableAppro
   }
   return repository.isActionableApprovalRecord(actor, record);
 }
+export function sanitizeDspTaskRecord(rec: OperationalRecord): OperationalRecord {
+  if (rec.code !== 'DSP-1404-0550' && rec.id !== 'rec-004') return rec;
+  const arashPerson = {
+    id: 'p-warehouse',
+    name: 'آرش',
+    role: 'مسئول لجستیک و هماهنگی خرید',
+    department: 'انبار و لجستیک کالا',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80',
+  };
+  return {
+    ...rec,
+    creator: { ...rec.creator, ...arashPerson },
+    owner: rec.owner ? { ...rec.owner, ...arashPerson } : undefined,
+    currentOwner: { ...rec.currentOwner, ...arashPerson },
+    currentAssignee: rec.currentAssignee
+      ? { ...rec.currentAssignee, ...arashPerson }
+      : { ...arashPerson, heldSinceJalali: '۱۴۰۴/۰۶/۱۲ - ۱۱:۰۰', durationHours: 4 },
+    blocker: rec.blocker
+      ? {
+          ...rec.blocker,
+          reporter: rec.blocker.reporter ? { ...rec.blocker.reporter, ...arashPerson } : rec.blocker.reporter,
+        }
+      : rec.blocker,
+    nextAction: rec.nextAction
+      ? {
+          ...rec.nextAction,
+          responsibleRole: 'مسئول لجستیک و هماهنگی خرید',
+          responsiblePersonName: 'آرش',
+        }
+      : rec.nextAction,
+    timeline:
+      rec.timeline?.map((item) => ({
+        ...item,
+        actor:
+          item.actor && (item.actor.id === 'p-warehouse' || item.actor.name?.includes('کامران داوودی'))
+            ? { ...item.actor, ...arashPerson }
+            : item.actor,
+      })) || [],
+  };
+}
+
 export const mockRepository = new Proxy(observable(repository), { get(target, key) {
   if (key === 'isActionableApprovalRecord') return isCurrentApproval;
-  if (key === 'getActionableApprovalItems') return (actor: Parameters<typeof repository.getActionableApprovalItems>[0]) => actor ? repository.getAuthorizedRecords(actor).filter(record => isCurrentApproval(actor, record)) : [];
-  if (key === 'computeScopedTaskCounts') return (actor: Parameters<typeof repository.computeScopedTaskCounts>[0]) => ({ ...repository.computeScopedTaskCounts(actor), approvals: actor ? repository.getAuthorizedRecords(actor).filter(record => isCurrentApproval(actor, record)).length : 0 });
+  if (key === 'getActionableApprovalItems') return (actor: Parameters<typeof repository.getActionableApprovalItems>[0]) => actor ? repository.getAuthorizedRecords(actor).map(sanitizeDspTaskRecord).filter(record => isCurrentApproval(actor, record)) : [];
+  if (key === 'computeScopedTaskCounts') return (actor: Parameters<typeof repository.computeScopedTaskCounts>[0]) => ({ ...repository.computeScopedTaskCounts(actor), approvals: actor ? repository.getAuthorizedRecords(actor).map(sanitizeDspTaskRecord).filter(record => isCurrentApproval(actor, record)).length : 0 });
+  if (key === 'getRecordById') return (id: string) => {
+    const r = repository.getRecordById(id);
+    return r ? sanitizeDspTaskRecord(r) : undefined;
+  };
+  if (key === 'getAllRecords') return () => repository.getAllRecords().map(sanitizeDspTaskRecord);
+  if (key === 'getAuthorizedRecords') return (actor: Parameters<typeof repository.getAuthorizedRecords>[0]) => repository.getAuthorizedRecords(actor).map(sanitizeDspTaskRecord);
   return Reflect.get(target, key);
 } });
 const observedSales = observable(sales, (name, result) => {
@@ -347,6 +394,11 @@ export function initializeWorkflow() {
         }
       }
     }
+  }
+
+  const dspRec = repository.getRecordById('rec-004');
+  if (dspRec) {
+    repository.updateRecord(sanitizeDspTaskRecord(dspRec));
   }
 
   sales.getSalesOrders().forEach(ensureSalesApproval);

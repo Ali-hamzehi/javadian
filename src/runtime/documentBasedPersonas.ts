@@ -1319,22 +1319,115 @@ export function getDocumentPersonaPaymentScope(persona: MockPersona): import('..
 }
 
 /**
+ * Helper to strip redundant role suffixes such as '— نقش نمونه', '(نقش نمونه)', etc.
+ * Keeps clean primary names and avoids repetitive label noise.
+ */
+export function stripRoleSampleSuffix(text?: string | null): string {
+  if (!text) return '';
+  return text
+    .replace(/\s*[—–-]\s*نقش نمونه/g, '')
+    .replace(/\s*\(نقش نمونه\)/g, '')
+    .replace(/\s*[—–-]\s*نقش سازمانی/g, '')
+    .replace(/\s*\(نقش سازمانی\)/g, '')
+    .trim();
+}
+
+/**
+ * Returns clean document-grounded display name for any person in the prototype.
+ * Strips redundant '— نقش نمونه' or '(نقش نمونه)' suffixes for pure presentation.
+ * Supports string, object, and persona ID.
+ */
+export function getPersonaDisplayName(
+  person: { id?: string; name?: string } | string | null | undefined
+): string {
+  if (!person) return '';
+  let raw = '';
+  if (typeof person === 'string') {
+    raw = cleanPersonNameString(person);
+  } else if (person.id) {
+    const docPersona = getDocumentBasedPersonaById(person.id);
+    raw = docPersona ? docPersona.name : cleanPersonNameString(person.name || '');
+  } else {
+    raw = cleanPersonNameString(person.name || '');
+  }
+  return stripRoleSampleSuffix(raw);
+}
+
+/**
+ * Returns single unified role type label:
+ * - 'نقش سازمانی' for verified/documented individuals
+ * - 'نقش نمونه' for demo sample personas
+ */
+export function getPersonaTypeLabel(
+  person: { id?: string; isDocumentedPerson?: boolean; isDocumented?: boolean; documentStatus?: string } | string | null | undefined
+): 'نقش سازمانی' | 'نقش نمونه' {
+  if (!person) return 'نقش نمونه';
+
+  if (typeof person === 'string') {
+    const docPersona = getDocumentBasedPersonaById(person);
+    if (docPersona) {
+      return docPersona.isDocumentedPerson ? 'نقش سازمانی' : 'نقش نمونه';
+    }
+    const clean = cleanPersonNameString(person);
+    const documentedNames = ['آرش', 'آقای نادری', 'آقای منتظری', 'آقای یوسفی'];
+    return documentedNames.some((d) => clean.includes(d)) ? 'نقش سازمانی' : 'نقش نمونه';
+  }
+
+  if (person.isDocumentedPerson || person.isDocumented || person.documentStatus === 'DOCUMENTED_PERSON') {
+    return 'نقش سازمانی';
+  }
+
+  if (person.id) {
+    const docPersona = getDocumentBasedPersonaById(person.id);
+    if (docPersona?.isDocumentedPerson) {
+      return 'نقش سازمانی';
+    }
+  }
+
+  return 'نقش نمونه';
+}
+
+/**
+ * Returns secondary line / subtitle (job title or department) ONLY if it provides
+ * distinct new information compared to the primary display name.
+ * e.g.:
+ * - For Arash -> 'مسئول لجستیک و هماهنگی خرید'
+ * - For Sales Specialist -> 'واحد فروش و بازرگانی داخلی'
+ */
+export function getPersonaSubtitle(
+  person: { id?: string; name?: string; jobTitle?: string; department?: string } | null | undefined
+): string {
+  if (!person) return '';
+  const displayName = getPersonaDisplayName(person);
+
+  let docPersona = person.id ? getDocumentBasedPersonaById(person.id) : undefined;
+  const rawJob = docPersona?.jobTitle || person.jobTitle || '';
+  const cleanJob = stripRoleSampleSuffix(getDisplayPersonaRole(rawJob));
+
+  // If cleanJob exists and is different from displayName, return cleanJob
+  if (cleanJob && cleanJob !== displayName) {
+    return cleanJob;
+  }
+
+  // If cleanJob is identical to displayName, return department if available and distinct
+  const dept = docPersona?.department || person.department || '';
+  if (dept && dept !== displayName) {
+    return dept;
+  }
+
+  return '';
+}
+
+/**
  * Returns clean document-grounded display name for any person in the prototype.
  * Supports string, object, and persona ID.
  */
 export function getDisplayPersonaName(
   person: { id?: string; name?: string } | string | null | undefined
 ): string {
-  if (!person) return '';
-  if (typeof person === 'string') {
-    return cleanPersonNameString(person);
-  }
-  if (person.id) {
-    const docPersona = getDocumentBasedPersonaById(person.id);
-    if (docPersona) return docPersona.name;
-  }
-  return cleanPersonNameString(person.name || '');
+  return getPersonaDisplayName(person);
 }
+
 
 /**
  * Normalizes any person name string by replacing legacy or fake demo names

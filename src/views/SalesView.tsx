@@ -7,6 +7,7 @@ import { MOCK_SALES_ORDERS } from '../data/mockSalesData';
 import { MOCK_CUSTOMERS, MOCK_PRODUCTS } from '../data/mockMasterData';
 import { mockSalesWarehouseStore } from '../runtime/workflow';
 import { getDisplayPersonaName } from '../runtime/documentBasedPersonas';
+import { getChannelDisplayName } from '../utils/channelMapper';
 import { Button } from '../components/design-system/Button';
 import { TextInput, SelectInput, FormField, TextareaInput } from '../components/design-system/FormControls';
 import { Chip, Badge } from '../components/design-system/Badges';
@@ -34,18 +35,7 @@ interface SalesViewProps {
 type SavedView = 'all' | 'mine' | 'pending_approval' | 'urgent' | 'needs_action';
 
 const getPersianChannelLabel = (channel?: string, rawLabel?: string): string => {
-  if (rawLabel && rawLabel !== 'phone' && !rawLabel.toLowerCase().includes('phone')) {
-    return rawLabel;
-  }
-  const map: Record<string, string> = {
-    phone: 'تلفنی',
-    visit: 'ویزیت میدانی',
-    whatsapp: 'پیام‌رسان واتساپ',
-    telegram: 'پیام‌رسان تلگرام',
-    in_person: 'مراجعه حضوری',
-    other: 'سایر',
-  };
-  return map[channel || ''] || 'تلفنی';
+  return getChannelDisplayName(channel, rawLabel);
 };
 
 const getPersianOrderStatusBadge = (status: string, customLabel?: string) => {
@@ -150,8 +140,37 @@ export const SalesView: React.FC<SalesViewProps> = ({
     cartons: number;
     agreedPrice: number;
   }[]>([
-    { productId: MOCK_PRODUCTS[0].id, cartons: 100, agreedPrice: MOCK_PRODUCTS[0].currentPriceRials },
+    {
+      productId: MOCK_PRODUCTS[0].id,
+      cartons: 1,
+      agreedPrice: MOCK_PRODUCTS[0].currentPriceRials || MOCK_PRODUCTS[0].referencePriceRials || 1250000,
+    },
   ]);
+
+  // Clean reset & open handler for new order creation modal
+  const handleOpenCreateModal = () => {
+    setCurrentStep(1);
+    const initialCustomer = customers[0] || MOCK_CUSTOMERS[0];
+    setFormCustomerId(initialCustomer?.id || '');
+    setFormChannel('phone');
+    setFormDeliveryAddress(
+      initialCustomer?.locations?.length > 0
+        ? initialCustomer.locations[0].address
+        : 'تهران، انبار کارفرما'
+    );
+    setFormSalesResponsible('تأییدکننده بازرگانی — نقش نمونه');
+    setFormPaymentTerms('۳۰٪ نقد + ۷۰٪ چک صیادی ۳۰ روزه');
+    setFormDeliveryTerms('تحویل درب انبار مرکزی کهریزک با ناوگان خریدار');
+    const firstProduct = MOCK_PRODUCTS[0];
+    setFormItems([
+      {
+        productId: firstProduct.id,
+        cartons: 1,
+        agreedPrice: firstProduct.currentPriceRials || firstProduct.referencePriceRials || 1250000,
+      },
+    ]);
+    setIsCreateModalOpen(true);
+  };
 
   // Price revision drawer modal state
   const [isPriceRevisionModalOpen, setIsPriceRevisionModalOpen] = useState(false);
@@ -166,8 +185,9 @@ export const SalesView: React.FC<SalesViewProps> = ({
     const prod = MOCK_PRODUCTS.find((p) => p.id === item.productId) || MOCK_PRODUCTS[0];
     const piecesPerCarton = prod.cartonConversion?.piecesPerCarton || prod.conversionRatio || 12;
     const kgPerCarton = prod.cartonConversion?.kgPerCarton || 16.5;
-    const pieces = item.cartons * piecesPerCarton;
-    const weightKg = Number((item.cartons * kgPerCarton).toFixed(1));
+    const validCartons = (!item.cartons || item.cartons <= 0 || !Number.isSafeInteger(item.cartons) || isNaN(item.cartons)) ? 0 : item.cartons;
+    const pieces = validCartons * piecesPerCarton;
+    const weightKg = Number((validCartons * kgPerCarton).toFixed(1));
     const officialPrice = prod.currentPriceRials || prod.referencePriceRials || 0;
     const minPermittedPrice = prod.minAllowedPriceRials || Math.round(officialPrice * 0.95);
 
@@ -189,6 +209,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
       productName: prod.name,
       productCode: prod.code,
       cartons: item.cartons,
+      validCartons,
       pieces,
       weightKg,
       baseUnit: prod.baseUnit,
@@ -213,6 +234,9 @@ export const SalesView: React.FC<SalesViewProps> = ({
 
   const hasAnyMissingPrice = calculatedItems.some((it) => it.hasMissingPrice);
   const hasAnyPriceBelowMinimum = calculatedItems.some((it) => it.isBelowMinimum);
+  const hasAnyInvalidQuantity = formItems.some(
+    (it) => !it.cartons || it.cartons <= 0 || !Number.isSafeInteger(it.cartons) || isNaN(it.cartons)
+  );
 
   // Filter orders by saved views and query
   const filteredOrders = orders.filter((ord) => {
@@ -330,7 +354,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
             size="sm"
             variant="primary"
             leftIcon={<Plus className="w-4 h-4" />}
-            onClick={() => setIsCreateModalOpen(true)}
+            onClick={handleOpenCreateModal}
           >
             ثبت سفارش جدید
           </Button>
@@ -1421,12 +1445,25 @@ export const SalesView: React.FC<SalesViewProps> = ({
                   size="sm"
                   variant="primary"
                   rightIcon={<ArrowLeft className="w-4 h-4" />}
-                  disabled={currentStep === 2 && hasAnyMissingPrice}
-                  title={currentStep === 2 && hasAnyMissingPrice ? 'برای ادامه باید کالاهای بدون قیمت تعیین تکلیف شوند' : undefined}
+                  disabled={currentStep === 2 && (hasAnyMissingPrice || hasAnyInvalidQuantity)}
+                  title={
+                    currentStep === 2 && hasAnyMissingPrice
+                      ? 'برای ادامه باید کالاهای بدون قیمت تعیین تکلیف شوند'
+                      : currentStep === 2 && hasAnyInvalidQuantity
+                      ? 'تعداد کارتن همه اقلام باید یک عدد صحیح مثبت (حداقل ۱) باشد'
+                      : undefined
+                  }
                   onClick={() => {
                     if (currentStep === 2 && hasAnyMissingPrice) {
                       addToast('خطای قیمت کاتالوگ', {
                         description: 'برای این کالا نرخ معتبر روز تعریف نشده است و امکان عبور به مرحله بعد وجود ندارد.',
+                        tone: 'danger',
+                      });
+                      return;
+                    }
+                    if (currentStep === 2 && hasAnyInvalidQuantity) {
+                      addToast('خطای تعداد کارتن', {
+                        description: 'تعداد کارتن باید یک عدد صحیح مثبت (حداقل ۱) باشد.',
                         tone: 'danger',
                       });
                       return;
@@ -1659,12 +1696,23 @@ export const SalesView: React.FC<SalesViewProps> = ({
                         />
                       </FormField>
 
-                      <FormField label="تعداد کارتن / بسته" required>
+                      <FormField
+                        label="تعداد کارتن / بسته"
+                        required
+                        error={
+                          !item.cartons || item.cartons <= 0 || !Number.isSafeInteger(item.cartons)
+                            ? 'تعداد کارتن باید یک عدد صحیح مثبت (حداقل ۱) باشد'
+                            : undefined
+                        }
+                      >
                         <TextInput
                           type="number"
-                          value={item.cartons}
+                          min={1}
+                          step={1}
+                          value={isNaN(item.cartons) ? '' : item.cartons}
                           onChange={(e) => {
-                            const val = Number(e.target.value) || 1;
+                            const raw = e.target.value.trim();
+                            const val = raw === '' ? 0 : Number(raw);
                             setFormItems((prev) =>
                               prev.map((it, i) => (i === index ? { ...it, cartons: val } : it))
                             );
@@ -1889,7 +1937,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                 </div>
                 <div className="flex justify-between font-bold">
                   <span>کانال ثبت:</span>
-                  <span>{formChannel}</span>
+                  <span>{getChannelDisplayName(formChannel)}</span>
                 </div>
                 <div className="flex justify-between font-bold">
                   <span>حجم کل محموله:</span>

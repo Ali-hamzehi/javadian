@@ -36,8 +36,8 @@ export const CLEAN_ROLE_METAS: Record<string, CleanRoleMeta> = {
   },
   'p-ordinary': {
     id: 'p-ordinary',
-    name: 'مسئول انبار — نقش نمونه',
-    jobTitle: 'مسئول انبار — نقش نمونه',
+    name: 'مسئول انبار',
+    jobTitle: 'واحد عملیات و نگهداری کالا',
     category: 'ops_warehouse',
     isDocumented: false,
     badgeText: 'نقش نمونه',
@@ -49,8 +49,8 @@ export const CLEAN_ROLE_METAS: Record<string, CleanRoleMeta> = {
   },
   'p-master-data': {
     id: 'p-master-data',
-    name: 'مسئول اطلاعات پایه — نقش نمونه',
-    jobTitle: 'مسئول اطلاعات پایه — نقش نمونه',
+    name: 'مسئول اطلاعات پایه',
+    jobTitle: 'واحد فناوری اطلاعات و کاتالوگ',
     category: 'ops_warehouse',
     isDocumented: false,
     badgeText: 'نقش نمونه',
@@ -77,8 +77,8 @@ export const CLEAN_ROLE_METAS: Record<string, CleanRoleMeta> = {
   },
   'p-sales': {
     id: 'p-sales',
-    name: 'کارشناس فروش — نقش نمونه',
-    jobTitle: 'کارشناس فروش — نقش نمونه',
+    name: 'کارشناس فروش',
+    jobTitle: 'واحد فروش و بازرگانی داخلی',
     category: 'sales',
     isDocumented: false,
     badgeText: 'نقش نمونه',
@@ -92,8 +92,8 @@ export const CLEAN_ROLE_METAS: Record<string, CleanRoleMeta> = {
   // ۳. مالی
   'p-fin-spec': {
     id: 'p-fin-spec',
-    name: 'کارشناس مالی — نقش نمونه',
-    jobTitle: 'کارشناس مالی — نقش نمونه',
+    name: 'کارشناس مالی',
+    jobTitle: 'واحد امور مالی و حسابداری',
     category: 'finance',
     isDocumented: false,
     badgeText: 'نقش نمونه',
@@ -105,8 +105,8 @@ export const CLEAN_ROLE_METAS: Record<string, CleanRoleMeta> = {
   },
   'p-fin-dir': {
     id: 'p-fin-dir',
-    name: 'تأییدکننده مالی — نقش نمونه',
-    jobTitle: 'تأییدکننده مالی — نقش نمونه',
+    name: 'تأییدکننده مالی',
+    jobTitle: 'مدیریت مالی و خزانه‌داری',
     category: 'finance',
     isDocumented: false,
     badgeText: 'نقش نمونه',
@@ -146,8 +146,8 @@ export const CLEAN_ROLE_METAS: Record<string, CleanRoleMeta> = {
   },
   'p-comm-approver': {
     id: 'p-comm-approver',
-    name: 'تأییدکننده بازرگانی — نقش نمونه',
-    jobTitle: 'تأییدکننده بازرگانی — نقش نمونه',
+    name: 'تأییدکننده بازرگانی',
+    jobTitle: 'معاونت بازرگانی و فروش',
     category: 'management',
     isDocumented: false,
     badgeText: 'نقش نمونه',
@@ -159,8 +159,8 @@ export const CLEAN_ROLE_METAS: Record<string, CleanRoleMeta> = {
   },
   'p-admin-ops': {
     id: 'p-admin-ops',
-    name: 'مدیر سیستم — نقش نمونه',
-    jobTitle: 'مدیر سیستم — نقش نمونه',
+    name: 'مدیر سیستم',
+    jobTitle: 'مدیریت فناوری و زیرساخت',
     category: 'management',
     isDocumented: false,
     badgeText: 'نقش نمونه',
@@ -172,8 +172,8 @@ export const CLEAN_ROLE_METAS: Record<string, CleanRoleMeta> = {
   },
   'p-no-access': {
     id: 'p-no-access',
-    name: 'کارآموز مهمان — نقش نمونه',
-    jobTitle: 'کارآموز مهمان — نقش نمونه',
+    name: 'کارآموز مهمان',
+    jobTitle: 'واحد آموزش و کارآموزی',
     category: 'management',
     isDocumented: false,
     badgeText: 'نقش نمونه',

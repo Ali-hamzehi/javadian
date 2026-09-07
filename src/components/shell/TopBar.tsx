@@ -25,6 +25,9 @@ import {
   PERSONA_CATEGORIES,
   PersonaCategory,
   getDocumentBasedPersonas,
+  getPersonaDisplayName,
+  getPersonaTypeLabel,
+  getPersonaSubtitle,
 } from '../../runtime/documentBasedPersonas';
 import { mockRepository, clearPersistedState, hasPersistedState } from '../../runtime/workflow';
 import { Button } from '../design-system/Button';
@@ -256,9 +259,9 @@ export const TopBar: React.FC<TopBarProps> = ({
                 adaptedActive.isDocumentedPerson ? 'bg-emerald-700' : 'bg-slate-600'
               }`}
             >
-              {adaptedActive.isDocumentedPerson ? 'فرد مستند' : 'نقش نمونه'}
+              {getPersonaTypeLabel(adaptedActive)}
             </span>
-            <span className="truncate max-w-[100px] sm:max-w-[130px] text-xs">{adaptedActive.name}</span>
+            <span className="truncate max-w-[100px] sm:max-w-[130px] text-xs">{getPersonaDisplayName(adaptedActive)}</span>
             <ChevronDown className="w-3 h-3 text-primary-700 shrink-0" />
           </button>
 
@@ -306,29 +309,29 @@ export const TopBar: React.FC<TopBarProps> = ({
                             >
                               <Avatar
                                 src={persona.avatar}
-                                alt={persona.name}
+                                alt={getPersonaDisplayName(persona)}
                                 className="w-7 h-7 rounded-full object-cover shrink-0 ring-1 ring-slate-200 mt-0.5"
                                 referrerPolicy="no-referrer"
                               />
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center justify-between gap-1">
                                   <span className="font-bold text-slate-900 text-xs truncate">
-                                    {persona.name}
+                                    {getPersonaDisplayName(persona)}
                                   </span>
                                   <div className="flex items-center gap-1">
                                     {persona.isDocumentedPerson ? (
-                                      <span className="text-caption bg-emerald-100 text-emerald-800 px-1 py-0.2 rounded font-bold">
-                                        مستند
+                                      <span className="text-caption bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded font-bold">
+                                        نقش سازمانی
                                       </span>
                                     ) : (
-                                      <span className="text-caption bg-slate-100 text-slate-600 px-1 py-0.2 rounded">
-                                        نمایشی
+                                      <span className="text-caption bg-slate-100 text-slate-600 px-1.5 py-0.2 rounded font-medium">
+                                        نقش نمونه
                                       </span>
                                     )}
                                     {isSelected && <Check className="w-3.5 h-3.5 text-primary-700 shrink-0" />}
                                   </div>
                                 </div>
-                                <p className="text-caption text-slate-500 truncate">{persona.jobTitle}</p>
+                                <p className="text-caption text-slate-500 truncate">{getPersonaSubtitle(persona)}</p>
                               </div>
                             </button>
                           );
@@ -346,14 +349,14 @@ export const TopBar: React.FC<TopBarProps> = ({
         <div className="relative" ref={userRef}>
           <button
             type="button"
-            aria-label="منوی نقش نمونه"
+            aria-label="منوی کاربر"
             aria-expanded={isUserMenuOpen}
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
             className="flex items-center gap-1 p-1 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
           >
             <Avatar
               src={activePersona.avatar}
-              alt={adaptedActive.name}
+              alt={getPersonaDisplayName(adaptedActive)}
               className="w-8 h-8 rounded-full object-cover ring-2 ring-primary-600"
               referrerPolicy="no-referrer"
             />
@@ -363,10 +366,10 @@ export const TopBar: React.FC<TopBarProps> = ({
             <div className="persona-menu absolute left-0 mt-1.5 w-68 bg-white rounded-xl shadow-xl border border-slate-200 p-3 z-50 text-right animate-in fade-in duration-150 space-y-2">
               <div className="pb-2 border-b border-slate-100">
                 <div className="flex items-center justify-between gap-1 mb-1">
-                  <span className="font-bold text-xs text-slate-900 block truncate">{adaptedActive.name}</span>
+                  <span className="font-bold text-xs text-slate-900 block truncate">{getPersonaDisplayName(adaptedActive)}</span>
                   {adaptedActive.isDocumentedPerson ? (
                     <span className="text-caption font-bold bg-emerald-100 text-emerald-800 px-1.5 py-0.5 rounded">
-                      فرد مستند
+                      نقش سازمانی
                     </span>
                   ) : (
                     <span className="text-caption font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">
@@ -374,15 +377,19 @@ export const TopBar: React.FC<TopBarProps> = ({
                     </span>
                   )}
                 </div>
-                <span className="text-caption text-slate-600 font-medium block">{adaptedActive.jobTitle}</span>
-                <span className="text-caption text-slate-500 block">{adaptedActive.department}</span>
+                {getPersonaSubtitle(adaptedActive) && (
+                  <span className="text-caption text-slate-600 font-medium block">{getPersonaSubtitle(adaptedActive)}</span>
+                )}
+                {adaptedActive.department && adaptedActive.department !== getPersonaSubtitle(adaptedActive) && (
+                  <span className="text-caption text-slate-500 block">{adaptedActive.department}</span>
+                )}
               </div>
 
               <div className="text-caption text-slate-600 space-y-1">
                 <div className="flex justify-between">
-                  <span>وضعیت هویت:</span>
+                  <span>نوع نقش:</span>
                   <strong className={adaptedActive.isDocumentedPerson ? 'text-emerald-700 font-bold' : 'text-slate-700'}>
-                    {adaptedActive.isDocumentedPerson ? 'شخص مستند در اسناد' : 'نقش نمونه'}
+                    {getPersonaTypeLabel(adaptedActive)}
                   </strong>
                 </div>
                 <div className="flex justify-between">

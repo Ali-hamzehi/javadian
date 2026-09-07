@@ -120,40 +120,43 @@ export const RoleSelectorModal: React.FC<RoleSelectorModalProps> = ({
               return (
                 <div
                   key={persona.id}
-                  className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between text-right ${
+                  className={`p-3.5 rounded-xl border transition-all flex flex-col justify-between text-right h-full ${
                     isCurrent
                       ? 'bg-primary-50/50 border-primary-300 ring-1 ring-primary-300'
                       : 'bg-white border-slate-200 hover:border-slate-300'
                   }`}
                 >
                   <div>
-                    {/* Header */}
-                    <div className="flex items-start justify-between gap-2 mb-2">
-                      <div className="flex items-center gap-2.5 min-w-0">
-                        <Avatar
-                          src={persona.avatar}
-                          alt={cleanName}
-                          className="w-9 h-9 rounded-full object-cover shrink-0 ring-1 ring-slate-200"
-                        />
-                        <div className="min-w-0">
-                          <h3 className="text-xs font-bold text-slate-900 truncate">
-                            {cleanName}
-                          </h3>
-                          <p className="text-caption text-slate-600 truncate mt-0.5">
+                    {/* Top Row: Role Type Badge */}
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <span
+                        className={`text-caption px-2 py-0.5 rounded-full font-bold border shrink-0 ${
+                          isDocumented
+                            ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                            : 'bg-slate-100 text-slate-700 border-slate-300 font-medium'
+                        }`}
+                      >
+                        {isDocumented ? 'نقش سازمانی' : 'نقش نمونه'}
+                      </span>
+                    </div>
+
+                    {/* Identity Row */}
+                    <div className="flex items-start gap-2.5 mb-2">
+                      <Avatar
+                        src={persona.avatar}
+                        alt={cleanName}
+                        className="w-10 h-10 rounded-full object-cover shrink-0 ring-1 ring-slate-200 mt-0.5"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <h3 className="text-xs sm:text-sm font-bold text-slate-900 line-clamp-2 leading-snug">
+                          {cleanName}
+                        </h3>
+                        {cleanJob && cleanJob !== cleanName && (
+                          <p className="text-caption text-slate-600 line-clamp-1 mt-0.5">
                             {cleanJob}
                           </p>
-                        </div>
+                        )}
                       </div>
-
-                      {isDocumented ? (
-                        <span className="text-caption px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200 shrink-0">
-                          نقش سازمانی
-                        </span>
-                      ) : (
-                        <span className="text-caption px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium border border-slate-200 shrink-0">
-                          نقش نمونه
-                        </span>
-                      )}
                     </div>
 
                     {/* 2 Key Capabilities */}

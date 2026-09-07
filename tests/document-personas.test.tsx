@@ -252,9 +252,9 @@ test('TopBar: renders document-based persona names and status pills', () => {
     </PWAProvider>
   );
 
-  // Shows Arash as document-verified person
+  // Shows Arash as document-verified person with unified organizational role badge
   assert.ok(html.includes('آرش'));
-  assert.ok(html.includes('فرد مستند'));
+  assert.ok(html.includes('نقش سازمانی'));
 
   // Check placeholder rendering
   const finSpecMock = MOCK_PERSONAS.find((p) => p.id === 'p-fin-spec')!;
@@ -270,7 +270,7 @@ test('TopBar: renders document-based persona names and status pills', () => {
       </ToastProvider>
     </PWAProvider>
   );
-  assert.ok(placeholderHtml.includes('کارشناس مالی — نقش نمونه'));
+  assert.ok(placeholderHtml.includes('کارشناس مالی'));
   assert.ok(placeholderHtml.includes('نقش نمونه'));
 });
 

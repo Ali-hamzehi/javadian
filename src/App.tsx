@@ -1,5 +1,5 @@
 import { useWorkflowRevision, initializeWorkflow } from './runtime/workflow';
-import { adaptPersona } from './runtime/documentBasedPersonas';
+import { adaptPersona, getPersonaDisplayName, getPersonaSubtitle, getPersonaTypeLabel } from './runtime/documentBasedPersonas';
 import { ArrowRight } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { MOCK_PERSONAS, NAV_ITEMS } from './data/mockData';
@@ -163,8 +163,12 @@ function AppContent() {
       setCurrentRoute(getPersonaLandingRoute(canonical));
       setTargetRecordId(undefined);
     }
-    addToast(`نقش به «${canonical.name}» تغییر یافت`, {
-      description: `${canonical.jobTitle} • ${canonical.badgeNote || ''}`,
+    const displayName = getPersonaDisplayName(canonical);
+    const subtitle = getPersonaSubtitle(canonical);
+    const typeLabel = getPersonaTypeLabel(canonical);
+    const descParts = [subtitle, typeLabel].filter(Boolean);
+    addToast(`نقش به «${displayName}» تغییر یافت`, {
+      description: descParts.join(' • '),
       tone: 'info',
     });
   };
