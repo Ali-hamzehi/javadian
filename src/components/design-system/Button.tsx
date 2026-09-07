@@ -46,11 +46,11 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantStyles: Record<ButtonVariant, string> = {
     primary:
-      'bg-primary-700 text-white hover:bg-primary-800 active:bg-primary-900 focus:ring-primary-500 shadow-xs border border-transparent font-semibold',
+      'bg-gradient-to-r from-[#4262ff] via-[#324dff] to-[#5a38ed] text-white hover:from-[#4d6aff] hover:to-[#5332e5] active:from-[#2e47e6] active:to-[#4627d4] shadow-[0_10px_24px_rgba(53,75,255,0.24)] hover:shadow-[0_14px_28px_rgba(53,75,255,0.32)] focus:ring-[#3657ff] border border-transparent font-extrabold',
     secondary:
-      'bg-slate-100 text-slate-800 hover:bg-slate-200 active:bg-slate-300 focus:ring-slate-400 border border-slate-200 font-medium',
+      'bg-[#f0f2ff] text-[#304cff] hover:bg-[#e4eaff] active:bg-[#d5dfff] focus:ring-[#3657ff] border border-[#dbe3ff] font-bold',
     outline:
-      'bg-white text-slate-700 hover:bg-slate-50 active:bg-slate-100 focus:ring-primary-500 border border-slate-200 shadow-none font-medium',
+      'bg-white text-slate-700 hover:bg-[#f8faff] hover:text-[#304cff] active:bg-[#f0f2ff] focus:ring-[#3657ff] border border-[#dbe2ee] hover:border-[#cdd5ff] shadow-[0_4px_12px_rgba(30,41,79,0.04)] font-bold',
     ghost:
       'bg-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200 focus:ring-slate-400 border border-transparent font-medium',
     destructive:

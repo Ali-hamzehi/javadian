@@ -36,10 +36,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentRoute, onNavigate, acti
   const badgeCounts: Record<string, number | undefined> = { inbox: counts.mine, approvals: counts.approvals || undefined, sales_orders: counts.orders || undefined, supply_requests: counts.supplyReqs || undefined, payment_requests: counts.payRequests || undefined, visit_plans: counts.visitPlans || undefined };
 
   const renderContent = (compact: boolean, mobile = false) => (
-    <aside className="flex flex-col h-full bg-white/95 backdrop-blur-md text-slate-800 border-l border-slate-200/80">
-      <div className="sidebar-brand px-3 border-b border-slate-100 flex items-center gap-2 shrink-0">
-        <div className="w-9 h-9 shrink-0 rounded-lg bg-primary-700 flex items-center justify-center text-white font-black" aria-hidden="true">ج</div>
-        {!compact && <div className="min-w-0 flex-1"><p className="sidebar-brand-name text-sm font-bold text-slate-900">سامانه عملیات جوادیان</p><p className="text-caption text-slate-500">عملیات و زنجیره تأمین</p></div>}
+    <aside className="flex flex-col h-full bg-white/95 backdrop-blur-md text-slate-800 border-l border-[#eef1f8] shadow-[10px_0_36px_rgba(43,57,120,0.035)]">
+      <div className="sidebar-brand px-3 border-b border-[#f0f2f8] flex items-center gap-2.5 shrink-0 h-[62px]">
+        <div className="w-9 h-9 shrink-0 rounded-xl bg-gradient-to-br from-[#556bff] via-[#354cff] to-[#5d36ef] shadow-[0_9px_22px_rgba(54,82,255,0.24)] flex items-center justify-center text-white font-black text-base" aria-hidden="true">ج</div>
+        {!compact && <div className="min-w-0 flex-1"><p className="sidebar-brand-name text-sm font-black text-[#0c2258]">سامانه عملیات جوادیان</p><p className="text-[10px] text-[#9aa4bc]">عملیات و زنجیره تأمین</p></div>}
         {mobile ? <button type="button" onClick={onCloseMobile} aria-label="بستن منو" className="shrink-0 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 p-1 inline-flex items-center justify-center"><X className="w-5 h-5" /></button> : !compact && <button type="button" onClick={onToggleCollapse} title="جمع کردن منو" aria-label="جمع کردن منو" className="shrink-0 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 p-1 inline-flex items-center justify-center"><PanelRightClose className="w-5 h-5" /></button>}
       </div>
       {compact && <button type="button" onClick={onToggleCollapse} title="باز کردن منو" aria-label="باز کردن منو" className="mx-auto my-2 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 p-1.5 inline-flex items-center justify-center"><PanelRightOpen className="w-5 h-5" /></button>}
@@ -62,18 +62,20 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentRoute, onNavigate, acti
                   if (single && group.id !== 'home') { onNavigate(subs[0].routeKey); onCloseMobile?.(); }
                   else { if (compact) onToggleCollapse(); setOpenGroups(previous => ({ ...previous, [group.id]: compact || !open })); }
                 }}
-                className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-xl text-sm transition-colors min-h-[44px] sm:min-h-[36px] ${single && active ? 'bg-primary-50 text-primary-800 font-bold border border-primary-100/80 shadow-xs' : 'text-slate-700 hover:bg-slate-100/80'}`}
+                className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-2xl text-sm transition-all min-h-[44px] sm:min-h-[38px] ${single && active ? 'bg-[#f0f2ff] text-[#304cff] font-extrabold border border-[#dbe3ff]' : 'text-[#66728f] hover:bg-[#f7f8ff] hover:text-[#304cff]'}`}
               >
-                <span className="flex items-center gap-2 min-w-0">
-                  <Icon className={`shrink-0 ${single && active ? 'text-primary-700' : 'text-slate-500'}`} />
-                  {!compact && <span>{group.title}</span>}
+                <span className="flex items-center gap-2.5 min-w-0">
+                  <span className={`w-7.5 h-7.5 rounded-lg flex items-center justify-center shrink-0 transition-all ${single && active ? 'bg-gradient-to-br from-[#526aff] via-[#344cff] to-[#5b3cf0] text-white shadow-[0_7px_18px_rgba(57,79,255,0.22)]' : 'text-[#8e99b3]'}`}>
+                    <Icon className="w-4 h-4" />
+                  </span>
+                  {!compact && <span className="font-bold text-xs sm:text-sm">{group.title}</span>}
                 </span>
                 {!compact && (!single || group.id === 'home') && (
                   <ChevronDown className={`shrink-0 text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`} />
                 )}
               </button>
               {!compact && open && (!single || group.id === 'home') && (
-                <div className="mr-3 pr-2 border-r border-slate-200 py-1 space-y-1">
+                <div className="mr-3 pr-2 border-r border-[#eef1f8] py-1 space-y-1">
                   {subs.map(sub => {
                     const isSubActive = currentRoute === sub.routeKey;
                     const renderedTitle = (sub.routeKey === 'inbox' || sub.title.includes('کارتابل')) ? 'کارهای من' : sub.title;
@@ -83,11 +85,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentRoute, onNavigate, acti
                         type="button"
                         aria-current={isSubActive ? 'page' : undefined}
                         onClick={() => { onNavigate(sub.routeKey); onCloseMobile?.(); }}
-                        className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-xl text-sm transition-colors min-h-[44px] sm:min-h-[36px] ${isSubActive ? 'bg-primary-50 text-primary-800 font-extrabold border border-primary-200/60 shadow-xs' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'}`}
+                        className={`w-full flex items-center justify-between gap-2 px-3 py-2 rounded-xl text-xs sm:text-sm transition-all min-h-[40px] ${isSubActive ? 'bg-[#f0f2ff] text-[#304cff] font-extrabold border border-[#dbe3ff]' : 'text-[#66728f] hover:bg-[#f7f8ff] hover:text-[#304cff]'}`}
                       >
                         <span>{renderedTitle}</span>
                         {badgeCounts[sub.routeKey] !== undefined && (
-                          <span className={`text-caption rounded-full px-2 shrink-0 font-medium ${isSubActive ? 'bg-primary-700 text-white' : 'bg-slate-100 text-slate-700'}`}>
+                          <span className={`text-caption rounded-full px-2 py-0.5 shrink-0 font-bold ${isSubActive ? 'bg-[#3657ff] text-white' : 'bg-[#eef1ff] text-[#304cff]'}`}>
                             {toPersianDigits(badgeCounts[sub.routeKey]!)}
                           </span>
                         )}
@@ -101,7 +103,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentRoute, onNavigate, acti
         })}
       </nav>
       {!compact && (
-        <div className="p-3 border-t border-slate-100 text-caption text-slate-600 safe-bottom bg-slate-50/50">
+        <div className="p-3 border-t border-[#f0f2f8] text-caption text-slate-600 safe-bottom bg-[#f8f9ff]/60">
           {isInstallable && (
             <button
               type="button"
@@ -109,23 +111,28 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentRoute, onNavigate, acti
                 onCloseMobile?.();
                 setShowInstallGuide(true);
               }}
-              className="w-full flex items-center gap-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200/90 text-primary-700 font-bold p-2.5 mb-3 cursor-pointer shadow-xs transition-colors"
+              className="w-full flex items-center gap-2 rounded-xl bg-white hover:bg-[#f0f2ff] border border-[#dbe3ff] text-[#304cff] font-bold p-2.5 mb-3 cursor-pointer shadow-xs transition-colors"
             >
-              <Download className="w-4 h-4 text-primary-700" />
+              <Download className="w-4 h-4 text-[#304cff]" />
               نصب برنامه
             </button>
           )}
-          <div className="flex items-center justify-between gap-2 mb-1">
-            <span className="text-caption text-slate-500 truncate">
-              {getPersonaSubtitle(activePersona) || activePersona.department}
-            </span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded font-medium shrink-0 bg-white text-slate-600 border border-slate-200">
+          <div className="bg-white border border-[#eef1f8] rounded-2xl p-2.5 flex items-center gap-2.5 shadow-xs">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#edf1ff] to-[#e2e8ff] text-[#3d51dd] font-black text-sm flex items-center justify-center shrink-0">
+              {getPersonaDisplayName(activePersona).charAt(0)}
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="font-black text-[#1a2e62] text-xs truncate">
+                {getPersonaDisplayName(activePersona)}
+              </p>
+              <p className="text-[10px] text-[#9aa4bc] truncate mt-0.5">
+                {getPersonaSubtitle(activePersona) || activePersona.department}
+              </p>
+            </div>
+            <span className="text-[10px] px-1.5 py-0.5 rounded-md font-bold shrink-0 bg-[#f0f2ff] text-[#304cff] border border-[#dbe3ff]">
               {getPersonaTypeLabel(activePersona)}
             </span>
           </div>
-          <p className="font-bold text-slate-900 text-sm truncate">
-            {getPersonaDisplayName(activePersona)}
-          </p>
         </div>
       )}
     </aside>

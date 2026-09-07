@@ -49,13 +49,20 @@ function AppContent() {
   const { addToast } = useToast();
   const { showInstallGuide, setShowInstallGuide } = usePWA();
 
-  // Active mock persona state - safe restoration from storage or null
+  // Active mock persona state - safe restoration from storage or default to primary sales specialist
   const [activePersona, setActivePersona] = useState<MockPersona | null>(() => {
     try {
+      const isExplicitlyLoggedOut = sessionStorage.getItem('javadian_explicit_signed_out');
+      if (isExplicitlyLoggedOut) return null;
       const savedPersonaId = localStorage.getItem('javadian_pwa_persona_id');
       if (savedPersonaId) {
         const found = MOCK_PERSONAS.find((p) => p.id === savedPersonaId);
         if (found) return adaptPersona(found);
+      }
+      // If no saved persona and not explicitly signed out, default to primary sales specialist
+      const defaultPersona = MOCK_PERSONAS.find((p) => p.id === 'sales_specialist') || MOCK_PERSONAS[0];
+      if (defaultPersona) {
+        return adaptPersona(defaultPersona);
       }
     } catch (e) {
       console.warn('Could not restore saved persona:', e);
@@ -141,6 +148,9 @@ function AppContent() {
 
   // Sign out handler - clears session and returns to Persian RTL login page
   const handleSignOut = () => {
+    try {
+      sessionStorage.setItem('javadian_explicit_signed_out', 'true');
+    } catch (e) {}
     setActivePersona(null);
     setCurrentRoute('inbox');
     setTargetRecordId(undefined);
@@ -156,6 +166,9 @@ function AppContent() {
 
   // Switch persona handler
   const handleSelectPersona = (persona: MockPersona) => {
+    try {
+      sessionStorage.removeItem('javadian_explicit_signed_out');
+    } catch (e) {}
     const canonical = adaptPersona(persona);
     setActivePersona(canonical);
     // If user cannot access current route under new persona, gracefully redirect
@@ -205,12 +218,21 @@ function AppContent() {
   // If user is not logged in, render the official enterprise LoginScreen
   if (!activePersona) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col justify-between">
+      <div
+        className="min-h-screen flex flex-col justify-between text-[#172554] antialiased"
+        style={{
+          background:
+            'radial-gradient(circle at 16% 10%, rgba(118, 133, 255, 0.12), transparent 30%), radial-gradient(circle at 92% 86%, rgba(75, 100, 255, 0.10), transparent 34%), #f6f7ff',
+        }}
+      >
         <PWALaunchSplash />
         <PWAOfflineBanner />
         <LoginScreen
           sessionNotice={sessionNotice}
           onLogin={(persona) => {
+            try {
+              sessionStorage.removeItem('javadian_explicit_signed_out');
+            } catch (e) {}
             const canonical = adaptPersona(persona);
             setActivePersona(canonical);
             setSessionNotice(null);
@@ -273,7 +295,13 @@ function AppContent() {
   const currentRouteDef = APP_ROUTES[currentRoute as AppRouteKey];
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col antialiased selection:bg-primary-700 selection:text-white">
+    <div
+      className="min-h-screen text-[#172554] flex flex-col antialiased selection:bg-primary-700 selection:text-white"
+      style={{
+        background:
+          'radial-gradient(circle at 16% 10%, rgba(118, 133, 255, 0.12), transparent 30%), radial-gradient(circle at 92% 86%, rgba(75, 100, 255, 0.10), transparent 34%), #f6f7ff',
+      }}
+    >
       <PWALaunchSplash />
       <PWAOfflineBanner />
 

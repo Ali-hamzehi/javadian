@@ -579,22 +579,23 @@ export const InboxView: React.FC<InboxViewProps> = ({
   return (
     <div className="space-y-4">
       {/* Top Header Card: Title, Persona info, Hybrid presentation toggle, and Submit Request button */}
-      <div className="bg-white p-4.5 rounded-2xl border border-slate-200/90 shadow-none space-y-3">
+      <div className="surface p-5 rounded-2xl border border-[#dfe5ef] shadow-[0_6px_18px_rgba(30,41,79,0.055)] space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="space-y-1">
+            <div className="eyebrow mb-1">فضای کاری شخصی</div>
             <div className="flex items-center gap-2 flex-wrap">
-              <h1 className="page-title text-xl sm:text-2xl font-black text-slate-900">
+              <h1 className="page-title text-xl sm:text-2xl font-black text-[#10245b]">
                 {activeMode === 'manager' ? 'میز تصمیم‌گیری و نظارت بر تیم' : 'کارهای من'}
               </h1>
               <div className="inline-flex items-center gap-1.5 flex-wrap">
-                <span className="text-xs font-bold text-slate-900">
+                <span className="text-xs font-bold text-slate-800">
                   {getPersonaDisplayName(activePersona)}
                 </span>
                 <span
-                  className={`text-caption px-2 py-0.5 rounded-full font-bold border ${
+                  className={`text-caption px-2.5 py-0.5 rounded-full font-bold border ${
                     getPersonaTypeLabel(activePersona) === 'نقش سازمانی'
-                      ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
-                      : 'bg-slate-100 text-slate-700 border-slate-300'
+                      ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                      : 'bg-[#edf1ff] text-[#304cff] border-[#dbe3ff]'
                   }`}
                 >
                   {getPersonaTypeLabel(activePersona)}
@@ -606,18 +607,21 @@ export const InboxView: React.FC<InboxViewProps> = ({
                 )}
               </div>
             </div>
+            <p className="text-xs text-slate-500">
+              {employeeSummary}
+            </p>
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
             {/* Hybrid Role Presentation Switcher (presentation-only, creates NO fake permissions) */}
             {experienceType === 'hybrid' && (
-              <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-semibold">
+              <div className="flex items-center bg-[#f0f2ff] p-1 rounded-xl border border-[#dbe3ff] text-xs font-semibold">
                 <button
                   type="button"
                   onClick={() => setActiveMode('employee')}
-                  className={`px-3 py-1.5 rounded-lg transition-all ${
+                  className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                     activeMode === 'employee'
-                      ? 'bg-white text-slate-900 shadow-xs font-bold'
+                      ? 'bg-white text-[#304cff] shadow-xs font-black'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -626,9 +630,9 @@ export const InboxView: React.FC<InboxViewProps> = ({
                 <button
                   type="button"
                   onClick={() => setActiveMode('manager')}
-                  className={`px-3 py-1.5 rounded-lg transition-all ${
+                  className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                     activeMode === 'manager'
-                      ? 'bg-white text-primary-700 shadow-xs font-bold'
+                      ? 'bg-white text-[#304cff] shadow-xs font-black'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
@@ -668,9 +672,53 @@ export const InboxView: React.FC<InboxViewProps> = ({
           </div>
         </div>
 
-        {/* Employee 4-Card Operational Summary Grid */}
+        {/* 3 Quick Navigation Capability Cards (Prototype-inspired) */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+          <button
+            type="button"
+            onClick={() => { setEmployeeTab('to_do'); }}
+            className="action-card flex items-start gap-3 p-3 text-right cursor-pointer"
+          >
+            <div className="cico">✓</div>
+            <div>
+              <b>کارهای من</b>
+              <p>وظایف جاری، موانع و اقدام بعدی.</p>
+              <span className="text-[#3154e8] font-bold text-xs">مشاهده کارهای من</span>
+            </div>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (onNavigateToRoute) onNavigateToRoute('approvals');
+            }}
+            className="action-card flex items-start gap-3 p-3 text-right cursor-pointer"
+          >
+            <div className="cico">⌛</div>
+            <div>
+              <b>تأییدهای من</b>
+              <p>تصمیم‌های تجاری، مالی و تأمین.</p>
+              <span className="text-[#3154e8] font-bold text-xs">مشاهده تأییدها</span>
+            </div>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              if (onNavigateToRoute) onNavigateToRoute('notifications');
+            }}
+            className="action-card flex items-start gap-3 p-3 text-right cursor-pointer"
+          >
+            <div className="cico">●</div>
+            <div>
+              <b>اعلان‌ها و رویدادها</b>
+              <p>ارجاع‌ها، هشدارها و رویدادهای سامانه.</p>
+              <span className="text-[#3154e8] font-bold text-xs">مشاهده اعلان‌ها</span>
+            </div>
+          </button>
+        </div>
+
+        {/* Employee 4-Card Operational Summary Grid (Prototype KPI styling) */}
         {activeMode === 'employee' && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-1">
+          <div className="kpis pt-1">
             <button
               type="button"
               onClick={() => {
@@ -678,16 +726,11 @@ export const InboxView: React.FC<InboxViewProps> = ({
                 setSelectedPriority('all');
                 setSelectedType('all');
               }}
-              className={`p-3 rounded-xl border text-right transition-all cursor-pointer ${
-                employeeTab === 'to_do'
-                  ? 'border-primary-400 bg-primary-50/60 shadow-xs ring-1 ring-primary-300/40'
-                  : 'border-slate-200 bg-white hover:border-slate-300'
-              }`}
+              className="kpi kpi-card-1 text-right cursor-pointer"
             >
-              <div className="text-caption text-slate-500 font-medium">برای اقدام من (برای انجام)</div>
-              <div className="text-lg font-black text-primary-900 mt-0.5">
-                {toPersianDigits(employeeCounts.toDo)} کار
-              </div>
+              <small>برای اقدام من (برای انجام)</small>
+              <strong>{toPersianDigits(employeeCounts.toDo)} کار</strong>
+              <span>مرتبط با شما • اولویت جاری</span>
             </button>
 
             <button
@@ -695,16 +738,11 @@ export const InboxView: React.FC<InboxViewProps> = ({
               onClick={() => {
                 setEmployeeTab('tracking');
               }}
-              className={`p-3 rounded-xl border text-right transition-all cursor-pointer ${
-                employeeTab === 'tracking'
-                  ? 'border-sky-400 bg-sky-50/60 shadow-xs ring-1 ring-sky-300/40'
-                  : 'border-slate-200 bg-white hover:border-slate-300'
-              }`}
+              className="kpi kpi-card-2 text-right cursor-pointer"
             >
-              <div className="text-caption text-slate-500 font-medium">منتظر دیگران (برای پیگیری)</div>
-              <div className="text-lg font-black text-sky-900 mt-0.5">
-                {toPersianDigits(employeeCounts.tracking)} مورد
-              </div>
+              <small>منتظر دیگران (برای پیگیری)</small>
+              <strong>{toPersianDigits(employeeCounts.tracking)} مورد</strong>
+              <span>نیازمند اقدام همکاران</span>
             </button>
 
             <button
@@ -712,16 +750,13 @@ export const InboxView: React.FC<InboxViewProps> = ({
               onClick={() => {
                 setEmployeeTab('to_do');
               }}
-              className={`p-3 rounded-xl border text-right transition-all cursor-pointer ${
-                employeeCounts.blocked > 0
-                  ? 'border-rose-300 bg-rose-50/50 hover:border-rose-400'
-                  : 'border-slate-200 bg-white hover:border-slate-300'
-              }`}
+              className="kpi kpi-card-3 text-right cursor-pointer"
             >
-              <div className="text-caption text-slate-500 font-medium">مسدود</div>
-              <div className={`text-lg font-black mt-0.5 ${employeeCounts.blocked > 0 ? 'text-rose-800' : 'text-slate-700'}`}>
+              <small>مسدود / نیازمند رفع مانع</small>
+              <strong className={employeeCounts.blocked > 0 ? "text-rose-600" : "text-slate-800"}>
                 {toPersianDigits(employeeCounts.blocked)} کار
-              </div>
+              </strong>
+              <span>{employeeCounts.blocked > 0 ? "نیازمند اقدام فوری" : "بدون مانع فعال"}</span>
             </button>
 
             <button
@@ -729,23 +764,20 @@ export const InboxView: React.FC<InboxViewProps> = ({
               onClick={() => {
                 setEmployeeTab('history');
               }}
-              className={`p-3 rounded-xl border text-right transition-all cursor-pointer ${
-                employeeTab === 'history'
-                  ? 'border-emerald-400 bg-emerald-50/60 shadow-xs ring-1 ring-emerald-300/40'
-                  : 'border-slate-200 bg-white hover:border-slate-300'
-              }`}
+              className="kpi kpi-card-4 text-right cursor-pointer"
             >
-              <div className="text-caption text-slate-500 font-medium">تاریخچه (انجام‌شده اخیر)</div>
-              <div className="text-lg font-black text-emerald-900 mt-0.5">
+              <small>تاریخچه (انجام‌شده اخیر)</small>
+              <strong className="text-emerald-700">
                 {toPersianDigits(employeeCounts.recentCompleted)} کار
-              </div>
+              </strong>
+              <span>سوابق نهایی‌شده</span>
             </button>
           </div>
         )}
 
         {/* Manager Actionable KPI Metric Cards (4 core indicators) */}
         {activeMode === 'manager' && (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1">
+          <div className="kpis pt-1">
             <button
               type="button"
               onClick={() => {
@@ -753,54 +785,11 @@ export const InboxView: React.FC<InboxViewProps> = ({
                 setManagerMetricFilter('all');
                 setSelectedStatus('all');
               }}
-              className={`p-3 rounded-xl border text-right transition-all cursor-pointer ${
-                managerTab === 'decisions' && managerMetricFilter === 'all'
-                  ? 'border-primary-400 bg-primary-50/60 shadow-xs ring-1 ring-primary-300/40'
-                  : 'border-slate-200 bg-white hover:border-slate-300'
-              }`}
+              className="kpi kpi-card-1 text-right cursor-pointer"
             >
-              <div className="text-caption text-slate-500 font-medium">تصمیم‌های در انتظار</div>
-              <div className="text-lg font-black text-primary-900 mt-0.5">
-                {toPersianDigits(actionableApprovals.length)} پرونده
-              </div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setManagerTab('team_tracking');
-                setManagerMetricFilter('blocked');
-                setSelectedStatus('blocked');
-              }}
-              className={`p-3 rounded-xl border text-right transition-all cursor-pointer ${
-                managerTab === 'team_tracking' && managerMetricFilter === 'blocked'
-                  ? 'border-rose-400 bg-rose-50/60 shadow-xs ring-1 ring-rose-300/40'
-                  : 'border-slate-200 bg-white hover:border-slate-300'
-              }`}
-            >
-              <div className="text-caption text-slate-500 font-medium">کارهای مسدود</div>
-              <div className="text-lg font-black text-rose-800 mt-0.5">
-                {toPersianDigits(teamBlockedRecords.length)} پرونده
-              </div>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => {
-                setManagerTab('team_tracking');
-                setManagerMetricFilter('overdue');
-                setSelectedStatus('overdue');
-              }}
-              className={`p-3 rounded-xl border text-right transition-all cursor-pointer ${
-                managerTab === 'team_tracking' && managerMetricFilter === 'overdue'
-                  ? 'border-amber-400 bg-amber-50/60 shadow-xs ring-1 ring-amber-300/40'
-                  : 'border-slate-200 bg-white hover:border-slate-300'
-              }`}
-            >
-              <div className="text-caption text-slate-500 font-medium">کارهای معوق</div>
-              <div className="text-lg font-black text-amber-900 mt-0.5">
-                {toPersianDigits(teamOverdueRecords.length)} پرونده
-              </div>
+              <small>تصمیم‌های منتظر من</small>
+              <strong>{toPersianDigits(actionableApprovals.length)} تصمیم</strong>
+              <span>تأیید یا بررسی تجاری/مالی</span>
             </button>
 
             <button
@@ -808,23 +797,42 @@ export const InboxView: React.FC<InboxViewProps> = ({
               onClick={() => {
                 setManagerTab('team_tracking');
                 setManagerMetricFilter('all');
-                setSelectedStatus('all');
               }}
-              className={`p-3 rounded-xl border text-right transition-all cursor-pointer ${
-                managerTab === 'team_tracking' && managerMetricFilter === 'all'
-                  ? 'border-sky-400 bg-sky-50/60 shadow-xs ring-1 ring-sky-300/40'
-                  : 'border-slate-200 bg-white hover:border-slate-300'
-              }`}
+              className="kpi kpi-card-2 text-right cursor-pointer"
             >
-              <div className="text-caption text-slate-500 font-medium">پیگیری تیم</div>
-              <div className="text-lg font-black text-sky-900 mt-0.5">
-                {toPersianDigits(
-                  teamBlockedRecords.length +
-                    teamOverdueRecords.length +
-                    authorizedRecords.filter((r) => r.status === 'waiting' || r.status === 'returned').length
-                )}{' '}
-                پرونده
-              </div>
+              <small>کارهای در جریان تیم</small>
+              <strong>{toPersianDigits(authorizedRecords.length)} پرونده</strong>
+              <span>کل کارهای در حوزه اختیارات</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setManagerTab('team_tracking');
+                setManagerMetricFilter('blocked');
+              }}
+              className="kpi kpi-card-3 text-right cursor-pointer"
+            >
+              <small>موارد مسدود تیم</small>
+              <strong className={teamBlockedRecords.length > 0 ? "text-rose-600" : "text-slate-800"}>
+                {toPersianDigits(teamBlockedRecords.length)} مانع
+              </strong>
+              <span>نیازمند مداخله و راهگشایی</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setManagerTab('team_tracking');
+                setManagerMetricFilter('overdue');
+              }}
+              className="kpi kpi-card-4 text-right cursor-pointer"
+            >
+              <small>موارد معوق / ریسک مهلت</small>
+              <strong className={teamOverdueRecords.length > 0 ? "text-amber-600" : "text-emerald-700"}>
+                {toPersianDigits(teamOverdueRecords.length)} مورد
+              </strong>
+              <span>سررسید منقضی‌شده</span>
             </button>
           </div>
         )}
