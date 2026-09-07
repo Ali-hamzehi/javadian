@@ -96,19 +96,19 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
   });
 
   return (
-    <div className="login-screen min-h-dvh bg-slate-900 flex flex-col justify-between items-center p-3 sm:p-6 text-slate-800 relative select-none">
+    <div className="login-screen min-h-dvh flex flex-col justify-between items-center p-3 sm:p-6 text-slate-800 relative select-none">
       {/* Top Header */}
-      <header className="w-full max-w-5xl flex items-center justify-between gap-3 py-2 relative z-10 border-b border-slate-800/80 pb-3">
+      <header className="w-full max-w-5xl flex items-center justify-between gap-3 py-3 relative z-10 border-b border-[#e7ebf6] pb-4">
         {/* Logo, System Name, Demo Badge */}
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 shrink-0 rounded-lg bg-primary-700 flex items-center justify-center text-white font-black text-sm shadow-sm">
+          <div className="w-9 h-9 shrink-0 rounded-xl bg-gradient-to-br from-[#556bff] via-[#354cff] to-[#5d36ef] shadow-[0_9px_22px_rgba(54,82,255,0.24)] flex items-center justify-center text-white font-black text-sm">
             ج
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs sm:text-sm font-bold text-slate-100">
+            <span className="text-xs sm:text-sm font-black text-[#0c2258]">
               سامانه عملیات جوادیان
             </span>
-            <span className="text-caption px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 font-semibold">
+            <span className="text-caption px-2 py-0.5 rounded-full bg-[#edf1ff] text-[#304cff] border border-[#dbe3ff] font-bold">
               نسخه نمایشی
             </span>
           </div>
@@ -120,18 +120,18 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             <button
               type="button"
               onClick={() => setAuthMode('credentials')}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white bg-slate-800 hover:bg-slate-700/80 rounded-lg border border-slate-700 transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 hover:text-[#304cff] bg-white hover:bg-[#f8faff] rounded-xl border border-[#dfe5ef] hover:border-[#cdd5ff] shadow-xs transition-colors cursor-pointer"
             >
-              <KeyRound className="w-3.5 h-3.5 text-primary-400" />
+              <KeyRound className="w-3.5 h-3.5 text-[#3657ff]" />
               <span>ورود با شناسه</span>
             </button>
           ) : (
             <button
               type="button"
               onClick={() => setAuthMode('demo_personas')}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:text-white bg-slate-800 hover:bg-slate-700/80 rounded-lg border border-slate-700 transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 hover:text-[#304cff] bg-white hover:bg-[#f8faff] rounded-xl border border-[#dfe5ef] hover:border-[#cdd5ff] shadow-xs transition-colors cursor-pointer"
             >
-              <ArrowRight className="w-3.5 h-3.5 text-primary-400" />
+              <ArrowRight className="w-3.5 h-3.5 text-[#3657ff]" />
               <span>انتخاب نقش</span>
             </button>
           )}
