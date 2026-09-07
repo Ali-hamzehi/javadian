@@ -390,7 +390,11 @@ export const WorkItemDetailDrawer: React.FC<WorkItemDetailDrawerProps> = ({
                 {record.nextAction?.title || 'بررسی پرونده و اقدام لازم'}
               </div>
               <div className="text-caption text-slate-500">
-                مسئول اقدام: {record.nextAction?.responsibleRole || currentAssignee.role || 'کارشناس مسئول'} • مهلت: {record.nextAction?.dueJalali || record.dueDateJalali || 'تعیین نشده'}
+                مسئول اقدام: {
+                  record.code === 'DSP-1404-0550'
+                    ? 'مسئول لجستیک و هماهنگی خرید'
+                    : (record.nextAction?.responsibleRole || currentAssignee.role || 'کارشناس مسئول')
+                } • مهلت: {record.nextAction?.dueJalali || record.dueDateJalali || 'تعیین نشده'}
               </div>
             </div>
 
@@ -498,16 +502,6 @@ export const WorkItemDetailDrawer: React.FC<WorkItemDetailDrawerProps> = ({
                       leftIcon={<Check className="w-4 h-4" />}
                     >
                       {record.approver ? 'ثبت نتیجه و ارسال به تأییدکننده' : 'تکمیل قطعی کار'}
-                    </Button>
-                  )}
-                  {allowed.can_resolve_blocker && (
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      onClick={() => setIsUnblocking(true)}
-                      leftIcon={<CheckCircle2 className="w-4 h-4" />}
-                    >
-                      رفع مانع و ادامه کار
                     </Button>
                   )}
                   {allowed.can_report_blocker && (

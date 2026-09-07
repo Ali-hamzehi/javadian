@@ -26,6 +26,11 @@ import {
   RequestTypeOption,
 } from '../utils/roleExperience';
 import {
+  getPersonaDisplayName,
+  getPersonaTypeLabel,
+  getPersonaSubtitle,
+} from '../runtime/documentBasedPersonas';
+import {
   Search,
   CheckCircle2,
   AlertCircle,
@@ -580,9 +585,25 @@ export const InboxView: React.FC<InboxViewProps> = ({
               <h1 className="page-title text-xl sm:text-2xl font-black text-slate-900">
                 {activeMode === 'manager' ? 'میز تصمیم‌گیری و نظارت بر تیم' : 'کارهای من'}
               </h1>
-              <span className="text-caption bg-slate-100 text-slate-700 px-2.5 py-0.5 rounded-full font-medium">
-                {activePersona.name} ({activePersona.jobTitle})
-              </span>
+              <div className="inline-flex items-center gap-1.5 flex-wrap">
+                <span className="text-xs font-bold text-slate-900">
+                  {getPersonaDisplayName(activePersona)}
+                </span>
+                <span
+                  className={`text-caption px-2 py-0.5 rounded-full font-bold border ${
+                    getPersonaTypeLabel(activePersona) === 'نقش سازمانی'
+                      ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                      : 'bg-slate-100 text-slate-700 border-slate-300'
+                  }`}
+                >
+                  {getPersonaTypeLabel(activePersona)}
+                </span>
+                {getPersonaSubtitle(activePersona) && (
+                  <span className="text-caption text-slate-500 font-medium">
+                    ({getPersonaSubtitle(activePersona)})
+                  </span>
+                )}
+              </div>
             </div>
           </div>
 

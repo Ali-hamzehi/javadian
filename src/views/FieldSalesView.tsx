@@ -21,6 +21,7 @@ import { Modal } from '../components/design-system/ModalAndDrawer';
 import { useToast } from '../components/design-system/ToastContext';
 import { ConflictState, OfflineBanner } from '../components/design-system/SystemStates';
 import { toPersianDigits, formatRials } from '../utils/formatters';
+import { getChannelDisplayName } from '../utils/channelMapper';
 
 interface FieldSalesViewProps {
   activePersona: MockPersona;
@@ -824,14 +825,7 @@ export const FieldSalesView: React.FC<FieldSalesViewProps> = ({
     if (convertTargetType === 'followup' || convertTargetType === 'task') {
       const taskCode = `TSK-1404-${Math.floor(1000 + Math.random() * 9000)}`;
       
-      const channelLabel =
-        selectedIntake.channel === 'phone'
-          ? 'تلفنی'
-          : selectedIntake.channel === 'whatsapp'
-          ? 'واتساپ'
-          : selectedIntake.channel === 'in_person'
-          ? 'حضوری'
-          : selectedIntake.channel;
+      const channelLabel = getChannelDisplayName(selectedIntake.channel);
 
       const taskRecord: OperationalRecord = {
         id: `rec-intk-${Date.now()}`,

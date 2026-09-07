@@ -6,6 +6,7 @@ import { Search, X, ArrowRight, Package, Truck, CreditCard, ShoppingBag, MapPin,
 import { mockRepository } from '../../runtime/workflow';
 import { OperationalRecord, MockPersona } from '../../types';
 import { StatusBadge } from '../design-system/Badges';
+import { getChannelDisplayName } from '../../utils/channelMapper';
 import { MOCK_FIELD_VISITS, MOCK_MANUAL_INTAKES, MOCK_OPERATIONAL_DRILL_RECORDS } from '../../data/mockOperationsPrompt4';
 
 interface GlobalSearchModalProps {
@@ -219,13 +220,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
                         <span className="text-caption text-slate-500 line-clamp-1 mt-0.5">{i.summary}</span>
                       </div>
                       <span className="text-caption font-bold bg-sky-100 text-sky-800 px-2 py-0.5 rounded">
-                        {i.channel === 'phone'
-                          ? 'تلفنی'
-                          : i.channel === 'whatsapp'
-                          ? 'واتساپ'
-                          : i.channel === 'in_person'
-                          ? 'حضوری'
-                          : i.channel}
+                        {getChannelDisplayName(i.channel)}
                       </span>
                     </div>
                   ))}
