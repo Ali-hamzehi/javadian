@@ -193,7 +193,7 @@ export const CreateWarehouseExitModal: React.FC<CreateWarehouseExitModalProps> =
 
     const newExit = mockSalesWarehouseStore.createWarehouseExit(payload);
     addToast('حواله خروج با موفقیت صادر شد', {
-      description: `حواله خروج ${newExit.code} برای ${buyerName} ایجاد شد و در کارتابل ترخیص انبار قرار گرفت.`,
+      description: `حواله خروج ${newExit.code} برای ${buyerName} ایجاد شد و در ترخیص انبار قرار گرفت.`,
       tone: 'success',
     });
 

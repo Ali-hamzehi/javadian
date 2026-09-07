@@ -94,7 +94,12 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       {children}
 
       {/* Floating toast notifications container */}
-      <div className="fixed bottom-5 left-5 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none">
+      <div
+        aria-live="polite"
+        role="region"
+        aria-label="اعلان‌های موقت"
+        className="fixed bottom-5 left-5 z-50 flex flex-col gap-3 max-w-sm w-full pointer-events-none safe-bottom"
+      >
         {toasts.map((t) => {
           const styles = getToneStyles(t.tone);
           return (
@@ -112,9 +117,11 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
                 </div>
               </div>
               <button
+                type="button"
                 onClick={() => removeToast(t.id)}
-                className="opacity-60 hover:opacity-100 p-0.5 rounded cursor-pointer transition-opacity"
-               aria-label="بستن">
+                className="opacity-60 hover:opacity-100 p-1 min-w-[44px] min-h-[44px] inline-flex items-center justify-center rounded cursor-pointer transition-opacity shrink-0 -m-1"
+                aria-label="بستن"
+              >
                 <X className="w-4 h-4" />
               </button>
             </div>

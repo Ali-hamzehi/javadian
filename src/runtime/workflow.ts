@@ -175,6 +175,37 @@ export const mockSalesWarehouseStore = new Proxy(observedSales, { get(target, ke
       return (target[key] as typeof sales.approveSalesOrder)(...args);
     };
   }
+  if (key === 'updateDispatchQuantities') {
+    return (...args: Parameters<typeof sales.updateDispatchQuantities>) => {
+      const [exitId, dispatches, , outcome] = args;
+      const exit = sales.getWarehouseExitById(exitId);
+      if (!exit) return false;
+
+      // Cancellation guard: cancelled exits cannot be dispatched
+      if ((exit.status as string) === 'cancelled') return false;
+
+      // Stale / repeated action guard: already dispatched exits cannot be dispatched again
+      if (exit.status === 'dispatched' && outcome === 'dispatched') return false;
+
+      // Cumulative partial dispatch quantity check:
+      // Dispatched quantities cannot exceed requested/approved cumulative quantities or be negative
+      for (const d of dispatches) {
+        const item = exit.items.find((i) => i.id === d.itemId);
+        if (item) {
+          if (d.dispatchedQuantity > item.requestedQuantity || d.dispatchedQuantity < 0) return false;
+          if (d.dispatchedCartons !== undefined && item.requestedCartons !== undefined) {
+            if (d.dispatchedCartons > item.requestedCartons || d.dispatchedCartons < 0) return false;
+          }
+        }
+      }
+
+      const result = target.updateDispatchQuantities(...args);
+      if (result) {
+        notifyWorkflow();
+      }
+      return result;
+    };
+  }
   return Reflect.get(target, key);
 } });
 function syncSupplyWorkItems() {

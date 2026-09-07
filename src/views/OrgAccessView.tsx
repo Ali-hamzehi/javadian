@@ -121,7 +121,7 @@ export const OrgAccessView: React.FC<OrgAccessViewProps> = ({
 
     if (isCurrentlyDeactivated) {
       addToast(`حساب کاربری «${u.name}» فعال گردید`, {
-        description: 'دسترسی‌های ورود به سامانه و کارتابل برای این کاربر احیا شد.',
+        description: 'دسترسی‌های ورود به سامانه و کارهای من برای این کاربر احیا شد.',
         tone: 'success',
       });
     } else {
@@ -701,7 +701,7 @@ export const OrgAccessView: React.FC<OrgAccessViewProps> = ({
         {assigningUser && (
           <div className="space-y-3.5 text-xs text-right">
             <div className="p-3 bg-primary-50 border border-primary-200 rounded-xl text-primary-900 text-caption leading-relaxed">
-              انتساب واحد و مسئولیت سازمانی به منزله تعیین دامنه مؤثر دسترسی کاربر در پرونده‌ها و کارتابل واحد مربوطه است.
+              انتساب واحد و مسئولیت سازمانی به منزله تعیین دامنه مؤثر دسترسی کاربر در پرونده‌ها و کارهای من واحد مربوطه است.
             </div>
 
             <FormField label="واحد سازمانی متبوع" required>

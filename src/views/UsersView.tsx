@@ -778,7 +778,7 @@ export const UsersView: React.FC<UsersViewProps> = ({
                 <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800 text-xs flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   <span>
-                    آزمون پذیرش امنیتی: این کاربر پس از ایجاد، فقط دسترسی پایه به کارتابل شخصی دارد و هیچ مجوز حساسی به صورت خودکار به وی اعطا نخواهد شد.
+                    آزمون پذیرش امنیتی: این کاربر پس از ایجاد، فقط دسترسی پایه به کارهای من دارد و هیچ مجوز حساسی به صورت خودکار به وی اعطا نخواهد شد.
                   </span>
                 </div>
               </div>

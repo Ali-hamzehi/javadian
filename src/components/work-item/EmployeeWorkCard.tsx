@@ -263,24 +263,20 @@ export const EmployeeWorkCard: React.FC<EmployeeWorkCardProps> = ({
 
       {/* 6. قدم بعدی و 7. دکمه اصلی */}
       <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
-        {/* Next Step / Current Assignee */}
-        <div className="flex flex-wrap items-center gap-4 text-caption text-slate-600">
-          {activeTab === 'tracking' ? (
-            <div className="flex items-center gap-1.5">
-              <span className="text-slate-500">مسئول فعلی:</span>
-              <span className="font-bold text-primary-800 bg-primary-50 px-2 py-0.5 rounded border border-primary-100">
-                {getDisplayPersonaName(currentAssignee) || 'نامشخص'}
-              </span>
-              <span className="text-slate-500">({currentAssignee?.heldSinceJalali || 'هم‌اکنون'})</span>
-            </div>
-          ) : (
-            <div className="flex items-center gap-1.5">
-              <span className="text-slate-500">قدم بعدی:</span>
-              <span className="font-semibold text-slate-800">
-                {record.nextAction?.title || 'بررسی و اقدام متناسب'}
-              </span>
-            </div>
-          )}
+        {/* Next Step & Current Owner */}
+        <div className="flex flex-wrap items-center gap-3 text-caption text-slate-600">
+          <div className="flex items-center gap-1.5">
+            <span className="text-slate-500">مسئول فعلی:</span>
+            <span className="font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+              {getDisplayPersonaName(currentAssignee) || 'نامشخص'}
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="text-slate-500">قدم بعدی:</span>
+            <span className="font-semibold text-slate-800">
+              {record.nextAction?.title || 'بررسی و اقدام متناسب'}
+            </span>
+          </div>
         </div>
 
         {/* 7. دکمه اصلی */}

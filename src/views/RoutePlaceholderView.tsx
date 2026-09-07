@@ -140,7 +140,7 @@ export const RoutePlaceholderView: React.FC<RoutePlaceholderViewProps> = ({
       case 'access_matrix':
         return {
           title: 'سازمان، ساختار مسئولیت‌ها و احکام جانشینی',
-          subtitle: 'مدیریت ماتریس دسترسی‌ها، تفویض جانشینی چندمسئولیتی و کارتابل‌ها',
+          subtitle: 'مدیریت ماتریس دسترسی‌ها، تفویض جانشینی چندمسئولیتی و مسئولیت‌ها',
           requiredCaps: ['org.read', 'access.read'] as Capability[],
           icon: <ShieldCheck className="w-5 h-5 text-primary-700" />,
         };
@@ -224,8 +224,8 @@ export const RoutePlaceholderView: React.FC<RoutePlaceholderViewProps> = ({
       ) : (
         <EmptyState
           title={`نمای عملیاتی ${meta.title}`}
-          description="داده‌های این بخش با سامانه جامع متصل و آماده است. می‌توانید از بخش کارتابل من پرونده‌های نیازمند اقدام فوری را بررسی نمایید."
-          actionText="مشاهده در کارتابل من"
+          description="داده‌های این بخش با سامانه جامع متصل و آماده است. می‌توانید از بخش کارهای من پرونده‌های نیازمند اقدام فوری را بررسی نمایید."
+          actionText="مشاهده در کارهای من"
           onAction={() => onNavigateToInboxWithRecord('')}
         />
       )}

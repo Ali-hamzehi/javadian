@@ -91,7 +91,7 @@ export const CompleteWorkItemModal: React.FC<CompleteWorkItemModalProps> = ({
         {hasApprover && (
           <div className="rounded-lg border border-blue-200 bg-blue-50 p-3 text-xs text-blue-900">
             <span className="font-bold">نکته مسیر تأیید: </span>
-            این کار دارای تأییدکننده مسئول ({approverName || 'مقام مربوطه'}) است. پس از ثبت نتیجه، کار به کارتابل تأیید وی منتقل می‌شود.
+            این کار دارای تأییدکننده مسئول ({approverName || 'مقام مربوطه'}) است. پس از ثبت نتیجه، کار به تأییدهای من وی منتقل می‌شود.
           </div>
         )}
 
@@ -329,11 +329,11 @@ export const ReturnWorkItemModal: React.FC<ReturnWorkItemModalProps> = ({
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900 leading-relaxed">
           {isApprovalReview ? (
             <span>
-              سفارش برای اصلاح به کارتابل <span className="font-bold">{recipientDisplay}</span> بازگردانده می‌شود.
+              سفارش برای اصلاح به کارهای من <span className="font-bold">{recipientDisplay}</span> بازگردانده می‌شود.
             </span>
           ) : (
             <span>
-              کار به کارتابل <span className="font-bold">{recipientDisplay}</span> در تب{' '}
+              کار به کارهای من <span className="font-bold">{recipientDisplay}</span> در تب{' '}
               <span className="font-bold">«برگشتی‌ها»</span> بازگردانده می‌شود تا نواقص رفع شود.
             </span>
           )}

@@ -133,7 +133,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
               {records.length > 0 && (
                 <div className="space-y-1">
                   <span className="text-caption font-bold text-slate-500 px-2 block mb-1">
-                    پرونده‌ها و اسناد کارتابل ({records.length})
+                    پرونده‌ها و وظایف من ({records.length})
                   </span>
                   {records.map((rec) => (
                     <div

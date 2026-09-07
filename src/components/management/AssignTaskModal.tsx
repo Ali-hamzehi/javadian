@@ -471,7 +471,7 @@ export const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
         : [],
 
       attachments: initialAttachments,
-      tags: ['وظیفه_محوله', 'کارتابل_پرسنل'],
+      tags: ['وظیفه_محوله', 'کارهای_پرسنل'],
       lastActivityJalali: 'هم‌اکنون',
       lastActivityDescription: `واگذاری کار توسط ${activePersona.name} به ${selectedAssignee.name}`,
     };
@@ -529,7 +529,7 @@ export const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
                 کار با کد شناسایی «{createdRecord.code}» در سامانه ثبت گردید
               </h3>
               <p className="text-xs text-slate-600 max-w-lg mx-auto leading-relaxed">
-                این وظیفه در کارتابل «اقدام من» برای{' '}
+                این وظیفه در فهرست «کارهای من» برای{' '}
                 <span className="font-bold text-slate-900">{selectedAssignee.name}</span> درج شد و نسخه پیگیری آن در تب
                 «در انتظار دیگران» برای شما در دسترس است.
               </p>
@@ -570,7 +570,7 @@ export const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
                   handleClose();
                 }}
               >
-                مشاهده کار در کارتابل
+                مشاهده کار در کارهای من
               </Button>
               <Button variant="outline" onClick={handleClose}>
                 بستن پنجره
@@ -1071,7 +1071,7 @@ export const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
             {step === 4 && (
               <div className="space-y-4 text-xs">
                 <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-900 text-xs leading-relaxed">
-                  لطفاً خلاصه اطلاعات کار را بازبینی نمایید. پس از فشردن دکمه واگذاری، کار بلافاصله در کارتابل «اقدام من» مجری
+                  لطفاً خلاصه اطلاعات کار را بازبینی نمایید. پس از فشردن دکمه واگذاری، کار بلافاصله در فهرست «کارهای من» مجری
                   و تب «در انتظار دیگران» برای شما ثبت می‌شود.
                 </div>
 
@@ -1162,7 +1162,7 @@ export const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
                   onClick={handleAssign}
                   leftIcon={<Send className="w-4 h-4" />}
                 >
-                  واگذاری و درج در کارتابل
+                  واگذاری و درج در کارهای من
                 </Button>
               )}
             </div>

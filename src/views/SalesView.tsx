@@ -324,7 +324,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
       });
     } else {
       addToast('سفارش جدید با موفقیت ثبت شد', {
-        description: `کد رهگیری: ${createdOrder.code} به کارتابل تأییدات بازرگانی ارسال گردید.`,
+        description: `کد رهگیری: ${createdOrder.code} به تأییدهای من ارسال گردید.`,
         tone: 'success',
       });
     }
@@ -975,7 +975,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                   </div>
 
                   <div className="p-3 bg-white rounded-lg border border-primary-100 space-y-1">
-                    <span className="text-slate-500 text-caption block">شناسه وظیفه کاری در کارتابل:</span>
+                    <span className="text-slate-500 text-caption block">شناسه وظیفه کاری در کارهای من:</span>
                     <div className="flex items-center justify-between">
                       <span className="font-mono font-bold text-primary-700">{selectedOrder.relatedApprovalId || selectedOrder.linkedWorkItemId || selectedOrder.code}</span>
                       {onNavigateToInboxRecord && (
@@ -1211,7 +1211,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
               <span>قاعده بازنگری و گردش کار:</span>
             </div>
             <p className="text-caption leading-relaxed text-amber-800">
-              تغییر قیمت پس از ثبت سفارش، نگارش جدید (Revision) ایجاد کرده و <strong>تأییدیه قبلی را باطل می‌نماید</strong>. در صورت پایین‌تر بودن از کف مجاز، پرونده مجدداً با وضعیت «نیازمند تأیید قیمت» در کارتابل معاونت بازرگانی قرار می‌گیرد.
+              تغییر قیمت پس از ثبت سفارش، نگارش جدید (Revision) ایجاد کرده و <strong>تأییدیه قبلی را باطل می‌نماید</strong>. در صورت پایین‌تر بودن از کف مجاز، پرونده مجدداً با وضعیت «نیازمند تأیید قیمت» در کارهای من معاونت بازرگانی قرار می‌گیرد.
             </p>
           </div>
 
@@ -1297,7 +1297,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
               <span>قاعده بازگشت سفارش:</span>
             </div>
             <p className="text-caption leading-relaxed text-amber-800">
-              با بازگشت سفارش، پرونده در کارتابل «برگشتی‌ها / نیازمند اقدام مجدد» کارشناس ثبت‌کننده قرار گرفته و او موظف است پس از تعدیل نرخ یا شرایط، نگارش جدید را ارسال نماید.
+              با بازگشت سفارش، پرونده در کارهای من «برگشتی‌ها / نیازمند اقدام مجدد» کارشناس ثبت‌کننده قرار گرفته و او موظف است پس از تعدیل نرخ یا شرایط، نگارش جدید را ارسال نماید.
             </p>
           </div>
 

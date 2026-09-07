@@ -430,3 +430,77 @@
 .metric-card { padding: 1.25rem; border-radius: 1rem; border: 1px solid #e2e8f0; background: linear-gradient(135deg, #ffffffed, #f0fdfa99); box-shadow: 0 4px 16px -6px #0f766e33; backdrop-filter: blur(12px); }
 :focus-visible { outline: 2px solid #0f766e; outline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+
+/* Soft CRM Visual Refresh Utility Classes (Prototype-aligned) */
+.soft-surface {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px -4px rgba(15, 23, 42, 0.05);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.soft-surface:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 24px -6px rgba(15, 23, 42, 0.08);
+}
+
+/* Truthful Operational Metric / Counter Card */
+.counter-card {
+  position: relative;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.04);
+  cursor: default;
+}
+.counter-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 1rem;
+  left: 1rem;
+  height: 3px;
+  border-radius: 0 0 999px 999px;
+  background: linear-gradient(90deg, #0f766e, #0d9488);
+}
+.counter-card[data-tone="primary"]::before { background: linear-gradient(90deg, #0f766e, #14b8a6); }
+.counter-card[data-tone="amber"]::before { background: linear-gradient(90deg, #b45309, #f59e0b); }
+.counter-card[data-tone="danger"]::before { background: linear-gradient(90deg, #b91c1c, #ef4444); }
+.counter-card[data-tone="info"]::before { background: linear-gradient(90deg, #1d4ed8, #3b82f6); }
+.counter-card strong {
+  font-variant-numeric: tabular-nums;
+  color: #0f172a;
+}
+
+/* Action Card with interactive affordance */
+.action-card {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.04);
+  cursor: pointer;
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+.action-card:hover {
+  transform: translateY(-2px);
+  border-color: #0f766e;
+  background: #fdfefe;
+  box-shadow: 0 10px 24px -6px rgba(15, 118, 110, 0.12);
+}
+.action-card:active {
+  transform: translateY(0);
+}
+
+/* Soft CRM Hero Section */
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fbfb 65%, #f0fdfa 100%);
+  border: 1px solid #ccfbf1;
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 20px -4px rgba(15, 118, 110, 0.08);
+}

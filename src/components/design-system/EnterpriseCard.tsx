@@ -38,7 +38,7 @@ export const EnterpriseCard: React.FC<EnterpriseCardProps> = ({
   };
 
   const interactiveClasses = isInteractive
-    ? 'cursor-pointer hover:border-slate-300 hover:shadow-md transition-all duration-150 active:scale-[0.998]'
+    ? 'cursor-pointer hover:border-primary-300 hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)] transition-all duration-200 active:scale-[0.998]'
     : '';
 
   return (
@@ -48,7 +48,7 @@ export const EnterpriseCard: React.FC<EnterpriseCardProps> = ({
       role={isInteractive ? 'button' : undefined}
       tabIndex={isInteractive ? 0 : undefined}
       onKeyDown={isInteractive ? (event) => { if (event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); onClick?.(); } } : undefined}
-      className={`bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between ${statusBorderClasses[status]} ${interactiveClasses} ${className}`}
+      className={`bg-white rounded-2xl border border-slate-200/90 shadow-[0_2px_10px_rgba(15,23,42,0.03)] overflow-hidden flex flex-col justify-between ${statusBorderClasses[status]} ${interactiveClasses} ${className}`}
     >
       {children}
     </div>

@@ -117,7 +117,7 @@ export const Forbidden403: React.FC<{
             onClick={onNavigateToInbox}
             leftIcon={<ArrowLeft className="w-4 h-4" />}
           >
-            بازگشت به کارتابل کارهای من
+            بازگشت به کارهای من
           </Button>
         )}
 
@@ -150,7 +150,7 @@ export const NotFound404: React.FC<{ onBackHome?: () => void }> = ({ onBackHome 
       </p>
       {onBackHome && (
         <Button size="sm" variant="outline" onClick={onBackHome} className="mt-4">
-          بازگشت به کارتابل عملیات
+          بازگشت به کارهای من
         </Button>
       )}
     </div>

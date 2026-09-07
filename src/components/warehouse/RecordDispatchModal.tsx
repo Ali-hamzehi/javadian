@@ -63,6 +63,21 @@ export const RecordDispatchModal: React.FC<RecordDispatchModalProps> = ({
       return;
     }
 
+    // Cumulative partial dispatch quantity check: cannot exceed requested/approved amount
+    if (outcome !== 'blocked') {
+      const hasExceeded = itemDispatches.some(
+        (d) =>
+          Number(d.dispatchedQuantity) > d.requestedQuantity ||
+          (d.requestedCartons > 0 && Number(d.dispatchedCartons) > d.requestedCartons) ||
+          Number(d.dispatchedQuantity) < 0 ||
+          Number(d.dispatchedCartons) < 0
+      );
+      if (hasExceeded) {
+        addToast('مقدار یا کارتن ارسالی نمی‌تواند بیشتر از سقف مصوب حواله باشد.', { tone: 'danger' });
+        return;
+      }
+    }
+
     const payload = itemDispatches.map((d) => ({
       itemId: d.itemId,
       dispatchedQuantity: outcome === 'blocked' ? 0 : Number(d.dispatchedQuantity) || 0,
@@ -93,6 +108,11 @@ export const RecordDispatchModal: React.FC<RecordDispatchModalProps> = ({
       });
 
       onClose();
+    } else {
+      addToast('خطا در ثبت عملیات خروج انبار', {
+        description: 'امکان ثبت عملیات برای این وضعیت حواله یا با مقادیر فراتر از سقف مصوب وجود ندارد.',
+        tone: 'danger',
+      });
     }
   };
 
@@ -109,7 +129,7 @@ export const RecordDispatchModal: React.FC<RecordDispatchModalProps> = ({
           </Button>
           <Button variant="primary" size="sm" onClick={handleSubmit}>
             <CheckCircle2 className="w-4 h-4 ml-1" />
-            ثبت قطعی در کارتابل انبار
+            ثبت قطعی در بخش انبار
           </Button>
         </div>
       }

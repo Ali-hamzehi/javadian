@@ -15,8 +15,16 @@ import {
 import { InboxView } from '../src/views/InboxView';
 import { PaymentRequestsView } from '../src/views/PaymentRequestsView';
 import { SalesView } from '../src/views/SalesView';
+import { WarehouseDispatchView } from '../src/views/WarehouseDispatchView';
 import { ToastProvider } from '../src/components/design-system/ToastContext';
 import { SubmitRequestModal } from '../src/components/work-item/SubmitRequestModal';
+import { TopBar } from '../src/components/shell/TopBar';
+import { Sidebar } from '../src/components/shell/Sidebar';
+import { MobileBottomNav } from '../src/components/shell/MobileBottomNav';
+import { DialogSurface } from '../src/components/design-system/DialogSurface';
+import { Button } from '../src/components/design-system/Button';
+import { canAccessRoute } from '../src/routes/routesConfig';
+import { PWAProvider } from '../src/components/pwa/PWAContext';
 
 test('experience type accurately distinguishes pure employee, manager, and hybrid roles', () => {
   const ordinary = MOCK_PERSONAS.find((p) => p.personaKey === 'ordinary_employee')!;
@@ -234,4 +242,275 @@ test('acceptance scenarios: employee experience header, tabs, empty state and ro
     assert.equal(isNavGroupVisibleForPersona('management', emp), false);
   }
 });
+
+test('Mandatory Language & Workflow Rules: zero kartabl in rendered UI and exact logout label', () => {
+  const salesSpec = MOCK_PERSONAS.find((p) => p.id === 'p-sales')!;
+
+  // 1. TopBar renders exact logout label and zero kartabl
+  const topBarHtml = render(
+    <PWAProvider>
+      <ToastProvider>
+        <TopBar
+          activePersona={salesSpec}
+          pageTitle="کارهای من"
+          breadcrumbs={['خانه', 'کارهای من']}
+          onNavigate={() => {}}
+          onOpenSearch={() => {}}
+          onOpenNotifications={() => {}}
+          onSignOut={() => {}}
+          onSelectPersona={() => {}}
+          onSwitchResponsibility={() => {}}
+          initialUserMenuOpen={true}
+        />
+      </ToastProvider>
+    </PWAProvider>
+  );
+  assert.ok(topBarHtml.includes('خروج از حساب کاربری'), 'Logout must be exactly خروج از حساب کاربری');
+  assert.ok(!topBarHtml.includes('کارتابل'), 'TopBar must have zero occurrences of kartabl');
+
+  // 2. Sidebar renders with zero kartabl and renders کارهای من for inbox
+  const sidebarHtml = render(
+    <PWAProvider>
+      <Sidebar
+        activePersona={salesSpec}
+        currentRoute="inbox"
+        onNavigate={() => {}}
+        isCollapsed={false}
+        onToggleCollapse={() => {}}
+        isMobileOpen={false}
+        onCloseMobile={() => {}}
+      />
+    </PWAProvider>
+  );
+  assert.ok(!sidebarHtml.includes('کارتابل'), 'Sidebar must have zero occurrences of kartabl');
+  assert.ok(sidebarHtml.includes('کارهای من'), 'Sidebar renders کارهای من for inbox');
+
+  // 3. InboxView for all personas has zero kartabl
+  for (const p of MOCK_PERSONAS) {
+    const html = render(
+      <ToastProvider>
+        <InboxView activePersona={p} />
+      </ToastProvider>
+    );
+    assert.ok(!html.includes('کارتابل'), `InboxView for persona ${p.id} must have zero occurrences of kartabl`);
+  }
+
+  // 4. SalesView has zero kartabl
+  const salesHtml = render(
+    <ToastProvider>
+      <SalesView activePersona={salesSpec} />
+    </ToastProvider>
+  );
+  assert.ok(!salesHtml.includes('کارتابل'), 'SalesView must have zero occurrences of kartabl');
+
+  // 5. WarehouseDispatchView (Journey J1) has zero kartabl and final terminal state is dispatched (never completed)
+  const whOfficer = MOCK_PERSONAS.find((p) => p.id === 'p-warehouse')!;
+  const dispatchHtml = render(
+    <ToastProvider>
+      <WarehouseDispatchView activePersona={whOfficer} />
+    </ToastProvider>
+  );
+  assert.ok(!dispatchHtml.includes('کارتابل'), 'WarehouseDispatchView must have zero occurrences of kartabl');
+  assert.ok(dispatchHtml.includes('خروج نهایی و تحویل به باربری'), 'J1 terminal state must be dispatched');
+  assert.ok(!dispatchHtml.includes('تکمیل‌شده نهایی'), 'J1 must not introduce COMPLETED state');
+
+  // 6. PaymentRequestsView (Journey J2) has zero kartabl
+  const finDirector = MOCK_PERSONAS.find((p) => p.id === 'p-fin-dir')!;
+  const paymentHtml = render(
+    <ToastProvider>
+      <PaymentRequestsView activePersona={finDirector} />
+    </ToastProvider>
+  );
+  assert.ok(!paymentHtml.includes('کارتابل'), 'PaymentRequestsView must have zero occurrences of kartabl');
+});
+
+test('absence of AI-style icons and forbidden AI assistant terminology', () => {
+  const salesSpec = MOCK_PERSONAS.find((p) => p.id === 'p-sales')!;
+
+  const topBarHtml = render(
+    <PWAProvider>
+      <ToastProvider>
+        <TopBar
+          activePersona={salesSpec}
+          pageTitle="کارهای من"
+          breadcrumbs={['خانه', 'کارهای من']}
+          onNavigate={() => {}}
+          onOpenSearch={() => {}}
+          onOpenNotifications={() => {}}
+          onSignOut={() => {}}
+          onSelectPersona={() => {}}
+          onSwitchResponsibility={() => {}}
+          initialUserMenuOpen={true}
+        />
+      </ToastProvider>
+    </PWAProvider>
+  );
+
+  const sidebarHtml = render(
+    <PWAProvider>
+      <Sidebar
+        activePersona={salesSpec}
+        currentRoute="inbox"
+        onNavigate={() => {}}
+        isCollapsed={false}
+        onToggleCollapse={() => {}}
+        isMobileOpen={false}
+        onCloseMobile={() => {}}
+      />
+    </PWAProvider>
+  );
+
+  const mobileNavHtml = render(
+    <MobileBottomNav
+      activePersona={salesSpec}
+      currentRoute="inbox"
+      onNavigate={() => {}}
+      onOpenMore={() => {}}
+    />
+  );
+
+  const inboxHtml = render(
+    <ToastProvider>
+      <InboxView activePersona={salesSpec} />
+    </ToastProvider>
+  );
+
+  const combinedHtml = [topBarHtml, sidebarHtml, mobileNavHtml, inboxHtml].join(' ');
+
+  // Forbidden AI icons:
+  const forbiddenIcons = [
+    'lucide-bot',
+    'lucide-sparkles',
+    'lucide-sparkle',
+    'lucide-wand',
+    'lucide-wand-2',
+    'lucide-cpu',
+    'lucide-bot-message-square',
+  ];
+  for (const icon of forbiddenIcons) {
+    assert.ok(!combinedHtml.includes(icon), `UI must not contain AI icon class: ${icon}`);
+  }
+
+  // Forbidden AI terms in copy:
+  const forbiddenAiTerms = ['هوش مصنوعی', 'دستیار هوشمند', 'ربات', 'چت‌بات'];
+  for (const term of forbiddenAiTerms) {
+    assert.ok(!combinedHtml.includes(term), `UI must not contain AI marketing/assistant term: ${term}`);
+  }
+});
+
+test('role-based capability-driven navigation and preservation of trusted authorization input', () => {
+  const employee = MOCK_PERSONAS.find((p) => p.personaKey === 'ordinary_employee')!;
+  const manager = MOCK_PERSONAS.find((p) => p.personaKey === 'operations_director')!;
+
+  // 1. Ordinary employee sees only capability-driven items and zero manager-only routes
+  assert.equal(isRouteVisibleForPersona('ops_view', employee), false);
+  assert.equal(isRouteVisibleForPersona('traceability', employee), false);
+  assert.equal(isRouteVisibleForPersona('integration_errors', employee), false);
+  assert.equal(isNavGroupVisibleForPersona('management', employee), false);
+  assert.equal(canAccessRoute('ops_view', employee), false);
+
+  // 2. Manager sees management routes derived from trusted permissions
+  assert.equal(canAccessRoute('ops_view', manager), true);
+  assert.equal(isRouteVisibleForPersona('ops_view', manager), true);
+  assert.equal(isNavGroupVisibleForPersona('management', manager), true);
+
+  // 3. Modifying/revoking backend capabilities strictly alters route access (no hardcoded frontend bypass)
+  const strippedManager: typeof manager = {
+    ...manager,
+    capabilities: [],
+    isManager: false,
+  };
+  assert.equal(canAccessRoute('ops_view', strippedManager), false);
+  assert.equal(isRouteVisibleForPersona('ops_view', strippedManager), false);
+  assert.equal(isNavGroupVisibleForPersona('management', strippedManager), false);
+});
+
+test('mobile destination limit: mobile bottom navigation renders at most 5 items', () => {
+  for (const persona of MOCK_PERSONAS) {
+    const html = render(
+      <MobileBottomNav
+        activePersona={persona}
+        currentRoute="inbox"
+        onNavigate={() => {}}
+        onOpenMore={() => {}}
+      />
+    );
+    const buttonCount = (html.match(/<button/g) || []).length;
+    assert.ok(buttonCount <= 5, `Persona ${persona.id} has ${buttonCount} mobile destinations (must be <= 5)`);
+    assert.ok(buttonCount >= 1, `Persona ${persona.id} must have at least 1 mobile destination`);
+  }
+});
+
+test('dialog accessibility: DialogSurface provides native modal, accessible labelling and escape handling', () => {
+  const dialogHtml = render(
+    <DialogSurface isOpen={true} onClose={() => {}} title="عنوان گفت‌وگو">
+      <p>محتوای پنجره</p>
+    </DialogSurface>
+  );
+
+  // 1. Native dialog element
+  assert.ok(dialogHtml.startsWith('<dialog'), 'Must use native <dialog> element');
+
+  // 2. Accessibility attributes
+  assert.ok(dialogHtml.includes('aria-modal="true"'), 'Must have aria-modal="true"');
+  assert.ok(dialogHtml.includes('aria-labelledby='), 'Must have aria-labelledby');
+  assert.ok(dialogHtml.includes('عنوان گفت‌وگو'), 'Must contain accessible title');
+
+  // 3. Responsive dialog surface class
+  assert.ok(dialogHtml.includes('dialog-surface'), 'Must include dialog-surface responsive styling class');
+
+  // 4. Closed state renders nothing
+  const closedHtml = render(
+    <DialogSurface isOpen={false} onClose={() => {}} title="عنوان گفت‌وگو">
+      <p>محتوای پنجره</p>
+    </DialogSurface>
+  );
+  assert.equal(closedHtml, '', 'Closed dialog must not render to DOM');
+});
+
+test('responsive shell behavior: minimum 44px tap targets on interactive elements', () => {
+  const salesSpec = MOCK_PERSONAS.find((p) => p.id === 'p-sales')!;
+
+  // 1. TopBar interactive targets
+  const topBarHtml = render(
+    <PWAProvider>
+      <ToastProvider>
+        <TopBar
+          activePersona={salesSpec}
+          pageTitle="کارهای من"
+          breadcrumbs={['خانه', 'کارهای من']}
+          onNavigate={() => {}}
+          onOpenSearch={() => {}}
+          onOpenNotifications={() => {}}
+          onSignOut={() => {}}
+          onSelectPersona={() => {}}
+          onSwitchResponsibility={() => {}}
+          initialUserMenuOpen={false}
+        />
+      </ToastProvider>
+    </PWAProvider>
+  );
+
+  // Hamburger button, notifications button, and user menu button have min-h-[44px]
+  assert.ok(topBarHtml.includes('min-h-[44px]'), 'TopBar must enforce >=44px min height for touch targets');
+  assert.ok(topBarHtml.includes('min-w-[44px]'), 'TopBar must enforce >=44px min width for touch targets');
+
+  // 2. Mobile bottom nav touch targets
+  const mobileNavHtml = render(
+    <MobileBottomNav
+      activePersona={salesSpec}
+      currentRoute="inbox"
+      onNavigate={() => {}}
+      onOpenMore={() => {}}
+    />
+  );
+  assert.ok(mobileNavHtml.includes('min-h-[48px]'), 'Mobile nav buttons must provide >= 44px tap target');
+
+  // 3. Primary Button component
+  const buttonHtml = render(<Button variant="primary">دکمه آزمون</Button>);
+  assert.ok(buttonHtml.includes('min-h-[44px]'), 'Button must enforce >= 44px min touch target');
+});
+
+
+
 

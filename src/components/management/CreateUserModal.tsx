@@ -134,7 +134,7 @@ export const CreateUserModal: React.FC<CreateUserModalProps> = ({
       permissions: [
         {
           capability: 'inbox.read',
-          labelPersian: 'کارتابل وظایف و اقدامات جاری',
+          labelPersian: 'فهرست کارهای من و اقدامات جاری',
           description: 'دسترسی به وظایف ارجاع‌شده شخصی',
           inheritedFrom: 'direct',
           sourceName: 'تخصیص اولیه سیستمی',
@@ -468,7 +468,7 @@ export const CreateUserModal: React.FC<CreateUserModalProps> = ({
                 </div>
 
                 <p className="text-caption text-slate-500">
-                  * پس از ایجاد، این کاربر به صورت خودکار به کارتابل کارهای من دسترسی خواهد داشت و می‌توانید اولین کار را به او ارجاع دهید.
+                  * پس از ایجاد، این کاربر به صورت خودکار به کارهای من کارهای من دسترسی خواهد داشت و می‌توانید اولین کار را به او ارجاع دهید.
                 </p>
               </div>
             )}
