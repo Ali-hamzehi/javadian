@@ -1032,7 +1032,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
                         <div className="font-mono text-caption text-slate-500 mt-0.5 flex items-center gap-1">
                           <Lock className="w-3 h-3 text-slate-500" />
                           <span>
-                            {revealedIds.has(p.id) ? p.beneficiary.fullIban : p.beneficiary.maskedIban}
+                            {p.beneficiary.maskedIban}
                           </span>
                         </div>
                       </td>
@@ -1449,33 +1449,19 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
 
                   <div className="flex items-center justify-between gap-2">
                     <div className="font-mono text-xs font-bold text-slate-900 tracking-wider">
-                      {revealedIds.has(selectedRecord.id)
-                        ? selectedRecord.beneficiary.fullIban
-                        : selectedRecord.beneficiary.maskedIban}
+                      {selectedRecord.beneficiary.maskedIban}
                     </div>
 
                     <div className="flex items-center gap-2 shrink-0">
-                      {revealedIds.has(selectedRecord.id) ? (
-                        <Button
-                          size="xs"
-                          variant="outline"
-                          onClick={() => handleCopyValue(selectedRecord.beneficiary.fullIban, 'شماره شبا')}
-                          className="flex items-center gap-1"
-                        >
-                          <Copy className="w-3 h-3" />
-                          کپی شبا
-                        </Button>
-                      ) : (
-                        <Button
-                          size="xs"
-                          variant="outline"
-                          onClick={handleRequestReveal}
-                          className="flex items-center gap-1 text-primary-700 hover:text-primary-900 border-primary-200"
-                        >
-                          <Eye className="w-3 h-3" />
-                          مشاهده کامل / کپی
-                        </Button>
-                      )}
+                      <Button
+                        size="xs"
+                        variant="outline"
+                        onClick={() => handleCopyValue(selectedRecord.beneficiary.maskedIban, 'شماره شبا (ماسک‌شده)')}
+                        className="flex items-center gap-1"
+                      >
+                        <Copy className="w-3 h-3" />
+                        کپی شبا
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -1486,19 +1472,17 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
                     <span className="text-slate-500">شماره کارت بانکی (شتاب):</span>
                     <div className="flex items-center gap-2">
                       <span className="font-mono font-bold text-slate-800">
-                        {revealedIds.has(selectedRecord.id)
-                          ? selectedRecord.beneficiary.fullCard
-                          : selectedRecord.beneficiary.maskedCard}
+                        {selectedRecord.beneficiary.maskedCard}
                       </span>
-                      {revealedIds.has(selectedRecord.id) && selectedRecord.beneficiary.fullCard && (
-                        <Button
-                          size="xs"
-                          variant="outline"
-                          onClick={() => handleCopyValue(selectedRecord.beneficiary.fullCard!, 'شماره کارت')}
-                        >
-                          <Copy className="w-3 h-3" />
-                        </Button>
-                      )}
+                      <Button
+                        size="xs"
+                        variant="outline"
+                        onClick={() => handleCopyValue(selectedRecord.beneficiary.maskedCard!, 'شماره کارت (ماسک‌شده)')}
+                        className="flex items-center gap-1"
+                      >
+                        <Copy className="w-3 h-3" />
+                        کپی کارت
+                      </Button>
                     </div>
                   </div>
                 )}

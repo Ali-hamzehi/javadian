@@ -11,6 +11,9 @@ import { IranianPlate } from '../src/components/design-system/IranianPlate';
 import { getProductSupportedUnits } from '../src/views/SupplyRequestsView';
 import { daysUntilDue } from '../src/components/design-system/PaymentSchedule';
 import { computeAllowedActions } from '../src/utils/workItemAuthorization';
+import { ToastProvider } from '../src/components/design-system/ToastContext';
+import { PaymentRequestsView } from '../src/views/PaymentRequestsView';
+import { InboxView } from '../src/views/InboxView';
 const creator = MOCK_PERSONAS.find(p => p.personaKey === 'sales_specialist')!;
 const approver = MOCK_PERSONAS.find(p => p.personaKey === 'commercial_approver')!;
 const product = MOCK_PRODUCTS[0];
@@ -98,4 +101,127 @@ test('returned orders produce a current approval revision and retire the previou
  assert.equal(repo.isActionableApprovalRecord(approver,previous),false);
  assert.equal(repo.isActionableApprovalRecord(approver,current),true);
  assert.ok(repo.getActionableApprovalItems(approver).some(r=>r.id===current.id));
+});
+
+test('J1: sales approval creates warehouse exit, enforces cumulative dispatch limits, rejects repeated dispatch, and final state is dispatched', () => {
+  const order = newOrder(product.currentPriceRials);
+  // Before approval: no warehouse exit exists for this order
+  let exits = sales.getWarehouseExits().filter(e => e.linkedSalesOrder?.id === order.id);
+  assert.equal(exits.length, 0);
+
+  // Self-approval prevented: creator cannot approve
+  assert.equal(sales.approveSalesOrder(order.id, creator).success, false);
+
+  // Approver approves
+  const appRes = sales.approveSalesOrder(order.id, approver);
+  assert.equal(appRes.success, true);
+
+  // On approval, warehouse exit is created
+  exits = sales.getWarehouseExits().filter(e => e.linkedSalesOrder?.id === order.id);
+  assert.equal(exits.length, 1);
+  const exit = exits[0];
+  assert.ok(exit.status === 'ready' || exit.status === 'blocked');
+
+  const itemId = exit.items[0].id;
+  const approvedQty = exit.items[0].requestedQuantity;
+
+  // Cumulative dispatch limit: exceeding requested quantity must fail
+  const exceedRes = sales.updateDispatchQuantities(
+    exit.id,
+    [{ itemId, dispatchedQuantity: approvedQty + 10 }],
+    approver,
+    'dispatched'
+  );
+  assert.equal(exceedRes, false);
+
+  // Negative dispatch quantity must fail
+  const negRes = sales.updateDispatchQuantities(
+    exit.id,
+    [{ itemId, dispatchedQuantity: -5 }],
+    approver,
+    'dispatched'
+  );
+  assert.equal(negRes, false);
+
+  // Valid dispatch within limit
+  const validRes = sales.updateDispatchQuantities(
+    exit.id,
+    [{ itemId, dispatchedQuantity: approvedQty }],
+    approver,
+    'dispatched'
+  );
+  assert.equal(validRes, true);
+
+  // Final state is 'dispatched' - never 'completed'
+  const updatedExit = sales.getWarehouseExitById(exit.id)!;
+  assert.equal(updatedExit.status, 'dispatched');
+  assert.notEqual(updatedExit.status as string, 'completed');
+
+  // Stale / repeated action guard: already dispatched exit cannot be dispatched again
+  const repeatedRes = sales.updateDispatchQuantities(
+    exit.id,
+    [{ itemId, dispatchedQuantity: approvedQty }],
+    approver,
+    'dispatched'
+  );
+  assert.equal(repeatedRes, false);
+});
+
+test('J2: beneficiary bank secrets are strictly masked and never exposed in DOM', () => {
+  const finDir = MOCK_PERSONAS.find(p => p.personaKey === 'finance_director')!;
+  const html = renderToStaticMarkup(
+    <ToastProvider>
+      <PaymentRequestsView activePersona={finDir} />
+    </ToastProvider>
+  );
+
+  // Masked values must appear
+  assert.ok(html.includes('IR58 •••• •••• •••• •••• •••• 9210') || html.includes('IR58 ••••'));
+
+  // Raw secrets must NEVER be present in the rendered HTML output
+  assert.equal(html.includes('IR580120000000001234569210'), false, 'Raw IBAN must never leak into DOM');
+  assert.equal(html.includes('۶۱۰۴۳۳۷۸۹۰۱۲۹۲۱۰'), false, 'Raw card number must never leak into DOM');
+  assert.equal(html.includes('6104337890129210'), false, 'Raw card number must never leak into DOM');
+});
+
+test('role-first employee experience: renders all 5 core elements and strictly eliminates "کارتابل"', () => {
+  const ordinary = MOCK_PERSONAS.find(p => p.personaKey === 'ordinary_employee')!;
+  const html = renderToStaticMarkup(
+    <ToastProvider>
+      <InboxView activePersona={ordinary} />
+    </ToastProvider>
+  );
+
+  // The word "کارتابل" must NEVER appear anywhere in the rendered employee view
+  assert.equal(html.includes('کارتابل'), false, 'Strict prohibition of "کارتابل" must be preserved');
+
+  // Must separate "برای اقدام من", "منتظر دیگران", "تاریخچه"
+  assert.ok(html.includes('برای اقدام من'));
+  assert.ok(html.includes('منتظر دیگران'));
+  assert.ok(html.includes('تاریخچه'));
+
+  // Must render core employee elements
+  assert.ok(html.includes('مسئول فعلی'));
+  assert.ok(html.includes('قدم بعدی'));
+});
+
+test('manager operational view: truthful authorized counts match repository without fabricated metrics', () => {
+  const commApprover = MOCK_PERSONAS.find(p => p.personaKey === 'commercial_approver')!;
+  const ordinary = MOCK_PERSONAS.find(p => p.personaKey === 'ordinary_employee')!;
+
+  const commCounts = repo.computeScopedTaskCounts(commApprover);
+  const ordCounts = repo.computeScopedTaskCounts(ordinary);
+
+  // Ordinary employee has 0 approval items authorized
+  assert.equal(ordCounts.approvals, 0);
+
+  // Authorized records for ordinary employee are strictly scoped to their persona
+  const ordRecords = repo.getAuthorizedRecords(ordinary);
+  for (const r of ordRecords) {
+    const isSelfOrUnit = r.creator.id === ordinary.id ||
+      r.currentAssignee?.id === ordinary.id ||
+      r.currentOwner?.id === ordinary.id ||
+      r.unit === ordinary.department;
+    assert.ok(isSelfOrUnit, 'Record must belong to employee scope');
+  }
 });

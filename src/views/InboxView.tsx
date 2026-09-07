@@ -684,7 +684,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
                   : 'border-slate-200 bg-white hover:border-slate-300'
               }`}
             >
-              <div className="text-caption text-slate-500 font-medium">برای انجام</div>
+              <div className="text-caption text-slate-500 font-medium">برای اقدام من (برای انجام)</div>
               <div className="text-lg font-black text-primary-900 mt-0.5">
                 {toPersianDigits(employeeCounts.toDo)} کار
               </div>
@@ -701,7 +701,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
                   : 'border-slate-200 bg-white hover:border-slate-300'
               }`}
             >
-              <div className="text-caption text-slate-500 font-medium">برای پیگیری</div>
+              <div className="text-caption text-slate-500 font-medium">منتظر دیگران (برای پیگیری)</div>
               <div className="text-lg font-black text-sky-900 mt-0.5">
                 {toPersianDigits(employeeCounts.tracking)} مورد
               </div>
@@ -735,7 +735,7 @@ export const InboxView: React.FC<InboxViewProps> = ({
                   : 'border-slate-200 bg-white hover:border-slate-300'
               }`}
             >
-              <div className="text-caption text-slate-500 font-medium">انجام‌شده اخیر</div>
+              <div className="text-caption text-slate-500 font-medium">تاریخچه (انجام‌شده اخیر)</div>
               <div className="text-lg font-black text-emerald-900 mt-0.5">
                 {toPersianDigits(employeeCounts.recentCompleted)} کار
               </div>
@@ -845,7 +845,8 @@ export const InboxView: React.FC<InboxViewProps> = ({
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                 }`}
               >
-                <span>برای انجام</span>
+                <span>برای اقدام من</span>
+                <span className={`text-[11px] font-normal ${employeeTab === 'to_do' ? 'text-primary-100' : 'text-slate-400'}`}>(برای انجام)</span>
                 <span className={`px-1.5 py-0.2 rounded-full text-caption font-mono ${
                   employeeTab === 'to_do' ? 'bg-primary-800 text-white' : 'bg-slate-200 text-slate-700'
                 }`}>
@@ -862,7 +863,8 @@ export const InboxView: React.FC<InboxViewProps> = ({
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                 }`}
               >
-                <span>برای پیگیری</span>
+                <span>منتظر دیگران</span>
+                <span className={`text-[11px] font-normal ${employeeTab === 'tracking' ? 'text-primary-100' : 'text-slate-400'}`}>(برای پیگیری)</span>
                 <span className={`px-1.5 py-0.2 rounded-full text-caption font-mono ${
                   employeeTab === 'tracking' ? 'bg-primary-800 text-white' : 'bg-slate-200 text-slate-700'
                 }`}>
@@ -879,7 +881,8 @@ export const InboxView: React.FC<InboxViewProps> = ({
                     : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                 }`}
               >
-                <span>سابقه</span>
+                <span>تاریخچه</span>
+                <span className={`text-[11px] font-normal ${employeeTab === 'history' ? 'text-primary-100' : 'text-slate-400'}`}>(سابقه)</span>
                 <span className={`px-1.5 py-0.2 rounded-full text-caption font-mono ${
                   employeeTab === 'history' ? 'bg-primary-800 text-white' : 'bg-slate-200 text-slate-700'
                 }`}>

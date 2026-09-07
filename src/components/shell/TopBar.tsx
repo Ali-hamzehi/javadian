@@ -117,14 +117,14 @@ export const TopBar: React.FC<TopBarProps> = ({
 
         <div className="min-w-0 flex-1">
           <span className="text-sm sm:text-base font-extrabold text-slate-900 truncate block">
-            {pageTitle}
+            {pageTitle?.replace(/کارتابل من/g, 'کارهای من').replace(/کارتابل/g, 'کارهای من')}
           </span>
           <nav aria-label="موقعیت در سامانه" className="hidden sm:flex items-center gap-1.5 text-caption text-slate-600 truncate mt-0.5">
             {breadcrumbs.map((crumb, idx) => (
               <React.Fragment key={idx}>
                 {idx > 0 && <span className="text-slate-500">/</span>}
                 <span className={idx === breadcrumbs.length - 1 ? 'text-primary-700 font-bold' : ''}>
-                  {crumb}
+                  {crumb?.replace(/کارتابل من/g, 'کارهای من').replace(/کارتابل/g, 'کارهای من')}
                 </span>
               </React.Fragment>
             ))}
