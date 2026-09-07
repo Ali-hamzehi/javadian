@@ -133,7 +133,7 @@ export const PWAInstallGuideModal: React.FC<PWAInstallGuideModalProps> = ({ isOp
                 نصب مستقیم در این مرورگر پشتیبانی نمی‌شود؛ سامانه همچنان از طریق وب قابل استفاده است.
               </p>
               <p className="text-caption text-slate-500 leading-relaxed">
-                برای تجربه نصب مستقل (PWA)، می‌توانید این صفحه را در مرورگرهای Chrome، Edge یا Samsung Internet باز فرمایید.
+                برای نصب برنامه، می‌توانید این صفحه را در مرورگرهای Chrome، Edge یا Samsung Internet باز فرمایید.
               </p>
             </div>
           )}
@@ -141,18 +141,18 @@ export const PWAInstallGuideModal: React.FC<PWAInstallGuideModalProps> = ({ isOp
           {/* App Status Details */}
           <div className="bg-slate-50 rounded-xl p-3 text-caption text-slate-600 space-y-1.5 border border-slate-100">
             <div className="flex justify-between">
-              <span>وضعیت اجرا:</span>
+              <span>وضعیت برنامه:</span>
               <strong className="text-slate-800">
-                {isStandalone ? 'نسخه نصب‌شده' : 'نسخه وب'}
+                {isStandalone ? 'برنامه نصب‌شده' : 'درحال اجرا در مرورگر'}
               </strong>
             </div>
             <div className="flex justify-between">
-              <span>نام بسته وب:</span>
-              <strong className="font-mono text-slate-800">javadian-operations</strong>
+              <span>سامانه:</span>
+              <strong className="text-slate-800">عملیات جوادیان</strong>
             </div>
             <div className="flex justify-between">
               <span>دامنه کش آفلاین:</span>
-              <span className="text-emerald-700 font-bold">پوسته و داده‌های دمو</span>
+              <span className="text-emerald-700 font-bold">پوسته و پرونده‌های نمایشی</span>
             </div>
           </div>
         </div>

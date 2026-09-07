@@ -1,4 +1,5 @@
 import { useWorkflowRevision, initializeWorkflow } from './runtime/workflow';
+import { adaptPersona } from './runtime/documentBasedPersonas';
 import { ArrowRight } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { MOCK_PERSONAS, NAV_ITEMS } from './data/mockData';
@@ -36,6 +37,7 @@ import { ManagementMonitorView } from './views/ManagementMonitorView';
 import { APP_ROUTES, canAccessRoute, AppRouteKey } from './routes/routesConfig';
 import { Forbidden403 } from './components/design-system/SystemStates';
 import { LoginScreen } from './components/auth/LoginScreen';
+import { RoleSelectorModal } from './components/auth/RoleSelectorModal';
 import { CreateUserModal } from './components/management/CreateUserModal';
 import { AssignTaskModal } from './components/management/AssignTaskModal';
 import { MOCK_USER_PROFILES } from './data/mockOrgData';
@@ -53,7 +55,7 @@ function AppContent() {
       const savedPersonaId = localStorage.getItem('javadian_pwa_persona_id');
       if (savedPersonaId) {
         const found = MOCK_PERSONAS.find((p) => p.id === savedPersonaId);
-        if (found) return found;
+        if (found) return adaptPersona(found);
       }
     } catch (e) {
       console.warn('Could not restore saved persona:', e);
@@ -101,6 +103,7 @@ function AppContent() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState<boolean>(false);
+  const [isRoleSelectorOpen, setIsRoleSelectorOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const openSearch = (event: KeyboardEvent) => {
@@ -142,7 +145,7 @@ function AppContent() {
     setCurrentRoute('inbox');
     setTargetRecordId(undefined);
     setSessionNotice({
-      message: 'شما با موفقیت از سامانه خارج شدید. جهت استفاده مجدد لطفاً وارد حساب خود شوید.',
+      message: 'شما با موفقیت از سامانه خارج شدید.',
       type: 'info',
     });
     addToast('از سامانه خارج شدید', {
@@ -153,14 +156,15 @@ function AppContent() {
 
   // Switch persona handler
   const handleSelectPersona = (persona: MockPersona) => {
-    setActivePersona(persona);
+    const canonical = adaptPersona(persona);
+    setActivePersona(canonical);
     // If user cannot access current route under new persona, gracefully redirect
-    if (!canAccessRoute(currentRoute, persona)) {
-      setCurrentRoute(getPersonaLandingRoute(persona));
+    if (!canAccessRoute(currentRoute, canonical)) {
+      setCurrentRoute(getPersonaLandingRoute(canonical));
       setTargetRecordId(undefined);
     }
-    addToast(`نقش به «${persona.name}» تغییر یافت`, {
-      description: `${persona.jobTitle} • ${persona.badgeNote || ''}`,
+    addToast(`نقش به «${canonical.name}» تغییر یافت`, {
+      description: `${canonical.jobTitle} • ${canonical.badgeNote || ''}`,
       tone: 'info',
     });
   };
@@ -203,11 +207,12 @@ function AppContent() {
         <LoginScreen
           sessionNotice={sessionNotice}
           onLogin={(persona) => {
-            setActivePersona(persona);
+            const canonical = adaptPersona(persona);
+            setActivePersona(canonical);
             setSessionNotice(null);
-            setCurrentRoute(getPersonaLandingRoute(persona));
-            addToast(`خوش آمدید، ${persona.name}`, {
-              description: `سمت سازمانی: ${persona.jobTitle}`,
+            setCurrentRoute(getPersonaLandingRoute(canonical));
+            addToast(`خوش آمدید، ${canonical.name}`, {
+              description: `سمت سازمانی: ${canonical.jobTitle}`,
               tone: 'success',
             });
           }}
@@ -223,6 +228,12 @@ function AppContent() {
 
   // Helper to get breadcrumb and page title from route
   const getPageInfo = () => {
+    if (currentRoute === 'inbox') {
+      return {
+        title: 'کارهای من',
+        breadcrumbs: ['خانه', 'کارهای من'],
+      };
+    }
     const routeDef = APP_ROUTES[currentRoute as AppRouteKey];
     if (routeDef) {
       return {
@@ -243,7 +254,7 @@ function AppContent() {
     }
     return {
       title: 'سامانه عملیات جوادیان',
-      breadcrumbs: ['خانه', 'کارتابل من'],
+      breadcrumbs: ['خانه', 'کارهای من'],
     };
   };
 
@@ -289,7 +300,7 @@ function AppContent() {
 
           {/* Dynamic Route View */}
           <main id="main-content" tabIndex={-1} className="app-main flex-1">
-          {currentRoute !== 'inbox' && <button type="button" className="lg:hidden flex items-center gap-2 text-primary-700 mb-3 rounded-lg" onClick={() => { setCurrentRoute('inbox'); setTargetRecordId(undefined); }}><ArrowRight className="w-4 h-4" />بازگشت به کارتابل</button>}
+          {currentRoute !== 'inbox' && <button type="button" className="lg:hidden flex items-center gap-2 text-primary-700 mb-3 rounded-lg" onClick={() => { setCurrentRoute('inbox'); setTargetRecordId(undefined); }}><ArrowRight className="w-4 h-4" />بازگشت به کارهای من</button>}
           {!isAuthorized ? (
             <Forbidden403
               missingCapabilities={currentRouteDef?.requiredCapabilities || []}
@@ -298,12 +309,7 @@ function AppContent() {
                 setTargetRecordId(undefined);
               }}
               onSwitchPersona={() => {
-                const authorized = MOCK_PERSONAS.find((p) => canAccessRoute(currentRoute, p));
-                if (authorized) {
-                  handleSelectPersona(authorized);
-                } else {
-                  handleSelectPersona(MOCK_PERSONAS[0]);
-                }
+                setIsRoleSelectorOpen(true);
               }}
             />
           ) : currentRoute === 'inbox' || currentRoute === 'approvals' || currentRoute === 'notifications' ? (
@@ -460,10 +466,13 @@ function AppContent() {
                 setCurrentRoute('inbox');
                 setTargetRecordId(recId);
               }}
-              onSwitchPersonaRequested={() => setIsSearchOpen(false)}
+              onSwitchPersonaRequested={() => setIsRoleSelectorOpen(true)}
             />
           )}
         </main>
+        <footer className="py-3 px-4 border-t border-slate-200 text-center text-caption text-slate-500 bg-white">
+          © سامانه عملیات جوادیان — نسخه نمایشی
+        </footer>
       </div>
       </div>
 
@@ -557,6 +566,17 @@ function AppContent() {
           }}
         />
       )}
+
+      {/* Role Selection Modal for Explicit Switching */}
+      <RoleSelectorModal
+        isOpen={isRoleSelectorOpen}
+        onClose={() => setIsRoleSelectorOpen(false)}
+        onSelect={(persona) => {
+          handleSelectPersona(persona);
+          setIsRoleSelectorOpen(false);
+        }}
+        currentPersonaId={activePersona?.id}
+      />
 
       {/* PWA Guided Install Modal and Update Banner */}
       <PWAInstallGuideModal

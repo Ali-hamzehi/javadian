@@ -23,7 +23,7 @@ export const ModalDialog: React.FC<ModalDialogProps> = ({ isOpen, onClose, title
   return (
     <DialogSurface isOpen={isOpen} onClose={onClose} title={title}>
       <div className={`dialog-panel ${widths[maxWidth]}`}>
-        <div className="dialog-header"><h3>{title}</h3><CloseButton onClose={onClose} /></div>
+        <div className="dialog-header"><span className="text-base font-bold text-slate-900">{title}</span><CloseButton onClose={onClose} /></div>
         <div className="dialog-body">{children}</div>
         {footer && <div className="dialog-footer">{footer}</div>}
       </div>
@@ -108,7 +108,7 @@ export const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose, title, subtitle
     <DialogSurface isOpen={isOpen} onClose={onClose} title={title} className="drawer-surface">
       <div className={`dialog-panel drawer-panel ${widths[width]}`}>
         <div className="dialog-header bg-slate-50">
-          <div className="min-w-0"><h3>{title}</h3>{subtitle && <p className="text-caption text-slate-600 mt-1">{subtitle}</p>}</div>
+          <div className="min-w-0"><span className="text-base font-bold text-slate-900 block">{title}</span>{subtitle && <p className="text-caption text-slate-600 mt-1">{subtitle}</p>}</div>
           <CloseButton onClose={onClose} />
         </div>
         <div className="dialog-body">{children}</div>

@@ -263,7 +263,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
         return (
           <span
             className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-caption font-medium bg-slate-100 text-slate-600 border border-slate-200"
-            title="اتصال به نرم‌افزار مالی پس از آماده شدن نسخه وب و API انجام خواهد شد."
+            title="این بخش نمایشی است و هنوز به بانک یا پارسینا متصل نیست."
           >
             <Building2 className="w-3 h-3 text-slate-500" />
             ثبت نشده در سیستم مالی
@@ -358,7 +358,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
     if (isRequesterOfSelected) {
       addToast({
         id: `sod-block-${Date.now()}`,
-        title: 'خطای تفکیک وظایف (Self-Approval Prohibited)',
+        title: 'خطای تفکیک وظایف (تأیید درخواست خودتان مجاز نیست)',
         description: 'امکان تأیید پرونده پرداختی توسط متقاضی اولیه وجود ندارد. این پرونده باید توسط مدیر مالی دیگر تأیید شود.',
         tone: 'danger',
       });
@@ -516,13 +516,13 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
       linkedWorkItem.statusLabel = 'تکمیل‌شده — حواله بانکی اجرا شد';
       linkedWorkItem.currentAssignee = {
         id: 'p-fin-spec',
-        name: 'کارشناس مالی — حساب نمایشی',
+        name: 'کارشناس مالی — نقش نمونه',
         role: 'کارشناس ثبت دفاتر و تطبیق اسناد مالی',
         department: 'امور مالی و خزانه‌داری',
       };
       linkedWorkItem.currentOwner = {
         id: 'p-fin-spec',
-        name: 'کارشناس مالی — حساب نمایشی',
+        name: 'کارشناس مالی — نقش نمونه',
         role: 'کارشناس ثبت دفاتر و تطبیق اسناد مالی',
         department: 'امور مالی و خزانه‌داری',
         heldSinceJalali: 'هم‌اکنون',
@@ -531,7 +531,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
       linkedWorkItem.nextAction = {
         title: 'بایگانی اسناد تسویه و تطبیق صورت‌حساب بانکی',
         responsibleRole: 'کارشناس ثبت دفاتر و تطبیق اسناد مالی',
-        responsiblePersonName: 'کارشناس مالی — حساب نمایشی',
+        responsiblePersonName: 'کارشناس مالی — نقش نمونه',
         dueJalali: '۱۴۰۴/۰۶/۱۴',
         suggestedAction: 'review',
       };
@@ -610,7 +610,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
     if (!scopeCheck.allowed) {
       addToast({
         id: `scope-err-${Date.now()}`,
-        title: 'عدم تطابق با دامنه اختیارات مستند (Scope Error)',
+        title: 'عدم تطابق با محدوده دسترسی مستند',
         description: scopeCheck.reason || 'ثبت پرداخت در این سرفصل مجاز نیست.',
         tone: 'danger',
       });
@@ -646,25 +646,25 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
       },
       reviewer: {
         id: 'p-fin-spec',
-        name: 'کارشناس مالی — حساب نمایشی',
-        role: 'کارشناس حسابداری و رسیدگی اسناد (نمایشی)',
+        name: 'کارشناس مالی — نقش نمونه',
+        role: 'کارشناس حسابداری و رسیدگی اسناد',
         department: 'امور مالی و خزانه‌داری',
       },
       approver: {
         id: 'p-fin-dir',
-        name: 'تأییدکننده مالی — حساب نمایشی',
-        role: 'تأییدکننده مالی و امضادار مجاز (نمایشی)',
+        name: 'تأییدکننده مالی — نقش نمونه',
+        role: 'تأییدکننده مالی و امضادار مجاز',
         department: 'مدیریت مالی',
       },
       executor: {
         id: 'p-fin-exec',
-        name: 'مجری خزانه‌داری — حساب نمایشی',
-        role: 'کارشناس امور بانکی و خزانه‌داری (نمایشی)',
+        name: 'مجری خزانه‌داری — نقش نمونه',
+        role: 'کارشناس امور بانکی و خزانه‌داری',
         department: 'امور مالی و خزانه‌داری',
       },
       accountingRecorder: {
         id: 'p-fin-spec',
-        name: 'کارشناس مالی — حساب نمایشی',
+        name: 'کارشناس مالی — نقش نمونه',
         role: 'کارشناس ثبت دفاتر و تطبیق اسناد مالی',
         department: 'امور مالی',
       },
@@ -703,20 +703,20 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
       },
       owner: {
         id: 'p-fin-spec',
-        name: 'کارشناس مالی — حساب نمایشی',
-        role: 'کارشناس حسابداری و رسیدگی اسناد (نمایشی)',
+        name: 'کارشناس مالی — نقش نمونه',
+        role: 'کارشناس حسابداری و رسیدگی اسناد',
         department: 'امور مالی و خزانه‌داری',
       },
       currentAssignee: {
         id: 'p-fin-spec',
-        name: 'کارشناس مالی — حساب نمایشی',
-        role: 'کارشناس حسابداری و رسیدگی اسناد (نمایشی)',
+        name: 'کارشناس مالی — نقش نمونه',
+        role: 'کارشناس حسابداری و رسیدگی اسناد',
         department: 'امور مالی و خزانه‌داری',
       },
       currentOwner: {
         id: 'p-fin-spec',
-        name: 'کارشناس مالی — حساب نمایشی',
-        role: 'کارشناس حسابداری و رسیدگی اسناد (نمایشی)',
+        name: 'کارشناس مالی — نقش نمونه',
+        role: 'کارشناس حسابداری و رسیدگی اسناد',
         department: 'امور مالی و خزانه‌داری',
         heldSinceJalali: 'هم‌اکنون',
         durationHours: 0,
@@ -733,7 +733,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
       nextAction: {
         title: 'تطبیق فاکتور و کد اقتصادی در سامانه مؤدیان و تأیید کنترل حسابداری',
         responsibleRole: 'کارشناس حسابداری و رسیدگی اسناد',
-        responsiblePersonName: 'کارشناس مالی — حساب نمایشی',
+        responsiblePersonName: 'کارشناس مالی — نقش نمونه',
         dueJalali: '۱۴۰۴/۰۶/۱۳',
         suggestedAction: 'review',
       },
@@ -794,15 +794,15 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-none">
         <div>
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+            <h1 className="page-title text-xl sm:text-2xl font-extrabold text-slate-900 flex items-center gap-2">
               <CreditCard className="w-5 h-5 text-primary-700" />
-              درخواست‌های پرداخت و تسویه مالی (Operational Finance)
+              درخواست‌های پرداخت و تسویه مالی
             </h1>
             <span className="text-caption bg-primary-50 text-primary-800 font-bold px-2 py-0.5 rounded border border-primary-200">
-              مبتنی بر شواهد اولیه کسب‌وکار
+              واحد مالی و خزانه‌داری
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs sm:text-sm text-slate-600 mt-1">
             تفکیک سرفصل‌های حقوقی و حقیقی، کنترل سلسله‌مراتب تأیید مالی، منع خود-تأییدی، صیانت از داده‌های بانکی و تسویه دستی خزانه‌داری
           </p>
         </div>
@@ -865,21 +865,16 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
       </div>
 
       {/* Financial Integration Notice Banner (Explicit separation from business status) */}
-      <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex items-start gap-3 text-slate-700 shadow-none">
-        <Building2 className="w-5 h-5 text-primary-700 shrink-0 mt-0.5" />
-        <div className="space-y-0.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-extrabold text-slate-900">
-              مرز سامانه‌ای و وضعیت اتصال به نرم‌افزار حسابداری (پارسینا):
-            </span>
-            <span className="text-caption font-bold text-slate-700 bg-slate-200 px-2 py-0.5 rounded">
-              ثبت نشده در سیستم مالی
-            </span>
-          </div>
-          <p className="text-xs text-slate-600 leading-relaxed">
-            این ماژول دفتر روزنامه یا سیستم حسابداری کل نیست و جایگزین پارسینا نمی‌شود. کلیه تراکنش‌ها تا زمان پیاده‌سازی وب‌سرویس رسمی، در وضعیت «ثبت نشده در سیستم مالی» نگهداری می‌شوند و اجرای تسویه بانکی به صورت دستی خارج از سیستم ثبت می‌گردد.
-          </p>
+      <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-slate-700 shadow-none">
+        <div className="flex items-center gap-2.5">
+          <Building2 className="w-4 h-4 text-slate-500 shrink-0" />
+          <span className="text-xs text-slate-700 font-medium">
+            این بخش نمایشی است و هنوز به بانک یا پارسینا متصل نیست (ثبت نشده در سیستم مالی).
+          </span>
         </div>
+        <span className="text-caption text-slate-500 shrink-0">
+          ثبت نتیجه پرداخت به صورت دستی انجام می‌شود
+        </span>
       </div>
 
       {/* Filters: Context Type, Search, Category & Status */}
@@ -1196,7 +1191,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
                       });
                     }}
                   >
-                    ارسال به حسابداری
+                    ارسال برای بررسی
                   </Button>
                 )}
 
@@ -1216,7 +1211,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
                       }
                       onClick={handleApprove}
                     >
-                      تأیید درخواست پرداخت
+                      تأیید پرداخت
                     </Button>
 
                     <Button
@@ -1226,7 +1221,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
                       onClick={() => setIsReturnModalOpen(true)}
                       className="text-orange-700 border-orange-200 hover:bg-orange-50"
                     >
-                      عودت جهت رفع نقص
+                      عودت برای اصلاح
                     </Button>
                   </>
                 )}
@@ -1273,7 +1268,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
                       setIsExecutionModalOpen(true);
                     }}
                   >
-                    ثبت تسویه دستی خزانه‌داری
+                    ثبت پرداخت
                   </Button>
                 )}
 
@@ -1363,9 +1358,9 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
                   <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
                   <div className="space-y-1">
                     <span className="font-extrabold text-xs block">
-                      خطای امنیت مالی: فرآیند خود-تأییدی مسدود شد (Self-Approval Blocked)
+                      تأیید درخواست خودتان مجاز نیست.
                     </span>
-                    <p className="text-caption leading-relaxed">{selectedRecord.statusNote}</p>
+                    <p className="text-caption leading-relaxed">این درخواست باید توسط تأییدکننده دیگری بررسی شود.</p>
                     {selectedRecord.unauthorizedRegionOrCategoryWarning && (
                       <p className="text-caption text-rose-700 font-bold mt-1">
                         {selectedRecord.unauthorizedRegionOrCategoryWarning}
@@ -1693,7 +1688,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
         >
           <div className="space-y-4 text-xs">
             <p className="text-slate-600 leading-relaxed">
-              بر اساس شواهد اولیه و استاندارد کنترل‌های داخلی شرکت جوادیان، دسترسی به ثبت سرفصل‌های پرداخت بر اساس مسئولیت‌های سازمانی تفکیک شده است:
+              بر اساس ضوابط کنترل‌های داخلی شرکت جوادیان، دسترسی به ثبت سرفصل‌های پرداخت بر اساس مسئولیت‌های سازمانی تفکیک شده است:
             </p>
 
             <div className="overflow-x-auto rounded-lg border border-slate-200">
@@ -1802,7 +1797,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
         <ModalDialog
           isOpen={isExecutionModalOpen}
           onClose={() => setIsExecutionModalOpen(false)}
-          title="ثبت تسویه دستی خزانه‌داری (External Execution)"
+          title="ثبت پرداخت"
           maxWidth="md"
           footer={
             <>
@@ -1810,14 +1805,14 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
                 انصراف
               </Button>
               <Button variant="primary" size="sm" onClick={handleManualExecution}>
-                ثبت قطعی تسویه بانکی (PAID)
+                ثبت پرداخت
               </Button>
             </>
           }
         >
           <div className="space-y-3.5 text-xs">
             <div className="p-3 bg-primary-50 border border-primary-200 rounded-lg text-primary-900 leading-relaxed">
-              این سیستم ادعای اتصال به وب‌سرویس بانک را ندارد. بر اساس شواهد کسب‌وکار، جهت تبدیل سند به وضعیت قطعی <strong>PAID</strong>، ورود مجری، زمان، شماره پیگیری و پیوست رسید تسویه الزامی است.
+              این سامانه به وب‌سرویس بانک متصل نیست. وضعیت «پرداخت شد» صرفاً نتیجه پرداخت بیرونی است که پس از واریز دستی توسط خزانه‌داری ثبت می‌گردد. ورود مشخصات و پیوست رسید تسویه الزامی است.
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1900,7 +1895,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
         <ModalDialog
           isOpen={isReturnModalOpen}
           onClose={() => setIsReturnModalOpen(false)}
-          title="عودت پرونده جهت رفع نقص مدارک"
+          title="عودت برای اصلاح"
           maxWidth="sm"
           footer={
             <>
@@ -1908,7 +1903,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
                 انصراف
               </Button>
               <Button variant="primary" size="sm" onClick={handleConfirmReturn}>
-                ثبت عودت پرونده
+                عودت برای اصلاح
               </Button>
             </>
           }

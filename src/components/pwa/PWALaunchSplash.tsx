@@ -41,8 +41,8 @@ export const PWALaunchSplash: React.FC<{ onFinish?: () => void }> = ({ onFinish 
           <div className="h-full bg-primary-500 rounded-full  w-full" />
         </div>
 
-        <span className="text-caption text-slate-300 mt-3 font-mono">
-          نسخه پیش‌نمایش PWA
+        <span className="text-caption text-slate-300 mt-3 font-medium">
+          سامانه عملیات سازمانی
         </span>
       </div>
     </div>

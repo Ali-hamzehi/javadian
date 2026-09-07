@@ -580,7 +580,16 @@ export const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
           <>
             {/* WIZARD STEPPER */}
             <div className="relative border-b border-slate-200 pb-4">
-              <div className="flex items-center justify-between text-xs">
+              {/* Mobile Condensed Stepper */}
+              <div className="sm:hidden flex items-center justify-between p-2.5 bg-primary-50 rounded-xl border border-primary-200 text-xs font-bold text-primary-900">
+                <span>مرحله {toPersianDigits(step)} از ۴</span>
+                <span className="text-primary-700 font-medium">
+                  {['موضوع و ارتباط', 'مسئولیت‌ها', 'زمان و اولویت', 'بررسی و تأیید'][step - 1]}
+                </span>
+              </div>
+
+              {/* Desktop Stepper */}
+              <div className="hidden sm:flex items-center justify-between text-xs">
                 {[
                   { num: 1, title: 'موضوع و ارتباط' },
                   { num: 2, title: 'مسئولیت‌ها' },
@@ -724,7 +733,7 @@ export const AssignTaskModal: React.FC<AssignTaskModalProps> = ({
                 <div className="space-y-2 pt-1 border-t border-slate-200">
                   <div className="flex items-center justify-between">
                     <label className="text-xs font-semibold text-slate-700">پیوست اولیه و دستورالعمل (اختیاری)</label>
-                    <span className="text-caption text-slate-600">ذخیره موقت نمایشی — اتصال به سرور انجام نشده</span>
+                    <span className="text-caption text-slate-500">حداکثر حجم فایل: ۱۰ مگابایت</span>
                   </div>
                   <FieldGroup className="flex items-center gap-3">
                     <label className="inline-flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs rounded-lg cursor-pointer border border-slate-300">

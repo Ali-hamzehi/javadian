@@ -6,6 +6,7 @@ import { MockPersona, SalesOrderDetails, SalesOrderItem } from '../types';
 import { MOCK_SALES_ORDERS } from '../data/mockSalesData';
 import { MOCK_CUSTOMERS, MOCK_PRODUCTS } from '../data/mockMasterData';
 import { mockSalesWarehouseStore } from '../runtime/workflow';
+import { getDisplayPersonaName } from '../runtime/documentBasedPersonas';
 import { Button } from '../components/design-system/Button';
 import { TextInput, SelectInput, FormField, TextareaInput } from '../components/design-system/FormControls';
 import { Chip, Badge } from '../components/design-system/Badges';
@@ -31,6 +32,56 @@ interface SalesViewProps {
 }
 
 type SavedView = 'all' | 'mine' | 'pending_approval' | 'urgent' | 'needs_action';
+
+const getPersianChannelLabel = (channel?: string, rawLabel?: string): string => {
+  if (rawLabel && rawLabel !== 'phone' && !rawLabel.toLowerCase().includes('phone')) {
+    return rawLabel;
+  }
+  const map: Record<string, string> = {
+    phone: 'تلفنی',
+    visit: 'ویزیت میدانی',
+    whatsapp: 'پیام‌رسان واتساپ',
+    telegram: 'پیام‌رسان تلگرام',
+    in_person: 'مراجعه حضوری',
+    other: 'سایر',
+  };
+  return map[channel || ''] || 'تلفنی';
+};
+
+const getPersianOrderStatusBadge = (status: string, customLabel?: string) => {
+  const statusMap: Record<string, { label: string; bg: string; text: string; border: string }> = {
+    waiting: { label: 'در انتظار', bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200' },
+    blocked: { label: 'مسدود', bg: 'bg-rose-50', text: 'text-rose-800', border: 'border-rose-200' },
+    overdue: { label: 'معوق', bg: 'bg-red-50', text: 'text-red-800', border: 'border-red-200' },
+    urgent: { label: 'فوری', bg: 'bg-orange-50', text: 'text-orange-800', border: 'border-orange-200' },
+    approved: { label: 'تأیید شده', bg: 'bg-teal-50', text: 'text-teal-700', border: 'border-teal-200' },
+    returned: { label: 'عودت داده شده', bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200' },
+    rejected: { label: 'رد شده', bg: 'bg-rose-50', text: 'text-rose-800', border: 'border-rose-200' },
+    pending_approval: { label: 'در انتظار تأیید', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+    pending_commercial_approval: { label: 'در انتظار تأیید بازرگانی', bg: 'bg-blue-50', text: 'text-blue-700', border: 'border-blue-200' },
+    needs_price_approval: { label: 'نیاز به تأیید نرخ', bg: 'bg-amber-50', text: 'text-amber-800', border: 'border-amber-200' },
+    under_review: { label: 'در حال بررسی', bg: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200' },
+    submitted: { label: 'ثبت شده', bg: 'bg-slate-50', text: 'text-slate-700', border: 'border-slate-200' },
+  };
+
+  const info = statusMap[status] || {
+    label: customLabel || status,
+    bg: 'bg-slate-50',
+    text: 'text-slate-700',
+    border: 'border-slate-200',
+  };
+
+  const label =
+    customLabel && !['phone', 'waiting', 'blocked', 'approved', 'rejected', 'returned', 'overdue', 'urgent'].includes(customLabel)
+      ? customLabel
+      : info.label;
+
+  return (
+    <span className={`px-2 py-0.5 rounded text-caption font-bold border ${info.bg} ${info.text} ${info.border}`}>
+      {label}
+    </span>
+  );
+};
 
 export const SalesView: React.FC<SalesViewProps> = ({
   subRoute,
@@ -91,7 +142,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
       ? initialCust.locations[0].address
       : 'تهران، انبار کارفرما'
   );
-  const [formSalesResponsible, setFormSalesResponsible] = useState('سهراب جوادیان');
+  const [formSalesResponsible, setFormSalesResponsible] = useState('تأییدکننده بازرگانی — نقش نمونه');
   const [formPaymentTerms, setFormPaymentTerms] = useState('۳۰٪ نقد + ۷۰٪ چک صیادی ۳۰ روزه');
   const [formDeliveryTerms, setFormDeliveryTerms] = useState('تحویل درب انبار مرکزی کهریزک با ناوگان خریدار');
   const [formItems, setFormItems] = useState<{
@@ -254,13 +305,13 @@ export const SalesView: React.FC<SalesViewProps> = ({
       <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-none flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-sm font-extrabold text-slate-900">
+            <h1 className="text-sm font-extrabold text-slate-900">
               {subRoute === 'pricing'
                 ? 'نرخ‌نامه، قیمت‌های مصوب و سقف اختیارات تخفیف'
                 : subRoute === 'sales_calls'
                 ? 'ثبت و پیگیری تعاملات، تماس‌ها و پیام‌های مشتریان'
                 : 'مدیریت و ثبت سفارش‌های فروش و توزیع'}
-            </h2>
+            </h1>
             <span className="text-caption font-bold px-2 py-0.5 rounded-full bg-primary-50 text-primary-700 border border-primary-200">
               واحد بازرگانی جوادیان
             </span>
@@ -281,7 +332,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
             leftIcon={<Plus className="w-4 h-4" />}
             onClick={() => setIsCreateModalOpen(true)}
           >
-            ثبت سفارش فروش جدید
+            ثبت سفارش جدید
           </Button>
         )}
       </div>
@@ -373,7 +424,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
               leftIcon={<Send className="w-4 h-4" />}
               onClick={() => addToast('رویداد تماس با مشتری در پرونده ثبت شد', { tone: 'success' })}
             >
-              ثبت در پرونده مشتری
+              ثبت پیگیری
             </Button>
           </div>
         </div>
@@ -494,26 +545,18 @@ export const SalesView: React.FC<SalesViewProps> = ({
                       <EnterpriseCardHeader
                         badge={
                           <div className="flex items-center gap-1.5">
-                            <span
-                              className={`px-2 py-0.5 rounded text-caption font-bold ${
-                                ord.status === 'approved'
-                                  ? 'bg-teal-50 text-teal-700'
-                                  : ord.status === 'returned'
-                                  ? 'bg-amber-50 text-amber-800'
-                                  : 'bg-blue-50 text-blue-700'
-                              }`}
-                            >
-                              {ord.statusLabel}
-                            </span>
+                            {getPersianOrderStatusBadge(ord.status, ord.statusLabel)}
                             <span className="px-1.5 py-0.5 rounded text-caption bg-slate-100 text-slate-600 font-medium">
-                              {ord.channelLabel}
+                              {getPersianChannelLabel(ord.channel, ord.channelLabel)}
                             </span>
                           </div>
                         }
                         title={
                           <div className="flex items-center gap-2">
                             <span className="font-mono font-bold text-primary-800 text-sm">{ord.code}</span>
-                            <span className="text-caption text-slate-500">({ord.dateJalali})</span>
+                            {ord.dateJalali ? (
+                              <span className="text-caption text-slate-500 font-sans">({ord.dateJalali})</span>
+                            ) : null}
                           </div>
                         }
                         subtitle={
@@ -564,7 +607,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                         {/* Total Amount */}
                         <div className="pt-1 border-t border-slate-100 flex items-center justify-between">
                           <span className="text-slate-500 text-caption font-medium">مبلغ کل سفارش:</span>
-                          <CurrencyAmount amountRials={ord.totalAmountRials} layout="compact" />
+                          <CurrencyAmount amountRials={ord.totalAmountRials} layout="dual" size="sm" />
                         </div>
                       </EnterpriseCardBody>
 
@@ -627,7 +670,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                           <div className="font-bold text-slate-800">{ord.customerName}</div>
                           <div className="text-slate-500 text-caption flex items-center gap-1 mt-0.5">
                             <Phone className="w-3 h-3 text-slate-500" />
-                            <span>{ord.channelLabel}</span>
+                            <span>{getPersianChannelLabel(ord.channel, ord.channelLabel)}</span>
                           </div>
                         </td>
 
@@ -637,7 +680,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                         </td>
 
                         <td className="p-3">
-                          <CurrencyAmount amountRials={ord.totalAmountRials} layout="compact" />
+                          <CurrencyAmount amountRials={ord.totalAmountRials} layout="dual" size="sm" />
                           {ord.hasPriceException && (
                             <span className="text-caption font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded mt-1 inline-block">
                               مغایرت نرخ / اعتبار
@@ -646,17 +689,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                         </td>
 
                         <td className="p-3">
-                          <span
-                            className={`px-2 py-0.5 rounded text-caption font-bold ${
-                              ord.status === 'approved'
-                                ? 'bg-teal-50 text-teal-700'
-                                : ord.status === 'returned'
-                                ? 'bg-amber-50 text-amber-800'
-                                : 'bg-blue-50 text-blue-700'
-                            }`}
-                          >
-                            {ord.statusLabel}
-                          </span>
+                          {getPersianOrderStatusBadge(ord.status, ord.statusLabel)}
                         </td>
 
                         <td className="p-3">
@@ -710,26 +743,18 @@ export const SalesView: React.FC<SalesViewProps> = ({
                         <h4 className="text-xs font-extrabold text-slate-900 mt-0.5">{ord.title}</h4>
                         <div className="text-caption text-slate-600 font-bold mt-0.5">{ord.customerName}</div>
                       </div>
-                      <span
-                        className={`px-2 py-0.5 rounded text-caption font-bold shrink-0 ${
-                          ord.status === 'approved'
-                            ? 'bg-teal-50 text-teal-700'
-                            : ord.status === 'returned'
-                            ? 'bg-amber-50 text-amber-800'
-                            : 'bg-blue-50 text-blue-700'
-                        }`}
-                      >
-                        {ord.statusLabel}
-                      </span>
+                      <div className="shrink-0">
+                        {getPersianOrderStatusBadge(ord.status, ord.statusLabel)}
+                      </div>
                     </div>
 
                     <div className="p-2 bg-slate-50 rounded-lg text-xs flex items-center justify-between">
                       <span className="text-slate-500">ارزش کل سفارش:</span>
-                      <CurrencyAmount amountRials={ord.totalAmountRials} layout="compact" />
+                      <CurrencyAmount amountRials={ord.totalAmountRials} layout="dual" size="sm" />
                     </div>
 
                     <div className="flex items-center justify-between text-caption text-slate-500 pt-1">
-                      <span>کانال: {ord.channelLabel}</span>
+                      <span>کانال: {getPersianChannelLabel(ord.channel, ord.channelLabel)}</span>
                       <span className="text-primary-700 font-bold">مشاهده جزئیات کامل ←</span>
                     </div>
                   </div>
@@ -745,7 +770,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
         isOpen={!!selectedOrder}
         onClose={() => setSelectedOrder(null)}
         title={selectedOrder ? `${selectedOrder.code} • ${selectedOrder.title}` : ''}
-        subtitle={selectedOrder ? `مشتری: ${selectedOrder.customerName} • کانال: ${selectedOrder.channelLabel}` : ''}
+        subtitle={selectedOrder ? `مشتری: ${selectedOrder.customerName} • کانال: ${getPersianChannelLabel(selectedOrder.channel, selectedOrder.channelLabel)}` : ''}
         width="lg"
         footer={
           selectedOrder && (
@@ -777,12 +802,12 @@ export const SalesView: React.FC<SalesViewProps> = ({
                               activePersona.capabilities.includes('pricing.approve') ||
                               activePersona.personaKey === 'commercial_approver'
                             )
-                          ? 'فقط معاونت بازرگانی (سهراب جوادیان) صلاحیت تصویب تجاری سفارش را دارد'
+                          ? 'فقط تأییدکننده بازرگانی صلاحیت تصویب تجاری سفارش را دارد'
                           : undefined
                       }
                       onClick={() => {
                         if (selectedOrder.createdByName.includes(activePersona.name) || selectedOrder.createdById === activePersona.id) {
-                          addToast('خطای تفکیک وظایف (Self-Approval)', {
+                          addToast('خطای تفکیک وظایف (تأیید درخواست خودتان مجاز نیست)', {
                             description: 'امکان تأیید سفارش ثبت‌شده توسط خود کاربر وجود ندارد. تأیید باید توسط مقام تجاری مستقل انجام گیرد.',
                             tone: 'danger',
                           });
@@ -812,8 +837,8 @@ export const SalesView: React.FC<SalesViewProps> = ({
                       }}
                     >
                       {selectedOrder.hasPriceException || selectedOrder.status === 'needs_price_approval'
-                        ? 'تأیید استثنای قیمت و تصویب بازرگانی'
-                        : 'تأیید بازرگانی سفارش'}
+                        ? 'تأیید استثنای قیمت'
+                        : 'تأیید سفارش'}
                     </Button>
 
                     <Button
@@ -831,7 +856,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                       }
                       onClick={() => setIsReturnModalOpen(true)}
                     >
-                      بازگشت جهت اصلاح
+                      عودت برای اصلاح
                     </Button>
 
                     <Button
@@ -866,7 +891,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                     setIsPriceRevisionModalOpen(true);
                   }}
                 >
-                  ویرایش قیمت و ثبت نگارش جدید
+                  ویرایش قیمت
                 </Button>
 
                 {selectedOrder.revisions.length > 0 && (
@@ -914,7 +939,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
                   <div className="p-3 bg-white rounded-lg border border-primary-100 space-y-1">
                     <span className="text-slate-500 text-caption block">مقام مستقل تأییدکننده (Approver):</span>
-                    <span className="font-bold text-slate-900">{selectedOrder.currentApproverName || 'سهراب جوادیان (معاونت بازرگانی)'}</span>
+                    <span className="font-bold text-slate-900">{getDisplayPersonaName(selectedOrder.currentApproverName) || 'تأییدکننده بازرگانی — نقش نمونه'}</span>
                     <span className="text-primary-700 text-caption block font-medium">مسئولیت بازرگانی، فروش و خط‌مشی قیمت‌گذاری</span>
                   </div>
 
@@ -1055,7 +1080,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                         onClick={() => onNavigateToRoute('warehouse_dispatch')}
                         className="text-caption"
                       >
-                        مشاهده در کارتابل خروج و ترخیص انبار
+                        مشاهده در حواله خروج
                       </Button>
                     </div>
                   )}
@@ -1070,7 +1095,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                 <span className="font-bold px-2 py-0.5 rounded bg-slate-200 text-slate-700">ثبت نشده در سیستم مالی</span>
               </div>
               <p className="text-slate-500 leading-relaxed">
-                اتصال به نرم‌افزار مالی پس از آماده‌شدن نسخه وب و API فعال خواهد شد.
+                این بخش نمایشی است و هنوز به بانک یا پارسینا متصل نیست.
               </p>
             </div>
 
@@ -1099,7 +1124,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
       <ModalDialog
         isOpen={isPriceRevisionModalOpen}
         onClose={() => setIsPriceRevisionModalOpen(false)}
-        title="ویرایش قیمت و ایجاد نگارش جدید (Revision)"
+        title="ویرایش قیمت و ایجاد نگارش جدید"
         width="md"
         footer={
           <div className="w-full flex items-center justify-between">
@@ -1143,7 +1168,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                 }
               }}
             >
-              ثبت نگارش جدید و ابطال تأیید قبلی
+              ثبت نگارش جدید
             </Button>
           </div>
         }
@@ -1202,7 +1227,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
       <ModalDialog
         isOpen={isReturnModalOpen}
         onClose={() => setIsReturnModalOpen(false)}
-        title="بازگشت سفارش فروش جهت اصلاح (Return for Amendment)"
+        title="عودت سفارش برای اصلاح"
         width="md"
         footer={
           <div className="w-full flex items-center justify-between">
@@ -1229,7 +1254,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                 }
               }}
             >
-              ثبت بازگشت و ارجاع به ثبت‌کننده
+              عودت برای اصلاح
             </Button>
           </div>
         }
@@ -1260,7 +1285,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
       <ModalDialog
         isOpen={isRejectModalOpen}
         onClose={() => setIsRejectModalOpen(false)}
-        title="رد قطعی سفارش فروش (Reject Sales Order)"
+        title="رد سفارش"
         width="md"
         footer={
           <div className="w-full flex items-center justify-between">
@@ -1287,7 +1312,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                 }
               }}
             >
-              رد قطعی سفارش
+              رد سفارش
             </Button>
           </div>
         }
@@ -1409,7 +1434,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                     setCurrentStep((prev) => (prev + 1) as any);
                   }}
                 >
-                  گام بعدی
+                  مرحله بعد
                 </Button>
               ) : (
                 <Button
@@ -1419,8 +1444,8 @@ export const SalesView: React.FC<SalesViewProps> = ({
                   onClick={handleCreateSubmit}
                 >
                   {hasAnyPriceBelowMinimum
-                    ? 'ثبت سفارش با شرط نیازمند تأیید قیمت'
-                    : 'ثبت قطعی و ارسال به کارتابل بازرگانی'}
+                    ? 'ثبت سفارش (نیازمند تأیید نرخ)'
+                    : 'ثبت سفارش'}
                 </Button>
               )}
             </div>
@@ -1428,8 +1453,14 @@ export const SalesView: React.FC<SalesViewProps> = ({
         }
       >
         <div className="space-y-4">
-          {/* Step Indicators */}
-          <div className="grid grid-cols-4 gap-2 text-center text-xs pb-2 border-b border-slate-100">
+          {/* Step Indicators: Condensed on Mobile, 4 columns on Desktop */}
+          <div className="sm:hidden flex items-center justify-between p-2.5 bg-primary-50 rounded-xl border border-primary-200 text-xs font-bold text-primary-900">
+            <span>مرحله {toPersianDigits(currentStep)} از ۴</span>
+            <span className="text-primary-700 font-medium">
+              {['۱. مشتری و کانال', '۲. اقلام و نرخ‌گذاری', '۳. تسویه و تحویل', '۴. بازبینی و تأیید'][currentStep - 1]}
+            </span>
+          </div>
+          <div className="hidden sm:grid grid-cols-4 gap-2 text-center text-xs pb-2 border-b border-slate-100">
             <div className={`p-1.5 rounded-lg font-bold ${currentStep === 1 ? 'bg-primary-50 text-primary-700' : 'text-slate-500'}`}>
               ۱. مشتری و کانال
             </div>
@@ -1530,9 +1561,9 @@ export const SalesView: React.FC<SalesViewProps> = ({
                     value={formSalesResponsible}
                     onChange={(e) => setFormSalesResponsible(e.target.value)}
                     options={[
-                      { label: 'سهراب جوادیان (معاونت بازرگانی)', value: 'سهراب جوادیان' },
-                      { label: 'علی بازرگان (سرپرست فروش)', value: 'علی بازرگان' },
-                      { label: 'علیرضا تهرانی (کارشناس ارشد فروش)', value: 'علیرضا تهرانی' },
+                      { label: 'تأییدکننده بازرگانی — نقش نمونه', value: 'تأییدکننده بازرگانی — نقش نمونه' },
+                      { label: 'کارشناس فروش — نقش نمونه', value: 'کارشناس فروش — نقش نمونه' },
+                      { label: 'آقای نادری (مسئول فروش مویرگی استان قم)', value: 'آقای نادری' },
                     ]}
                   />
                 </FormField>
@@ -1701,7 +1732,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                           </div>
                           <div>
                             <span className="text-amber-700 block">شرط تصویب:</span>
-                            <span className="font-bold text-amber-950">سهراب جوادیان (معاونت بازرگانی)</span>
+                            <span className="font-bold text-amber-950">تأییدکننده بازرگانی — نقش نمونه</span>
                           </div>
                         </div>
                       </div>
@@ -1775,9 +1806,9 @@ export const SalesView: React.FC<SalesViewProps> = ({
                   value={formSalesResponsible}
                   onChange={(e) => setFormSalesResponsible(e.target.value)}
                   options={[
-                    { label: 'سهراب جوادیان (معاونت بازرگانی)', value: 'سهراب جوادیان' },
-                    { label: 'مهندس بهنام کمالی (فروش منطقه‌ای)', value: 'مهندس بهنام کمالی' },
-                    { label: 'علیرضا تهرانی (کارشناس ارشد فروش)', value: 'علیرضا تهرانی' },
+                    { label: 'تأییدکننده بازرگانی — نقش نمونه', value: 'تأییدکننده بازرگانی — نقش نمونه' },
+                    { label: 'کارشناس فروش — نقش نمونه', value: 'کارشناس فروش — نقش نمونه' },
+                    { label: 'آقای نادری (مسئول فروش مویرگی استان قم)', value: 'آقای نادری' },
                   ]}
                 />
               </FormField>
@@ -1809,7 +1840,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                     <span>هشدار کنترل قیمت: سفارش نیازمند تأیید معاونت بازرگانی است</span>
                   </div>
                   <p className="text-xs text-rose-800 leading-relaxed">
-                    یک یا چند قلم دارای قیمت کمتر از کف مجاز هستند. این سفارش پس از ثبت با وضعیت <strong>«نیازمند تأیید قیمت»</strong> مشخص شده و تا پیش از تأیید <strong>سهراب جوادیان (معاونت بازرگانی)</strong>، امکان تأیید نهایی یا صدور خروج از انبار را ندارد.
+                    یک یا چند قلم دارای قیمت کمتر از کف مجاز هستند. این سفارش پس از ثبت با وضعیت <strong>«نیازمند تأیید قیمت»</strong> مشخص شده و تا پیش از تأیید <strong>تأییدکننده بازرگانی — نقش نمونه</strong>، امکان تأیید نهایی یا صدور خروج از انبار را ندارد.
                   </p>
 
                   <div className="pt-2 border-t border-rose-200">
@@ -1831,7 +1862,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                               توافقی: {formatRials(it.agreedUnitPriceRials)} (کف: {formatRials(it.minPermittedPriceRials)})
                             </span>
                             <span className="bg-rose-100 text-rose-800 px-1.5 py-0.5 rounded font-sans font-bold">
-                              نیازمند تأیید سهراب جوادیان
+                              نیازمند تأیید معاونت بازرگانی
                             </span>
                           </div>
                         ))}
@@ -1845,7 +1876,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                     <span>قیمت‌گذاری اقلام سفارش کاملاً منطبق با نرخ مصوب است</span>
                   </div>
                   <p className="text-emerald-800 text-caption">
-                    پیش‌نویس با موفقیت ذخیره شده است. پس از ثبت، پرونده بلافاصله جهت اقدامات تجاری ارسال می‌شود.
+                    اطلاعات سفارش آماده بازبینی است. پس از ثبت، پرونده جهت بررسی و اقدامات تجاری ارسال می‌شود.
                   </p>
                 </div>
               )}
@@ -1874,7 +1905,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
 
               {/* Self-Approval Reminder */}
               <div className="p-3 bg-slate-100 rounded-lg text-slate-600 text-caption leading-relaxed">
-                <strong>منع خودتأییدی:</strong> ثبت‌کننده سفارش ({activePersona.name}) به دلیل اصل تفکیک وظایف، امکان تأیید نهایی این سفارش را نخواهد داشت.
+                <strong>تأیید مستقل:</strong> ثبت‌کننده سفارش ({activePersona.name}) به دلیل اصل تفکیک وظایف، امکان تأیید نهایی این سفارش را نخواهد داشت.
               </div>
             </div>
           )}

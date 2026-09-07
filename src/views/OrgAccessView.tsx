@@ -50,7 +50,7 @@ export const OrgAccessView: React.FC<OrgAccessViewProps> = ({
 
   // New delegation modal
   const [isDelegationModalOpen, setIsDelegationModalOpen] = useState(false);
-  const [delDelegateeName, setDelDelegateeName] = useState('محسن راد');
+  const [delDelegateeName, setDelDelegateeName] = useState('آقای یوسفی');
   const [delScopeTitle, setDelScopeTitle] = useState('تأیید حواله خروج انبار اضطراری و تأمین تا سقف ۲ میلیارد ریال');
   const [delStartDate, setDelStartDate] = useState('۱۴۰۴/۰۶/۱۵');
   const [delEndDate, setDelEndDate] = useState('۱۴۰۴/۰۶/۳۱');

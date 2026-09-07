@@ -1,5 +1,6 @@
 import { DialogSurface } from '../design-system/DialogSurface';
 import { canAccessRoute } from '../../routes/routesConfig';
+import { isRouteVisibleForPersona } from '../../utils/roleExperience';
 import React, { useState } from 'react';
 import { Search, X, ArrowRight, Package, Truck, CreditCard, ShoppingBag, MapPin, MessageSquare, BarChart3, Server } from 'lucide-react';
 import { mockRepository } from '../../runtime/workflow';
@@ -62,7 +63,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
   const totalMatches = records.length + matchedVisits.length + matchedIntakes.length + matchedDrill.length;
 
   const quickRoutes = [
-    { title: 'کارتابل من و اقدامات جاری', routeKey: 'inbox', icon: <Package className="w-4 h-4 text-primary-700" /> },
+    { title: 'کارهای من', routeKey: 'inbox', icon: <Package className="w-4 h-4 text-primary-700" /> },
     { title: 'برنامه ویزیت میدانی و فروش', routeKey: 'visit_plans', icon: <MapPin className="w-4 h-4 text-emerald-600" /> },
     { title: 'درگاه ثبت دستی تماس و پیام (Intake)', routeKey: 'sales_calls', icon: <MessageSquare className="w-4 h-4 text-sky-600" /> },
     { title: 'دیده‌بان عملیاتی و پایش گلوگاه‌ها', routeKey: 'ops_view', icon: <BarChart3 className="w-4 h-4 text-amber-600" /> },
@@ -103,7 +104,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
                 بخش‌های پرکاربرد سامانه
               </span>
               <div className="space-y-1">
-                {quickRoutes.filter(route => !activePersona || canAccessRoute(route.routeKey, activePersona)).map((r) => (
+                {quickRoutes.filter(route => !activePersona || isRouteVisibleForPersona(route.routeKey, activePersona)).map((r) => (
                   <button
                     key={r.routeKey}
                     onClick={() => {
@@ -218,7 +219,13 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
                         <span className="text-caption text-slate-500 line-clamp-1 mt-0.5">{i.summary}</span>
                       </div>
                       <span className="text-caption font-bold bg-sky-100 text-sky-800 px-2 py-0.5 rounded">
-                        {i.channel}
+                        {i.channel === 'phone'
+                          ? 'تلفنی'
+                          : i.channel === 'whatsapp'
+                          ? 'واتساپ'
+                          : i.channel === 'in_person'
+                          ? 'حضوری'
+                          : i.channel}
                       </span>
                     </div>
                   ))}

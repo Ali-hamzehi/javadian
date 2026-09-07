@@ -6,6 +6,7 @@ import { MOCK_PERSONAS } from '../data/mockData';
 import { MOCK_PAYMENT_REQUESTS } from '../data/mockSupplyLogisticsData';
 import type { OperationalRecord, SalesOrderDetails, PaymentRequestRecord } from '../types';
 import { loadPersistedState, savePersistedState, clearPersistedState, hasPersistedState } from './persistence';
+import { getDisplayPersonaName, getDisplayPersonaRole } from './documentBasedPersonas';
 
 // Observable adapters: protected fixtures and store implementations stay byte-identical.
 let revision = 0;
@@ -34,13 +35,15 @@ export function ensureSalesApproval(order: SalesOrderDetails) {
   const manager = MOCK_PERSONAS.find(p => p.personaKey === 'commercial_approver' && p.id !== order.createdById)
     || MOCK_PERSONAS.find(p => p.id !== order.createdById && p.capabilities.includes('sales.approve'));
   if (!manager) throw new Error('تأییدکننده مستقل برای سفارش تعریف نشده است.');
-  const approver = { id: manager.id, name: manager.name, role: manager.jobTitle, department: manager.department };
+  const approver = { id: manager.id, name: getDisplayPersonaName(manager), role: getDisplayPersonaRole(manager), department: manager.department };
+  const creatorName = getDisplayPersonaName(creator || { name: order.createdByName });
+  const creatorRole = getDisplayPersonaRole(creator || { role: 'کارشناس فروش — نقش نمونه' });
   let record = order.linkedWorkItemId ? repository.getRecordById(order.linkedWorkItemId) as ApprovalRecord | undefined : undefined;
   if (!record) {
     record = {
       id: `wi-approval-${order.id}`, code: `TSK-${order.code}`, title: `بررسی سفارش ${order.code}`,
       type: 'approval', typeLabel: 'تأیید سفارش فروش', itemSummary: order.title,
-      creator: { id: order.createdById, name: creator?.name || order.createdByName, role: creator?.jobTitle || 'فروش', department: creator?.department || 'بازرگانی' },
+      creator: { id: order.createdById, name: creatorName, role: creatorRole, department: creator?.department || 'بازرگانی' },
       owner: approver, currentOwner: { ...approver, heldSinceJalali: 'هم‌اکنون', durationHours: 0 },
       createdAt: new Date().toISOString(), createdAtJalali: 'هم‌اکنون', statusSinceJalali: 'هم‌اکنون',
       status: 'ready', statusLabel: 'آماده بررسی', priority: order.hasPriceException ? 'urgent' : 'normal',
@@ -155,10 +158,106 @@ export const mockSupplyReceiptStore = new Proxy(observedSupply, { get(target, ke
   return Reflect.get(target, key);
 } });
 
-let payments: PaymentRequestRecord[] = structuredClone(MOCK_PAYMENT_REQUESTS);
+export function sanitizePaymentRecord(p: PaymentRequestRecord): PaymentRequestRecord {
+  if (p.id === 'pay-06' || p.code === 'PAY-1403-138') {
+    return {
+      ...p,
+      contextType: 'company',
+      category: 'freight',
+      amountRials: 75000000,
+      purpose: 'کرایه حمل بارنامه رسمی باربری محموله روغن خوراکی انبار کهریزک',
+      beneficiary: {
+        name: 'شرکت حمل‌ونقل سراسری باربری کالا',
+        nationalOrEconomicCode: '۱۰۱۰۲۴۵۸۹۶۱',
+        bankName: 'بانک ملت - شعبه مرکزی',
+        maskedIban: 'IR58 •••• •••• •••• •••• •••• 9210',
+        fullIban: 'IR580120000000001234569210',
+        maskedCard: '۶۱۰۴ •••• •••• ۹۲۱۰',
+        fullCard: '۶۱۰۴۳۳۷۸۹۰۱۲۹۲۱۰',
+      },
+      requester: {
+        id: 'p-warehouse',
+        name: 'آرش',
+        role: 'مسئول لجستیک و هماهنگی خرید',
+        department: 'انبار و لجستیک کالا',
+      },
+      reviewer: {
+        id: 'p-fin-spec',
+        name: 'کارشناس مالی — نقش نمونه',
+        role: 'کارشناس مالی — نقش نمونه',
+        department: 'امور مالی',
+      },
+      approver: {
+        id: 'p-fin-dir',
+        name: 'تأییدکننده مالی — نقش نمونه',
+        role: 'تأییدکننده مالی — نقش نمونه',
+        department: 'امور مالی',
+      },
+      executor: {
+        id: 'p-fin-dir',
+        name: 'تأییدکننده مالی — نقش نمونه',
+        role: 'تأییدکننده مالی — نقش نمونه',
+        department: 'امور مالی',
+      },
+      status: 'submitted',
+      statusNote: 'آماده بررسی و تأیید مالی',
+      isSelfApprovalBlocked: false,
+      unauthorizedRegionOrCategoryWarning: undefined,
+      auditLogs: [
+        {
+          id: 'aud-9',
+          timestampJalali: '۱۴۰۴/۰۶/۱۲ - ۱۲:۰۰',
+          actorName: 'آرش',
+          action: 'ثبت درخواست پرداخت کرایه حمل',
+          details: 'پیوست بارنامه رسمی و فیش باسکول ثبت گردید.',
+        },
+      ],
+    };
+  }
+
+  return {
+    ...p,
+    requester: {
+      ...p.requester,
+      name: getDisplayPersonaName(p.requester),
+      role: getDisplayPersonaRole(p.requester),
+    },
+    reviewer: p.reviewer
+      ? {
+          ...p.reviewer,
+          name: getDisplayPersonaName(p.reviewer),
+          role: getDisplayPersonaRole(p.reviewer),
+        }
+      : p.reviewer,
+    approver: {
+      ...p.approver,
+      name: getDisplayPersonaName(p.approver),
+      role: getDisplayPersonaRole(p.approver),
+    },
+    executor: {
+      ...p.executor,
+      name: getDisplayPersonaName(p.executor),
+      role: getDisplayPersonaRole(p.executor),
+    },
+    statusNote: p.statusNote
+      ? p.statusNote.replace(
+          /مسدود به علت قانون جلوگیری از خود-تأییدی \(Self-Approval Blocked\)/g,
+          'مسدود به علت قانون تفکیک وظایف و جلوگیری از خود-تأییدی'
+        )
+      : p.statusNote,
+    auditLogs:
+      p.auditLogs?.map((log) => ({
+        ...log,
+        actorName: getDisplayPersonaName(log.actorName),
+      })) || [],
+  };
+}
+
+let payments: PaymentRequestRecord[] = structuredClone(MOCK_PAYMENT_REQUESTS).map(sanitizePaymentRecord);
 export function getPayments() { return payments; }
 export function setPayments(next: PaymentRequestRecord[] | ((previous: PaymentRequestRecord[]) => PaymentRequestRecord[])) {
-  payments = typeof next === 'function' ? next(payments) : next;
+  const nextPayments = typeof next === 'function' ? next(payments) : next;
+  payments = nextPayments.map(sanitizePaymentRecord);
   payments.forEach(syncPaymentWorkItem);
   notifyWorkflow();
 }
@@ -201,7 +300,7 @@ export function decidePayment(recordId: string, actorId: string, decision: 'appr
   const payment = payments.find(p => p.id === record?.linkedBusinessRecord?.id);
   const actor = MOCK_PERSONAS.find(p => p.id === actorId);
   if (!payment || !actor || payment.requester.id === actorId || payment.approver.id !== actorId || !['submitted', 'under_review', 'pending'].includes(payment.status)) return false;
-  setPayments(current => current.map(p => p.id !== payment.id ? p : { ...p, status: decision, statusNote: note || (decision === 'approved' ? 'تأیید شد؛ در انتظار خزانه‌داری' : 'نیازمند رسیدگی'), auditLogs: [...p.auditLogs, { id: `audit-${crypto.randomUUID()}`, timestampJalali: new Date().toLocaleDateString('fa-IR'), actorName: actor.name, action: decision, details: note }] }));
+  setPayments(current => current.map(p => p.id !== payment.id ? p : { ...p, status: decision, statusNote: note || (decision === 'approved' ? 'تأیید شد؛ در انتظار خزانه‌داری' : 'نیازمند رسیدگی'), auditLogs: [...p.auditLogs, { id: `audit-${crypto.randomUUID()}`, timestampJalali: new Date().toLocaleDateString('fa-IR'), actorName: getDisplayPersonaName(actor), action: decision, details: note }] }));
   return true;
 }
 
@@ -215,7 +314,7 @@ export function initializeWorkflow() {
   const persisted = loadPersistedState();
   if (persisted) {
     if (Array.isArray(persisted.payments) && persisted.payments.length > 0) {
-      payments = persisted.payments;
+      payments = persisted.payments.map(sanitizePaymentRecord);
     }
     if (Array.isArray(persisted.repositoryRecords)) {
       for (const rec of persisted.repositoryRecords) {

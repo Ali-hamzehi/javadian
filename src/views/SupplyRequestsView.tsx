@@ -376,8 +376,8 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
 
   // Resolve Accountable Owner and Eligible Assignee dynamically from Responsibility Area
   const opsRespArea = MOCK_RESPONSIBILITY_AREAS.find((r) => r.id === 'resp-operations');
-  const accountableOwnerName = 'مهندس حامد اسدی';
-  const accountableOwnerRole = 'مدیر ارشد عملیات و زنجیره تأمین';
+  const accountableOwnerName = 'آقای منتظری';
+  const accountableOwnerRole = 'مدیرعامل';
   const accountableOwnerId = opsRespArea?.primaryResponsiblePersonId || 'p-ops-dir';
 
   const activeDelegation = mockOrgStore.getDelegations().find(
@@ -1029,11 +1029,11 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-none">
         <div>
-          <h1 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+          <h1 className="page-title text-xl sm:text-2xl font-extrabold text-slate-900 flex items-center gap-2">
             <ShoppingBag className="w-5 h-5 text-primary-700" />
-            درخواست‌های تأمین کالا و ملزومات (Supply Requests)
+            درخواست‌های تأمین کالا و ملزومات
           </h1>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs sm:text-sm text-slate-600 mt-1">
             سفارش‌گذاری ناشی از کسری انبار یا نیاز عملیاتی، تفکیک ثبت‌کننده/صاحب‌کار/مجری و ارجاع مستقیم به کارتابل وظایف
           </p>
         </div>
@@ -1431,7 +1431,7 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
                   className="cursor-pointer"
                 >
                   <Package className="w-4 h-4 ml-1" />
-                  ثبت تحویل فیزیکی و نتیجه نهایی تأمین
+                  ثبت تحویل کالا
                 </Button>
 
                 {selectedRecord.linkedWorkItemId && onNavigateToRoute && (
@@ -2227,7 +2227,7 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
                   }`}
                 >
                   <CheckSquare className="w-4 h-4" />
-                  ثبت و ارجاع به کارتابل خرید
+                  ارسال برای بررسی
                 </Button>
               </div>
             </div>
@@ -2332,10 +2332,10 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-amber-950 text-xs flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4 text-amber-600" />
-                    انتخاب مستند رسمی ارزیابی و کسری موجودی انبار (Inventory Snapshot Evidence)
+                    انتخاب ارزیابی و کسری موجودی انبار
                   </span>
                   <span className="text-caption text-amber-800 bg-amber-200/60 px-2 py-0.5 rounded font-semibold">
-                    الزامی — داده‌های مستند کاردکس
+                    الزامی — بر اساس اطلاعات کاردکس
                   </span>
                 </div>
 
@@ -2373,8 +2373,8 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
                         {selectedSnapshot.offlineNotice || 'بر اساس آخرین ثبت موجودی — اتصال برخط فعال نیست.'}
                       </span>
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-caption px-2 py-0.5 rounded bg-amber-200 text-amber-900 font-bold">
-                          وضعیت یکپارچه‌سازی: {selectedSnapshot.integrationStatus || 'NOT_CONNECTED'} (آفلاین)
+                        <span className="text-caption px-2 py-0.5 rounded bg-amber-200 text-amber-900 font-bold" data-status={selectedSnapshot.integrationStatus || 'NOT_CONNECTED'}>
+                          وضعیت اتصال: متصل نیست (آفلاین)
                         </span>
                         <span
                           className={`font-bold text-caption px-2 py-0.5 rounded ${
@@ -2383,7 +2383,7 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
                               : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
                           }`}
                         >
-                          تازگی داده: {selectedSnapshot.freshnessStatus === 'STALE' ? 'منقضی (STALE)' : 'جاری (CURRENT)'}
+                          تازگی داده: {selectedSnapshot.freshnessStatus === 'STALE' ? 'نیازمند به‌روزرسانی' : 'جاری'}
                         </span>
                       </div>
                     </div>
@@ -2393,14 +2393,14 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
                       <div className="p-3 bg-rose-50 border border-rose-300 rounded-lg text-xs text-rose-900 space-y-1">
                         <div className="font-bold flex items-center gap-2 text-rose-950">
                           <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
-                          مستند منقضی (STALE) — ثبت و ارجاع قطعی مسدود است
+                          مستند منقضی — ثبت و ارجاع قطعی مسدود است
                         </div>
                         <p className="text-rose-800 leading-relaxed font-medium">
                           {snapshotFreshness?.warningMessage ||
-                            `این مستند موجودی (${selectedSnapshot.code}) به دلیل گذشت ${selectedSnapshot.snapshotAge}، منقضی (STALE) شده است و نمیتواند مبنای ارجاع قطعی درخواست تأمین باشد. لطفاً مستند ارزیابی جدید انتخاب نمایید یا درخواست را بهصورت پیش‌نویس ذخیره کنید.`}
+                            `این مستند موجودی (${selectedSnapshot.code}) به دلیل گذشت ${selectedSnapshot.snapshotAge}، منقضی شده است و نمیتواند مبنای ارجاع قطعی درخواست تأمین باشد. لطفاً مستند ارزیابی جدید انتخاب نمایید یا درخواست را بهصورت پیش‌نویس ذخیره کنید.`}
                         </p>
                         <div className="text-caption text-rose-700 bg-white/80 p-1.5 rounded border border-rose-200 font-medium">
-                          دکمه «ثبت و ارجاع به کارتابل خرید» غیرفعال شده است. شما می‌توانید درخواست را به‌صورت پیش‌نویس ذخیره کنید.
+                          دکمه «ارسال برای بررسی» غیرفعال شده است. شما می‌توانید درخواست را به‌صورت پیش‌نویس ذخیره کنید.
                         </div>
                       </div>
                     )}
@@ -2422,11 +2422,11 @@ export const SupplyRequestsView: React.FC<SupplyRequestsViewProps> = ({
                         <strong className="font-mono">{selectedSnapshot.code}</strong>
                       </div>
                       <div>
-                        <span className="text-slate-500 block text-caption">۳. زمان ثبت مبدأ (Source Timestamp):</span>
+                        <span className="text-slate-500 block text-caption">۳. زمان ثبت در انبار:</span>
                         <strong>{selectedSnapshot.sourceTimestamp || selectedSnapshot.evidenceTimestampJalali}</strong>
                       </div>
                       <div>
-                        <span className="text-slate-500 block text-caption">۴. قدمت مستند (Snapshot Age):</span>
+                        <span className="text-slate-500 block text-caption">۴. زمان ارزیابی کاردکس:</span>
                         <strong>{selectedSnapshot.snapshotAge}</strong>
                       </div>
                       <div>

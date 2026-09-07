@@ -68,7 +68,7 @@ export const TopBar: React.FC<TopBarProps> = ({
   const respRef = useRef<HTMLDivElement>(null);
   const userRef = useRef<HTMLDivElement>(null);
 
-  const { isStandalone, setShowInstallGuide } = usePWA();
+  const { isStandalone, isInstallable, setShowInstallGuide } = usePWA();
 
   const adaptedActive = adaptPersona(activePersona);
   const categorizedPersonas = getPersonasByCategory();
@@ -96,23 +96,23 @@ export const TopBar: React.FC<TopBarProps> = ({
   const hasUrgent = (scopedCounts.blocked || 0) > 0;
 
   return (
-    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-4 sm:px-6 h-16 flex items-center justify-between gap-4 transition-all">
+    <header className="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200/80 px-3 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4 transition-all">
       {/* Right: Hamburger (mobile) + Page Title & Breadcrumbs */}
-      <div className="flex items-center gap-3 min-w-0">
+      <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
         <button
           type="button"
           onClick={onOpenMobileMenu}
-          className="lg:hidden p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer"
+          className="lg:hidden p-2 rounded-lg text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
           aria-label="باز کردن منوی ناوبری"
         >
           <Menu className="w-5 h-5" />
         </button>
 
-        <div className="min-w-0">
-          <h1 className="text-sm sm:text-base font-extrabold text-slate-900 truncate">
+        <div className="min-w-0 flex-1">
+          <span className="text-sm sm:text-base font-extrabold text-slate-900 truncate block">
             {pageTitle}
-          </h1>
-          <nav aria-label="موقعیت در سامانه" className="flex items-center gap-1.5 text-caption text-slate-600 truncate mt-0.5">
+          </span>
+          <nav aria-label="موقعیت در سامانه" className="hidden sm:flex items-center gap-1.5 text-caption text-slate-600 truncate mt-0.5">
             {breadcrumbs.map((crumb, idx) => (
               <React.Fragment key={idx}>
                 {idx > 0 && <span className="text-slate-500">/</span>}
@@ -127,11 +127,11 @@ export const TopBar: React.FC<TopBarProps> = ({
 
       {/* Left: Actions + Demo Persona Switcher + Profile */}
       <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-        {/* Global Search Trigger (Desktop & Mobile) */}
+        {/* Global Search Trigger (Desktop only) */}
         <button
           type="button"
           onClick={onOpenSearch}
-          className="flex items-center gap-2 px-2.5 py-1.5 text-xs text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg border border-slate-200/80 transition-colors cursor-pointer"
+          className="hidden sm:flex items-center gap-2 px-2.5 py-1.5 text-xs text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg border border-slate-200/80 transition-colors cursor-pointer"
           title="جستجوی سریع (Ctrl+K)"
           aria-label="جستجوی سراسری (Ctrl+K)"
         >
@@ -158,7 +158,7 @@ export const TopBar: React.FC<TopBarProps> = ({
 
         {/* ACTIVE RESPONSIBILITY SWITCHER (If persona has delegated responsibilities) */}
         {activePersona.delegatedResponsibilities && activePersona.delegatedResponsibilities.length > 0 && (
-          <div className="relative" ref={respRef}>
+          <div className="hidden md:block relative" ref={respRef}>
             <button
               type="button"
               onClick={() => setIsResponsibilityMenuOpen(!isResponsibilityMenuOpen)}
@@ -240,15 +240,15 @@ export const TopBar: React.FC<TopBarProps> = ({
           </div>
         )}
 
-        {/* DEMO PERSONA SWITCHER: «حالت نمایشی بر اساس اسناد» */}
-        <div className="relative" ref={personaRef}>
+        {/* DEMO PERSONA SWITCHER */}
+        <div className="hidden sm:block relative" ref={personaRef}>
           <button
             type="button"
             onClick={() => setIsPersonaMenuOpen(!isPersonaMenuOpen)}
             className="flex items-center gap-2 px-2.5 py-1.5 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-lg text-xs font-bold text-primary-900 transition-colors cursor-pointer shadow-none"
-            title="تغییر نقش در حالت نمایشی"
+            title="تغییر نقش"
             aria-expanded={isPersonaMenuOpen}
-            aria-label="تغییر نقش در حالت نمایشی"
+            aria-label="تغییر نقش"
           >
             <UsersRound className="w-3.5 h-3.5 text-primary-700 shrink-0" />
             <span
@@ -256,7 +256,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                 adaptedActive.isDocumentedPerson ? 'bg-emerald-700' : 'bg-slate-600'
               }`}
             >
-              {adaptedActive.isDocumentedPerson ? 'فرد مستند' : 'حساب نمایشی'}
+              {adaptedActive.isDocumentedPerson ? 'فرد مستند' : 'نقش نمونه'}
             </span>
             <span className="truncate max-w-[100px] sm:max-w-[130px] text-xs">{adaptedActive.name}</span>
             <ChevronDown className="w-3 h-3 text-primary-700 shrink-0" />
@@ -266,8 +266,8 @@ export const TopBar: React.FC<TopBarProps> = ({
             <div className="persona-menu absolute left-0 mt-1.5 w-84 max-h-[80vh] overflow-y-auto bg-white rounded-xl shadow-2xl border border-slate-200 py-2 z-50 text-right animate-in fade-in duration-150">
               <div className="px-4 py-2 border-b border-slate-100 flex items-center justify-between">
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900">تغییر کاربر دمو</h4>
-                  <p className="text-caption text-slate-500 mt-0.5">تفکیک بر اساس ۴ حوزه سازمانی مستند</p>
+                  <h4 className="text-xs font-bold text-slate-900">تغییر نقش کاربر</h4>
+                  <p className="text-caption text-slate-500 mt-0.5">تفکیک بر اساس ۴ حوزه سازمانی</p>
                 </div>
                 <span className="text-caption bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-bold">
                   {allPersonas.length} نقش
@@ -346,7 +346,7 @@ export const TopBar: React.FC<TopBarProps> = ({
         <div className="relative" ref={userRef}>
           <button
             type="button"
-            aria-label="منوی حساب نمایشی"
+            aria-label="منوی نقش نمونه"
             aria-expanded={isUserMenuOpen}
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
             className="flex items-center gap-1 p-1 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
@@ -370,7 +370,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                     </span>
                   ) : (
                     <span className="text-caption font-medium bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">
-                      حساب نمایشی
+                      نقش نمونه
                     </span>
                   )}
                 </div>
@@ -382,7 +382,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                 <div className="flex justify-between">
                   <span>وضعیت هویت:</span>
                   <strong className={adaptedActive.isDocumentedPerson ? 'text-emerald-700 font-bold' : 'text-slate-700'}>
-                    {adaptedActive.isDocumentedPerson ? 'شخص مستند در اسناد' : 'Demo Placeholder'}
+                    {adaptedActive.isDocumentedPerson ? 'شخص مستند در اسناد' : 'نقش نمونه'}
                   </strong>
                 </div>
                 <div className="flex justify-between">
@@ -392,18 +392,34 @@ export const TopBar: React.FC<TopBarProps> = ({
                   </strong>
                 </div>
                 <div className="flex justify-between items-center pt-1 border-t border-slate-100">
-                  <span>حالت اجرا:</span>
-                  <span
-                    className={`px-2 py-0.5 rounded-full text-caption font-bold ${
-                      isStandalone ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-100 text-slate-700'
-                    }`}
-                  >
-                    {isStandalone ? 'نسخه نصب‌شده' : 'نسخه وب'}
+                  <span>وضعیت اتصال:</span>
+                  <span className="px-2 py-0.5 rounded-full text-caption font-bold bg-emerald-100 text-emerald-800">
+                    فعال و متصل
                   </span>
                 </div>
               </div>
 
-              {!isStandalone && (
+              {/* Mobile Persona Switcher in User Menu */}
+              <div className="sm:hidden pt-2 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsUserMenuOpen(false);
+                    setIsPersonaMenuOpen(true);
+                  }}
+                  className="w-full flex items-center justify-between p-2 rounded-lg text-xs font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 transition-colors cursor-pointer"
+                >
+                  <span className="flex items-center gap-2">
+                    <UsersRound className="w-3.5 h-3.5 text-primary-700" />
+                    <span>تغییر نقش ({allPersonas.length} نقش)</span>
+                  </span>
+                  <span className="text-caption bg-primary-100 text-primary-800 px-1.5 py-0.5 rounded font-bold">
+                    {adaptedActive.name}
+                  </span>
+                </button>
+              </div>
+
+              {isInstallable && (
                 <div className="pt-2 border-t border-slate-100">
                   <button
                     type="button"
@@ -415,10 +431,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                   >
                     <span className="flex items-center gap-2">
                       <Download className="w-3.5 h-3.5 text-primary-700" />
-                      <span>نصب نسخه اپلیکیشن</span>
-                    </span>
-                    <span className="text-caption bg-primary-700 text-white px-1.5 py-0.5 rounded font-mono">
-                      PWA
+                      <span>نصب برنامه</span>
                     </span>
                   </button>
                 </div>

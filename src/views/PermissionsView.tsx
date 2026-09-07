@@ -311,13 +311,13 @@ export const PermissionsView: React.FC<PermissionsViewProps> = ({ activePersona 
         <Scale className="w-5 h-5 text-rose-700 mt-0.5 shrink-0" />
         <div className="text-xs text-rose-950 leading-relaxed space-y-1">
           <div className="font-bold flex items-center gap-2">
-            <span>حاکمیت اصل تفکیک وظایف (Separation of Duties - SoD) و منع مطلق خودتأییدی:</span>
+            <span>اصل تفکیک وظایف و منع خودتأییدی:</span>
             <span className="px-2 py-0.5 bg-rose-200 text-rose-800 text-caption rounded-full font-mono">
               قفل تفکیک وظایف — فعال
             </span>
           </div>
           <div>
-            در هیچ نقطه‌ای از سیستم، کاربر ثبت‌کننده سفارش (نظیر علیرضا تهرانی) یا صادرکننده درخواست پرداخت (نظیر پروانه صالحی یا کامران داوودی) قادر به تأیید نهایی یا صدور حواله برای رکورد ثبت‌شده توسط خود نخواهد بود؛ حتی اگر بالاترین مسئولیت یا تفویض اختیارات سازمانی را دارا باشد.
+            در سامانه عملیات، کاربر ثبت‌کننده سفارش یا درخواست پرداخت، امکان تأیید نهایی یا صدور حواله برای درخواست‌های ثبت‌شده توسط خود را ندارد؛ حتی در صورت دارا بودن بالاترین سطح اختیارات سازمانی.
           </div>
         </div>
       </div>

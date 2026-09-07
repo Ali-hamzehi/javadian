@@ -20,10 +20,11 @@ import { ModalDialog, Drawer } from '../components/design-system/ModalAndDrawer'
 import { useToast } from '../components/design-system/ToastContext';
 import { formatRials, formatNumber } from '../utils/formatters';
 import { Search, Plus, AlertTriangle, MapPin } from 'lucide-react';
+import { getDisplayPersonaName } from '../runtime/documentBasedPersonas';
 
 interface MasterDataViewProps {
   initialTab?: 'customers' | 'products' | 'suppliers' | 'warehouses';
-  activePersona: MockPersona;
+  activePersona?: MockPersona;
 }
 
 export const MasterDataView: React.FC<MasterDataViewProps> = ({
@@ -61,7 +62,7 @@ export const MasterDataView: React.FC<MasterDataViewProps> = ({
   const [newCustNationalId, setNewCustNationalId] = useState('');
   const [newCustEconomicCode, setNewCustEconomicCode] = useState('');
   const [newCustPhone, setNewCustPhone] = useState('');
-  const [newCustSalesperson, setNewCustSalesperson] = useState('سهراب جوادیان');
+  const [newCustSalesperson, setNewCustSalesperson] = useState('کارشناس فروش — نقش نمونه');
   const [newCustCreditLimit, setNewCustCreditLimit] = useState(10000000000);
 
   // Create Product Modal State
@@ -527,7 +528,7 @@ export const MasterDataView: React.FC<MasterDataViewProps> = ({
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">کارشناس مسئول فروش جوادیان:</span>
-                <span className="font-bold text-primary-700">{selectedCustomer.assignedSalesperson.name}</span>
+                <span className="font-bold text-primary-700">{getDisplayPersonaName(selectedCustomer.assignedSalesperson.name)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-500">شناسه اتصال ERP مالی:</span>

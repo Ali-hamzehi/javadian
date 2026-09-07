@@ -1,7 +1,7 @@
 import React from 'react';
 import { OperationalRecord, MockPersona } from '../../types';
 import { Button } from '../design-system/Button';
-import { Badge } from '../design-system/Badges';
+import { Badge, PriorityBadge } from '../design-system/Badges';
 import { CurrencyAmount } from '../design-system/CurrencyAmount';
 import { computeAllowedActions } from '../../utils/workItemAuthorization';
 import { isJalaliOverdue } from '../../utils/formatters';
@@ -173,9 +173,16 @@ export const EmployeeWorkCard: React.FC<EmployeeWorkCardProps> = ({
     );
   };
 
+  // Amount display only if vital for active role in a genuine payment task
+  const isFinanceRelevant =
+    (activePersona.capabilities.includes('finance.read') ||
+      activePersona.capabilities.includes('finance.payment_request.create') ||
+      activePersona.capabilities.includes('finance.payment_request.approve')) &&
+    (record.linkedBusinessRecord?.category === 'payment_request' || record.type === 'payment_request');
+
   return (
     <div
-      className={`bg-white rounded-xl border transition-all hover:border-slate-300 p-4 space-y-3 ${
+      className={`bg-white rounded-xl border transition-all hover:border-slate-300 p-4 space-y-2.5 ${
         hasBlocker
           ? 'border-rose-300 bg-rose-50/15'
           : isReturned
@@ -185,53 +192,55 @@ export const EmployeeWorkCard: React.FC<EmployeeWorkCardProps> = ({
           : 'border-slate-200'
       }`}
     >
-      {/* Top Meta Line */}
+      {/* 1. وضعیت و اولویت */}
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="font-mono text-xs font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
             {record.code}
           </span>
           {getSemanticStatus()}
-        </div>
-
-        {/* Due Date & Overdue Tag */}
-        <div className="flex items-center gap-2 text-caption">
-          {isOverdue && (
-            <span className="font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
-              سررسید گذشته (تأخیر)
-            </span>
-          )}
-          {record.dueDateJalali && (
-            <span className="flex items-center gap-1 text-slate-600">
-              <Calendar className="w-3.5 h-3.5 text-slate-400" />
-              <span>مهلت: {record.dueDateJalali}</span>
-            </span>
-          )}
+          <PriorityBadge priority={record.priority} />
         </div>
       </div>
 
-      {/* Main Title & Action Question */}
-      <div className="space-y-1">
+      {/* 2. عنوان کار */}
+      <div>
         <h3
           onClick={() => onOpenDrawer(record.id)}
-          className="font-extrabold text-slate-900 text-sm hover:text-primary-700 cursor-pointer transition-colors leading-snug"
+          className="card-title font-extrabold text-slate-900 text-base hover:text-primary-700 cursor-pointer transition-colors leading-snug"
         >
           {record.title}
         </h3>
-        {record.itemSummary && (
-          <p className="text-xs text-slate-600 line-clamp-1">{record.itemSummary}</p>
+      </div>
+
+      {/* 3. توضیح یک‌خطی */}
+      {record.itemSummary && (
+        <p className="text-xs text-slate-600 leading-relaxed line-clamp-1">{record.itemSummary}</p>
+      )}
+
+      {/* 4. مهلت */}
+      <div className="flex items-center gap-2 text-xs">
+        <span className="flex items-center gap-1.5 text-slate-600 font-medium">
+          <Calendar className="w-3.5 h-3.5 text-slate-400" />
+          <span>مهلت:</span>
+          <strong className="text-slate-800">{record.dueDateJalali || 'تعیین نشده'}</strong>
+        </span>
+        {isOverdue && (
+          <span className="font-bold text-caption text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">
+            سررسید گذشته (تأخیر)
+          </span>
+        )}
+
+        {/* Amount Display strictly only when relevant to this role */}
+        {isFinanceRelevant && record.requestedAmountRials != null && record.requestedAmountRials > 0 && (
+          <div className="inline-flex items-center gap-1.5 mr-auto px-2 py-0.5 bg-slate-50 border border-slate-200 rounded text-caption">
+            <span className="text-slate-500">مبلغ:</span>
+            <CurrencyAmount amountRials={record.requestedAmountRials} layout="inline" size="sm" tone="primary" />
+          </div>
         )}
       </div>
 
-      {/* Amount Display only if vital for this record */}
-      {record.requestedAmountRials != null && record.requestedAmountRials > 0 && (
-        <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs">
-          <span className="text-caption text-slate-500 font-medium">مبلغ:</span>
-          <CurrencyAmount amountRials={record.requestedAmountRials} layout="inline" size="sm" tone="primary" />
-        </div>
-      )}
-
-      {/* Blocker Banner */}
+      {/* 5. مانع، در صورت وجود */}
       {hasBlocker && record.blocker && (
         <div className="p-2.5 rounded-lg bg-rose-50 border border-rose-200 text-xs text-rose-900 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
@@ -242,7 +251,6 @@ export const EmployeeWorkCard: React.FC<EmployeeWorkCardProps> = ({
         </div>
       )}
 
-      {/* Returned Banner */}
       {isReturned && record.returnedReason && (
         <div className="p-2.5 rounded-lg bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
@@ -253,7 +261,7 @@ export const EmployeeWorkCard: React.FC<EmployeeWorkCardProps> = ({
         </div>
       )}
 
-      {/* Footer: The 4 Core Answers */}
+      {/* 6. قدم بعدی و 7. دکمه اصلی */}
       <div className="pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
         {/* Next Step / Current Assignee */}
         <div className="flex flex-wrap items-center gap-4 text-caption text-slate-600">
@@ -263,7 +271,7 @@ export const EmployeeWorkCard: React.FC<EmployeeWorkCardProps> = ({
               <span className="font-bold text-primary-800 bg-primary-50 px-2 py-0.5 rounded border border-primary-100">
                 {getDisplayPersonaName(currentAssignee) || 'نامشخص'}
               </span>
-              <span className="text-slate-400">({currentAssignee?.heldSinceJalali || 'هم‌اکنون'})</span>
+              <span className="text-slate-500">({currentAssignee?.heldSinceJalali || 'هم‌اکنون'})</span>
             </div>
           ) : (
             <div className="flex items-center gap-1.5">
@@ -273,18 +281,9 @@ export const EmployeeWorkCard: React.FC<EmployeeWorkCardProps> = ({
               </span>
             </div>
           )}
-
-          {record.linkedBusinessRecord && (
-            <div className="hidden sm:flex items-center gap-1 text-slate-500">
-              <span>سند:</span>
-              <span className="font-mono text-slate-700 font-bold">
-                {record.linkedBusinessRecord.code}
-              </span>
-            </div>
-          )}
         </div>
 
-        {/* Primary Action Button */}
+        {/* 7. دکمه اصلی */}
         <div className="flex items-center gap-2 mr-auto">
           {renderPrimaryAction()}
         </div>

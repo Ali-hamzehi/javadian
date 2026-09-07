@@ -4,6 +4,7 @@ import { MockPersona } from '../../types';
 import { NAV_ITEMS } from '../../data/mockData';
 import { mockRepository } from '../../runtime/workflow';
 import { toPersianDigits } from '../../utils/formatters';
+import { isRouteVisibleForPersona, isNavGroupVisibleForPersona } from '../../utils/roleExperience';
 import { usePWA } from '../pwa/PWAContext';
 import { DialogSurface } from '../design-system/DialogSurface';
 
@@ -18,7 +19,7 @@ interface SidebarProps {
 }
 const icons = { Home, ShoppingBag, Truck, CreditCard, MapPin, BarChart3, Database, ShieldCheck, Palette };
 export const Sidebar: React.FC<SidebarProps> = ({ currentRoute, onNavigate, activePersona, isCollapsed, onToggleCollapse, isMobileOpen, onCloseMobile }) => {
-  const { isStandalone, setShowInstallGuide } = usePWA();
+  const { isInstallable, setShowInstallGuide } = usePWA();
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({ home: true, sales: true, design_system: true });
 
   useEffect(() => {
@@ -30,7 +31,6 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentRoute, onNavigate, acti
     }
   }, [currentRoute]);
 
-  const hasAccess = (requiredCaps: string[]) => !requiredCaps?.length || requiredCaps.some(cap => activePersona.capabilities.includes(cap as any));
   const counts = mockRepository.computeScopedTaskCounts(activePersona);
   const badgeCounts: Record<string, number | undefined> = { inbox: counts.mine, approvals: counts.approvals || undefined, sales_orders: counts.orders || undefined, supply_requests: counts.supplyReqs || undefined, payment_requests: counts.payRequests || undefined, visit_plans: counts.visitPlans || undefined };
 
@@ -43,8 +43,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentRoute, onNavigate, acti
       </div>
       {compact && <button type="button" onClick={onToggleCollapse} title="باز کردن منو" aria-label="باز کردن منو" className="mx-auto rounded-lg text-slate-300 inline-flex items-center justify-center"><PanelRightOpen className="w-5 h-5" /></button>}
       <nav aria-label="بخش‌های سامانه" className="sidebar-navigation flex-1 overflow-y-auto px-2 py-3 space-y-1">
-        {NAV_ITEMS.filter(group => hasAccess(group.requiredCapabilities) && group.subItems?.some(sub => hasAccess(sub.requiredCapabilities))).map(group => {
-          const subs = group.subItems?.filter(sub => hasAccess(sub.requiredCapabilities)) || [];
+        {NAV_ITEMS.filter(group => isNavGroupVisibleForPersona(group.id, activePersona)).map(group => {
+          const subs = group.subItems?.filter(sub => isRouteVisibleForPersona(sub.routeKey, activePersona)) || [];
+          if (subs.length === 0) return null;
           const single = subs.length === 1;
           const open = openGroups[group.id] ?? false;
           const active = subs.some(sub => sub.routeKey === currentRoute);
@@ -70,8 +71,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentRoute, onNavigate, acti
         })}
       </nav>
       {!compact && <div className="p-3 border-t border-slate-800 text-caption text-slate-300 safe-bottom">
-        {!isStandalone && <button type="button" onClick={() => { onCloseMobile?.(); setShowInstallGuide(true); }} className="w-full flex items-center gap-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white p-3 mb-3"><Download className="w-5 h-5" />نصب نسخه اپلیکیشن</button>}
-        <p>{activePersona.department}</p><p className="font-bold">{activePersona.jobTitle}</p><p className="mt-1">{isStandalone ? 'نسخه نصب‌شده' : 'نسخه وب'}</p>
+        {isInstallable && <button type="button" onClick={() => { onCloseMobile?.(); setShowInstallGuide(true); }} className="w-full flex items-center gap-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white p-3 mb-3 cursor-pointer"><Download className="w-5 h-5" />نصب برنامه</button>}
+        <p>{activePersona.department}</p><p className="font-bold text-white">{activePersona.jobTitle}</p>
       </div>}
     </aside>
   );

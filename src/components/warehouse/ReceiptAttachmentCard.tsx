@@ -144,16 +144,15 @@ export const ReceiptAttachmentCard: React.FC<ReceiptAttachmentCardProps> = ({
           )}
         </div>
 
-        {/* Mock/Local storage notice */}
-        <div className="text-caption text-slate-500 bg-amber-50/70 px-2 py-1 rounded border border-amber-200/80 mb-2 flex items-center justify-between">
-          <span>ذخیره موقت نمایشی — اتصال به سرور انجام نشده است.</span>
-          {attachment && (
-            <span className="text-emerald-700 font-bold flex items-center gap-0.5">
+        {/* Attachment status notice */}
+        {attachment && (
+          <div className="text-caption text-slate-500 bg-slate-50 px-2 py-1 rounded border border-slate-200 mb-2 flex items-center justify-between">
+            <span className="text-emerald-700 font-medium flex items-center gap-0.5">
               <Check className="w-3 h-3 text-emerald-600" />
-              ذخیره در حافظه مرورگر
+              فایل پیوست آماده ارسال
             </span>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Uploaded Content Box */}
         {attachment ? (
@@ -277,7 +276,7 @@ export const ReceiptAttachmentCard: React.FC<ReceiptAttachmentCardProps> = ({
               title="بارگذاری فایل آزمایشی استاندارد جهت تست فرم"
             >
               <FileCheck className="w-3.5 h-3.5 text-primary-500" />
-              فایل آزمایشی (نمایشی / Mock)
+              بارگذاری نمونه
             </Button>
           </>
         )}

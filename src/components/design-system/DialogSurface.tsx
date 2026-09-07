@@ -70,6 +70,12 @@ export const DialogSurface: React.FC<DialogSurfaceProps> = ({
       aria-labelledby={titleId}
       className={`dialog-surface ${className}`}
       onCancel={(event) => { event.preventDefault(); onClose(); }}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape') {
+          event.stopPropagation();
+          onClose();
+        }
+      }}
       onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}
     >
       <h2 id={titleId} className="sr-only">{title}</h2>

@@ -175,8 +175,8 @@ export const DelegationsView: React.FC<DelegationsViewProps> = ({ activePersona 
               <UserCheck className="w-5 h-5" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-slate-800">جانشینی و تفویض اختیارات</h1>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <h1 className="page-title text-xl sm:text-2xl font-bold text-slate-800">جانشینی و تفویض اختیارات</h1>
+              <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
                 صدور احکام زمان‌بندی‌شده، کنترل مسئولیت نهایی اصیل، ممیزی شفاف اقدامات و ابطال پیش از موعد
               </p>
             </div>
@@ -311,7 +311,9 @@ export const DelegationsView: React.FC<DelegationsViewProps> = ({ activePersona 
                         <button
                           type="button"
                           onClick={() => setSelectedDelegation(del)}
-                          className="px-2 py-1 text-caption bg-slate-100 text-slate-700 hover:bg-slate-200 rounded font-medium transition-colors"
+                          className="px-3 py-1.5 min-h-[36px] text-xs bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 rounded-lg border border-slate-200 font-semibold transition-colors inline-flex items-center justify-center cursor-pointer"
+                          title="مشاهده گاه‌شمار تفویض"
+                          aria-label="مشاهده گاه‌شمار تفویض"
                         >
                           گاه‌شمار
                         </button>
@@ -323,7 +325,9 @@ export const DelegationsView: React.FC<DelegationsViewProps> = ({ activePersona 
                               setRevokingDelegation(del);
                               setRevocationReason('');
                             }}
-                            className="px-2 py-1 text-caption bg-rose-50 text-rose-700 hover:bg-rose-100 rounded border border-rose-200 font-medium transition-colors"
+                            className="px-3 py-1.5 min-h-[36px] text-xs bg-rose-50 text-rose-700 hover:bg-rose-100 rounded-lg border border-rose-300 font-semibold transition-colors inline-flex items-center justify-center cursor-pointer"
+                            title="ابطال حکم تفویض اختیار"
+                            aria-label="ابطال حکم تفویض اختیار"
                           >
                             ابطال حکم
                           </button>
