@@ -15,7 +15,7 @@ import { Chip, Badge } from '../components/design-system/Badges';
 import { ModalDialog, Drawer } from '../components/design-system/ModalAndDrawer';
 import { useToast } from '../components/design-system/ToastContext';
 import { Forbidden403 } from '../components/design-system/SystemStates';
-import { Users, UserPlus, Search, Building2, Eye, EyeOff, RotateCcw, Send, Phone, Mail, AlertTriangle, CheckCircle2, ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import { Users, UserPlus, Search, Building2, Eye, EyeOff, RotateCcw, Send, Phone, Mail, AlertTriangle, CheckCircle2, ChevronLeft, ChevronRight, Info, LayoutGrid, List } from 'lucide-react';
 import { toPersianDigits } from '../utils/formatters';
 
 interface UsersViewProps {
@@ -46,6 +46,7 @@ export const UsersView: React.FC<UsersViewProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStateFilter, setSelectedStateFilter] = useState<string>('ALL');
   const [selectedUnitFilter, setSelectedUnitFilter] = useState<string>('ALL');
+  const [employeeViewMode, setEmployeeViewMode] = useState<'grid' | 'table'>('grid');
 
   // Reveal sensitive info modal/drawer state
   const [revealedNationalCodeUserId, setRevealedNationalCodeUserId] = useState<string | null>(null);
@@ -212,248 +213,285 @@ export const UsersView: React.FC<UsersViewProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Header & Primary Actions */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-        <div>
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-primary-50 border border-primary-200 flex items-center justify-center text-primary-700">
-              <Users className="w-5 h-5" />
-            </div>
-            <div>
-              <h1 className="page-title text-xl sm:text-2xl font-bold text-slate-800">کاربران و پرسنل سازمانی</h1>
-              <p className="text-xs sm:text-sm text-slate-600 mt-0.5">
-                مدیریت اطلاعات هویتی، وضعیت حساب‌های کاربری و شناسنامه پرسنل شرکت جوادیان
-              </p>
-            </div>
-          </div>
+      {/* 1. Page Header matching prototype #page-employees */}
+      <div className="page-head">
+        <div className="page-title">
+          <h1>کارمندان</h1>
+          <p>فهرست کارکنان و کارشناسان و وضعیت حضور و دسترسی.</p>
         </div>
-
-        <div className="flex items-center gap-3">
-          <Button
-            variant="primary"
-            icon={<UserPlus className="w-4 h-4" />}
+        <div className="page-actions">
+          <button
+            type="button"
+            className="btn primary cursor-pointer"
             onClick={() => {
               resetWizard();
               setIsCreateWizardOpen(true);
             }}
           >
+            <UserPlus className="w-4 h-4" />
             تعریف پرسنل جدید
-          </Button>
+          </button>
         </div>
       </div>
 
-      {/* Information Banner on Architectural Separation */}
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
-        <Info className="w-5 h-5 text-amber-700 mt-0.5 shrink-0" />
-        <div className="text-xs text-amber-900 leading-relaxed">
-          <span className="font-bold">تخصیص اختیارات و دسترسی‌ها: </span>
-          تعریف کاربر صرفاً جهت ثبت مشخصات پرسنلی است. تخصیص اختیارات و مجوزهای تأیید از طریق بخش‌های «مسئولیت‌ها و پست‌ها» یا «جانشینی و تفویض» انجام می‌شود.
+      {/* 2. Toolbar matching prototype */}
+      <div className="toolbar">
+        <input
+          type="text"
+          placeholder="جست‌وجوی کارمند یا شماره پرسنلی..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="input search"
+        />
+        <select
+          value={selectedStateFilter}
+          onChange={(e) => setSelectedStateFilter(e.target.value)}
+          className="select"
+        >
+          <option value="ALL">همه وضعیت‌ها</option>
+          <option value="active">فعال</option>
+          <option value="invited">دعوت‌شده</option>
+          <option value="suspended">معلق</option>
+          <option value="locked">قفل</option>
+          <option value="archived">بایگانی</option>
+        </select>
+        <select
+          value={selectedUnitFilter}
+          onChange={(e) => setSelectedUnitFilter(e.target.value)}
+          className="select"
+        >
+          <option value="ALL">همه واحدها</option>
+          {units.map((u) => (
+            <option key={u.id} value={u.id}>
+              {u.name}
+            </option>
+          ))}
+        </select>
+        <div className="spacer" />
+        <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200">
+          <button
+            type="button"
+            onClick={() => setEmployeeViewMode('grid')}
+            className={`p-1.5 rounded text-xs flex items-center gap-1 cursor-pointer transition-colors ${
+              employeeViewMode === 'grid'
+                ? 'bg-white text-primary-700 shadow-sm font-bold'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+            title="نمای کارت"
+          >
+            <LayoutGrid className="w-4 h-4" />
+            <span className="hidden sm:inline">کارت‌ها</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setEmployeeViewMode('table')}
+            className={`p-1.5 rounded text-xs flex items-center gap-1 cursor-pointer transition-colors ${
+              employeeViewMode === 'table'
+                ? 'bg-white text-primary-700 shadow-sm font-bold'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+            title="نمای جدول"
+          >
+            <List className="w-4 h-4" />
+            <span className="hidden sm:inline">جدول</span>
+          </button>
         </div>
       </div>
 
-      {/* Filters & Search Toolbar */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          <div className="relative">
-            <Search className="w-4 h-4 text-slate-500 absolute right-3 top-3" />
-            <input
-              type="text"
-              placeholder="جستجو با نام، کد پرسنلی، سمت یا واحد..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-3 pr-9 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <select
-              value={selectedStateFilter}
-              onChange={(e) => setSelectedStateFilter(e.target.value)}
-              className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:outline-none text-slate-700"
-            >
-              <option value="ALL">همه وضعیت‌های حساب</option>
-              <option value="active">حساب‌های فعال</option>
-              <option value="invited">در انتظار دعوت و ورود اولیه</option>
-              <option value="suspended">معلق‌شده</option>
-              <option value="locked">قفل امنیتی شده</option>
-              <option value="archived">بایگانی‌شده</option>
-            </select>
-          </div>
-
-          <div>
-            <select
-              value={selectedUnitFilter}
-              onChange={(e) => setSelectedUnitFilter(e.target.value)}
-              className="w-full px-3 py-2 text-xs border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:outline-none text-slate-700"
-            >
-              <option value="ALL">همه واحدهای سازمانی</option>
-              {units.map((u) => (
-                <option key={u.id} value={u.id}>
-                  {u.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex items-center justify-end text-xs text-slate-500">
-            نمایش <span className="font-bold text-slate-700 mx-1">{filteredUsers.length}</span> نفر از مجموع {users.length} پرسنل
-          </div>
+      {/* 3. Employee Content: Grid (Default) vs Table matching prototype */}
+      {employeeViewMode === 'grid' ? (
+        <div className="grid employee-grid">
+          {filteredUsers.length === 0 ? (
+            <div className="col-span-full bg-white p-8 rounded-xl border border-slate-200 text-center text-slate-500 text-xs">
+              پرسنلی مطابق با فیلترهای جستجو یافت نشد.
+            </div>
+          ) : (
+            filteredUsers.map((user) => (
+              <div key={user.id} className="employee-card">
+                <div className="employee-top">
+                  <div className="avatar">{user.name.charAt(0)}</div>
+                  <div className="employee-info">
+                    <div className="employee-name">{user.name}</div>
+                    <div className="employee-role">{user.jobTitle}</div>
+                  </div>
+                  {getAccountStateBadge(user.accountState)}
+                </div>
+                <div className="employee-meta">
+                  <div>واحد: <b>{user.unit}</b></div>
+                  <div>کد پرسنلی: <b className="font-mono">{user.personnelCode || user.personnelId || '—'}</b></div>
+                  <div>شماره تماس: <b className="font-mono">{user.maskedMobile || user.mobile || '—'}</b></div>
+                  <div>دسترسی: <b>{user.accountState === 'active' ? 'دارای مجوز' : 'محدود'}</b></div>
+                </div>
+                <div className="employee-foot">
+                  <button
+                    type="button"
+                    className="btn small"
+                    onClick={() => setProfileUser(user)}
+                  >
+                    شناسنامه
+                  </button>
+                  <button
+                    type="button"
+                    className="btn small"
+                    onClick={() => {
+                      setStateChangeUser(user);
+                      setTargetAccountState(user.accountState || 'active');
+                      setStateChangeReason('');
+                    }}
+                  >
+                    وضعیت حساب
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
-      </div>
-
-      {/* Users Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <AdaptiveTable className="w-full text-right text-xs">
-            <thead className="bg-slate-50 text-slate-700 font-semibold border-b border-slate-200">
-              <tr>
-                <th className="py-3 px-4">پرسنل / هویت</th>
-                <th className="py-3 px-4">کد پرسنلی</th>
-                <th className="py-3 px-4">شناسه ملی (حفاظت‌شده)</th>
-                <th className="py-3 px-4">واحد سازمانی و سمت</th>
-                <th className="py-3 px-4">ارتباطات سازمانی</th>
-                <th className="py-3 px-4">وضعیت حساب</th>
-                <th className="py-3 px-4 text-center">اقدامات مدیریتی</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 text-slate-700">
-              {filteredUsers.length === 0 ? (
+      ) : (
+        <div className="table-card">
+          <div className="table-scroll">
+            <AdaptiveTable className="data-table w-full text-right text-xs">
+              <thead>
                 <tr>
-                  <td colSpan={7} className="py-8 text-center text-slate-500">
-                    پرسنلی مطابق با فیلترهای جستجو یافت نشد.
-                  </td>
+                  <th>پرسنل / هویت</th>
+                  <th>کد پرسنلی</th>
+                  <th>شناسه ملی (حفاظت‌شده)</th>
+                  <th>واحد سازمانی و سمت</th>
+                  <th>ارتباطات سازمانی</th>
+                  <th>وضعیت حساب</th>
+                  <th className="text-center">اقدامات مدیریتی</th>
                 </tr>
-              ) : (
-                filteredUsers.map((user) => {
-                  const isNationalRevealed = revealedNationalCodeUserId === user.id;
-                  const isMobileRevealed = revealedMobileUserId === user.id;
+              </thead>
+              <tbody>
+                {filteredUsers.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="py-8 text-center text-slate-500">
+                      پرسنلی مطابق با فیلترهای جستجو یافت نشد.
+                    </td>
+                  </tr>
+                ) : (
+                  filteredUsers.map((user) => {
+                    const isNationalRevealed = revealedNationalCodeUserId === user.id;
+                    const isMobileRevealed = revealedMobileUserId === user.id;
 
-                  return (
-                    <tr key={user.id} className="hover:bg-slate-50 transition-colors">
-                      {/* Name & Avatar */}
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-slate-700 shrink-0">
-                            {user.name.charAt(0)}
+                    return (
+                      <tr key={user.id} className="hover:bg-slate-50 transition-colors">
+                        <td>
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center font-bold text-slate-700 shrink-0">
+                              {user.name.charAt(0)}
+                            </div>
+                            <div>
+                              <div className="font-bold text-slate-900">{user.name}</div>
+                              {user.directManagerName && (
+                                <div className="text-caption text-slate-500">
+                                  مدیر: {user.directManagerName}
+                                </div>
+                              )}
+                            </div>
                           </div>
-                          <div>
-                            <div className="font-bold text-slate-900">{user.name}</div>
-                            {user.directManagerName && (
-                              <div className="text-caption text-slate-500">
-                                مدیر: {user.directManagerName}
-                              </div>
+                        </td>
+
+                        <td className="font-mono font-medium text-slate-700">
+                          {user.personnelCode || user.personnelId || '---'}
+                        </td>
+
+                        <td>
+                          <div className="flex items-center gap-2">
+                            <span className="font-mono text-slate-800">
+                              {isNationalRevealed ? user.nationalCode : user.maskedNationalCode || '۰۰۷***۳۲۱۱'}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleOpenRevealConfirm(user.id, 'national')}
+                              title={isNationalRevealed ? 'پنهان‌سازی مجدد' : 'افشای موقت با ثبت لاگ امنیتی'}
+                              className="text-slate-500 hover:text-primary-700 p-1 rounded transition-colors"
+                              aria-label={isNationalRevealed ? 'پنهان‌سازی مجدد' : 'افشای موقت با ثبت لاگ امنیتی'}
+                            >
+                              {isNationalRevealed ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                            </button>
+                          </div>
+                          {isNationalRevealed && (
+                            <div className="text-caption text-amber-600 mt-0.5">افشا با لاگ امنیتی</div>
+                          )}
+                        </td>
+
+                        <td>
+                          <div className="font-medium text-slate-800">{user.jobTitle}</div>
+                          <div className="text-caption text-slate-500 flex items-center gap-1 mt-0.5">
+                            <Building2 className="w-3 h-3 text-slate-500" />
+                            {user.unit}
+                          </div>
+                        </td>
+
+                        <td className="space-y-0.5">
+                          <div className="flex items-center gap-2 text-slate-600">
+                            <Phone className="w-3 h-3 text-slate-500" />
+                            <span className="font-mono text-caption">
+                              {isMobileRevealed ? user.mobile : user.maskedMobile || '۰۹۱۲***'}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => handleOpenRevealConfirm(user.id, 'mobile')}
+                              className="text-slate-500 hover:text-slate-700 p-0.5"
+                              title="افشای موقت شماره"
+                              aria-label="افشای موقت شماره"
+                            >
+                              <Eye className="w-3 h-3" />
+                            </button>
+                            {user.internalExtension && user.internalExtension !== '---' && (
+                              <span className="text-caption bg-slate-100 text-slate-600 px-1 py-0.2 rounded border border-slate-200">
+                                داخلی: {user.internalExtension}
+                              </span>
                             )}
                           </div>
-                        </div>
-                      </td>
-
-                      {/* Personnel Code */}
-                      <td className="py-4 px-4 font-mono font-medium text-slate-700">
-                        {user.personnelCode || user.personnelId || '---'}
-                      </td>
-
-                      {/* Masked National Code with Security Reveal */}
-                      <td className="py-4 px-4">
-                        <div className="flex items-center gap-2">
-                          <span className="font-mono text-slate-800">
-                            {isNationalRevealed ? user.nationalCode : user.maskedNationalCode || '۰۰۷***۳۲۱۱'}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => handleOpenRevealConfirm(user.id, 'national')}
-                            title={isNationalRevealed ? 'پنهان‌سازی مجدد' : 'افشای موقت با ثبت لاگ امنیتی'}
-                            className="text-slate-500 hover:text-primary-700 p-1 rounded transition-colors"
-                           aria-label={isNationalRevealed ? 'پنهان‌سازی مجدد' : 'افشای موقت با ثبت لاگ امنیتی'}>
-                            {isNationalRevealed ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
-                          </button>
-                        </div>
-                        {isNationalRevealed && (
-                          <div className="text-caption text-amber-600 mt-0.5">افشا با لاگ امنیتی</div>
-                        )}
-                      </td>
-
-                      {/* Unit & Position */}
-                      <td className="py-4 px-4">
-                        <div className="font-medium text-slate-800">{user.jobTitle}</div>
-                        <div className="text-caption text-slate-500 flex items-center gap-1 mt-0.5">
-                          <Building2 className="w-3 h-3 text-slate-500" />
-                          {user.unit}
-                        </div>
-                      </td>
-
-                      {/* Contacts */}
-                      <td className="py-4 px-4 space-y-0.5">
-                        <div className="flex items-center gap-2 text-slate-600">
-                          <Phone className="w-3 h-3 text-slate-500" />
-                          <span className="font-mono text-caption">
-                            {isMobileRevealed ? user.mobile : user.maskedMobile || '۰۹۱۲***'}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={() => handleOpenRevealConfirm(user.id, 'mobile')}
-                            className="text-slate-500 hover:text-slate-700 p-0.5"
-                            title="افشای موقت شماره"
-                           aria-label="افشای موقت شماره">
-                            <Eye className="w-3 h-3" />
-                          </button>
-                          {user.internalExtension && user.internalExtension !== '---' && (
-                            <span className="text-caption bg-slate-100 text-slate-600 px-1 py-0.2 rounded border border-slate-200">
-                              داخلی {user.internalExtension}
-                            </span>
+                          {user.email && (
+                            <div className="flex items-center gap-1 text-slate-500 text-caption font-mono">
+                              <Mail className="w-3 h-3" />
+                              {user.email}
+                            </div>
                           )}
-                        </div>
-                        {user.email && (
-                          <div className="flex items-center gap-2 text-caption text-slate-500">
-                            <Mail className="w-3 h-3 text-slate-500" />
-                            <span className="font-mono">{user.email}</span>
+                        </td>
+
+                        <td>{getAccountStateBadge(user.accountState)}</td>
+
+                        <td className="text-center">
+                          <div className="flex items-center justify-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => setProfileUser(user)}
+                              className="px-3 py-1.5 min-h-[36px] text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-semibold transition-colors inline-flex items-center justify-center cursor-pointer"
+                              title="مشاهده شناسنامه و تخصیص‌های پرسنلی"
+                              aria-label="مشاهده شناسنامه و تخصیص‌های پرسنلی"
+                            >
+                              شناسنامه
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setStateChangeUser(user);
+                                setTargetAccountState(user.accountState || 'active');
+                                setStateChangeReason('');
+                              }}
+                              className="px-3 py-1.5 min-h-[36px] text-xs bg-amber-50 text-amber-800 hover:bg-amber-100 rounded-lg border border-amber-300 font-semibold transition-colors inline-flex items-center justify-center cursor-pointer"
+                              title="تغییر وضعیت حساب"
+                              aria-label="تغییر وضعیت حساب"
+                            >
+                              وضعیت
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => handleResetPassword(user)}
+                              className="p-2 min-h-[36px] min-w-[36px] inline-flex items-center justify-center text-slate-500 hover:text-primary-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                              title="ارسال مجدد دعوت‌نامه / بازنشانی رمز"
+                              aria-label="ارسال مجدد دعوت‌نامه / بازنشانی رمز"
+                            >
+                              <RotateCcw className="w-3.5 h-3.5" />
+                            </button>
                           </div>
-                        )}
-                      </td>
-
-                      {/* State */}
-                      <td className="py-4 px-4">
-                        {getAccountStateBadge(user.accountState)}
-                      </td>
-
-                      {/* Actions */}
-                      <td className="py-4 px-4">
-                        <div className="flex items-center justify-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setProfileUser(user)}
-                            className="px-3 py-1.5 min-h-[36px] text-xs bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 rounded-lg border border-slate-200 font-semibold transition-colors inline-flex items-center justify-center cursor-pointer"
-                            title="مشاهده شناسنامه پرسنلی"
-                            aria-label="مشاهده شناسنامه پرسنلی"
-                          >
-                            شناسنامه
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setStateChangeUser(user);
-                              setTargetAccountState(user.accountState || 'active');
-                              setStateChangeReason('');
-                            }}
-                            className="px-3 py-1.5 min-h-[36px] text-xs bg-amber-50 text-amber-800 hover:bg-amber-100 rounded-lg border border-amber-300 font-semibold transition-colors inline-flex items-center justify-center cursor-pointer"
-                            title="تغییر وضعیت حساب"
-                            aria-label="تغییر وضعیت حساب"
-                          >
-                            وضعیت
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => handleResetPassword(user)}
-                            className="p-2 min-h-[36px] min-w-[36px] inline-flex items-center justify-center text-slate-500 hover:text-primary-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
-                            title="ارسال مجدد دعوت‌نامه / بازنشانی رمز"
-                            aria-label="ارسال مجدد دعوت‌نامه / بازنشانی رمز"
-                          >
-                            <RotateCcw className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
+                        </td>
+                      </tr>
                   );
                 })
               )}
@@ -461,6 +499,7 @@ export const UsersView: React.FC<UsersViewProps> = ({
           </AdaptiveTable>
         </div>
       </div>
+      )}
 
       {/* ================= MODAL: CHANGE ACCOUNT STATE ================= */}
       {stateChangeUser && (

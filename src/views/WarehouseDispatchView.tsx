@@ -44,7 +44,7 @@ export const WarehouseDispatchView: React.FC<WarehouseDispatchViewProps> = ({
   const [selectedExit, setSelectedExit] = useState<WarehouseExitRecord | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
+  const [viewMode, setViewMode] = useState<'cards' | 'table'>('table');
 
   useEffect(() => {
     const unsub = mockSalesWarehouseStore.subscribe(() => {
