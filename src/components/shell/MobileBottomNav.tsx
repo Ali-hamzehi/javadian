@@ -223,13 +223,13 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                 }
               }}
               className={`flex-1 flex flex-col items-center justify-center py-1 px-1 min-w-0 min-h-[48px] rounded-xl transition-all cursor-pointer select-none ${
-                isActive ? 'text-primary-700 font-bold bg-primary-50/70' : 'text-slate-500 hover:text-slate-800'
+                isActive ? 'text-[#6558d9] font-bold bg-[#f0eeff]' : 'text-[#697082] hover:text-[#1a202c]'
               }`}
             >
               <div className="relative">
                 <Icon className="w-5 h-5 transition-transform shrink-0" />
                 {item.badge !== undefined && (
-                  <span className="absolute -top-1.5 -left-2 bg-rose-600 text-white text-caption font-black px-1.5 py-0.2 rounded-full min-w-[16px] text-center shadow-none">
+                  <span className="absolute -top-1.5 -left-2 bg-[#c74b55] text-white text-caption font-black px-1.5 py-0.2 rounded-full min-w-[16px] text-center shadow-none">
                     {toPersianDigits(item.badge)}
                   </span>
                 )}
@@ -240,7 +240,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               </span>
 
               {isActive && (
-                <span className="w-4 h-0.5 bg-primary-700 rounded-full mt-0.5" />
+                <span className="w-4 h-0.5 bg-[#6558d9] rounded-full mt-0.5" />
               )}
             </button>
           );

@@ -91,20 +91,20 @@ export const Forbidden403: React.FC<{
   onNavigateToInbox?: () => void;
 }> = ({ missingCapabilities = ['access.manage'], onSwitchPersona, onNavigateToInbox }) => {
   return (
-    <div className="flex flex-col items-center justify-center p-8 sm:p-14 text-center bg-white rounded-2xl border border-slate-200 shadow-none">
-      <div className="p-4 bg-amber-50 text-amber-700 rounded-2xl mb-3 ring-8 ring-amber-50/50">
+    <div className="flex flex-col items-center justify-center p-8 sm:p-14 text-center bg-white rounded-2xl border border-[#e6e8ef] shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+      <div className="p-4 bg-[#fff0f1] text-[#c74b55] rounded-2xl mb-3 ring-8 ring-[#fff0f1]/50">
         <ShieldX className="w-10 h-10" />
       </div>
-      <span className="text-xs font-mono font-bold text-amber-800 bg-amber-100 px-2 py-0.5 rounded">
+      <span className="text-xs font-mono font-bold text-[#c74b55] bg-[#fff0f1] border border-[#ffd0d4] px-2.5 py-0.5 rounded-lg">
         دسترسی غیرمجاز (خطای ۴۰۳)
       </span>
       <h3 className="mt-2 text-base font-extrabold text-slate-900">شما مجوز دسترسی به این بخش عملیاتی را ندارید</h3>
-      <p className="mt-1.5 text-xs text-slate-600 max-w-md leading-relaxed">
+      <p className="mt-1.5 text-xs text-[#697082] max-w-md leading-relaxed">
         پست و مسئولیت سازمانی شما برای مشاهده یا اقدام در این بخش تعریف نشده است. داده‌های این صفحه برای حفظ محرمانگی و تفکیک وظایف بارگذاری نشد.
       </p>
 
-      <div className="mt-4 p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-right w-full max-w-sm space-y-1.5">
-        <div className="text-slate-600 text-caption">
+      <div className="mt-4 p-3 bg-[#fbfbfd] rounded-xl border border-[#e6e8ef] text-xs text-right w-full max-w-sm space-y-1.5">
+        <div className="text-[#697082] text-caption">
           جهت بازنگری در حدود اختیارات یا درخواست تفویض جانشینی، با <strong>مدیر سیستم و عملیات</strong> تماس بگیرید.
         </div>
       </div>
@@ -137,15 +137,15 @@ export const Forbidden403: React.FC<{
 
 export const NotFound404: React.FC<{ onBackHome?: () => void }> = ({ onBackHome }) => {
   return (
-    <div className="flex flex-col items-center justify-center p-8 sm:p-16 text-center bg-white rounded-xl border border-slate-200">
-      <div className="p-4 bg-slate-100 text-slate-500 rounded-2xl mb-3">
+    <div className="flex flex-col items-center justify-center p-8 sm:p-16 text-center bg-white rounded-xl border border-[#e6e8ef]">
+      <div className="p-4 bg-[#f5f6fa] text-[#697082] rounded-2xl mb-3">
         <FileQuestion className="w-10 h-10" />
       </div>
-      <span className="text-xs font-mono font-bold text-slate-500 bg-slate-200 px-2 py-0.5 rounded">
+      <span className="text-xs font-mono font-bold text-[#697082] bg-[#eef1f6] px-2 py-0.5 rounded">
         خطای ۴۰۴
       </span>
       <h3 className="mt-2 text-base font-bold text-slate-900">پرونده یا صفحه مورد نظر یافت نشد</h3>
-      <p className="mt-1 text-xs text-slate-500 max-w-sm leading-relaxed">
+      <p className="mt-1 text-xs text-[#697082] max-w-sm leading-relaxed">
         ممکن است شناسه سند اشتباه باشد، به آرشیو منتقل شده باشد یا دسترسی آن تغییر کرده باشد.
       </p>
       {onBackHome && (

@@ -46,23 +46,23 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantStyles: Record<ButtonVariant, string> = {
     primary:
-      'bg-gradient-to-r from-[#4262ff] via-[#324dff] to-[#5a38ed] text-white hover:from-[#4d6aff] hover:to-[#5332e5] active:from-[#2e47e6] active:to-[#4627d4] shadow-[0_10px_24px_rgba(53,75,255,0.24)] hover:shadow-[0_14px_28px_rgba(53,75,255,0.32)] focus:ring-[#3657ff] border border-transparent font-extrabold',
+      'bg-[#6558d9] text-white hover:bg-[#5548c7] active:bg-[#4b3eb9] shadow-[0_6px_16px_rgba(101,88,217,0.16)] focus:ring-[#6558d9] border border-transparent font-bold',
     secondary:
-      'bg-[#f0f2ff] text-[#304cff] hover:bg-[#e4eaff] active:bg-[#d5dfff] focus:ring-[#3657ff] border border-[#dbe3ff] font-bold',
+      'bg-[#f0eeff] text-[#4b3eb9] hover:bg-[#e8e4ff] active:bg-[#ded8ff] focus:ring-[#6558d9] border border-transparent font-bold',
     outline:
-      'bg-white text-slate-700 hover:bg-[#f8faff] hover:text-[#304cff] active:bg-[#f0f2ff] focus:ring-[#3657ff] border border-[#dbe2ee] hover:border-[#cdd5ff] shadow-[0_4px_12px_rgba(30,41,79,0.04)] font-bold',
+      'bg-white text-slate-700 hover:bg-[#fbfbfd] hover:text-slate-900 active:bg-[#f0f2f5] focus:ring-[#6558d9] border border-[#e6e8ef] hover:border-[#d5d8e2] shadow-[0_1px_2px_rgba(0,0,0,0.02)] font-bold',
     ghost:
       'bg-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-900 active:bg-slate-200 focus:ring-slate-400 border border-transparent font-medium',
     destructive:
-      'bg-rose-700 text-white hover:bg-rose-800 active:bg-rose-900 focus:ring-rose-500 shadow-xs border border-transparent font-semibold',
+      'bg-[#fff0f1] text-[#c74b55] hover:bg-[#ffe2e5] active:bg-[#ffd3d7] border border-[#ffd0d4] focus:ring-[#c74b55] font-semibold',
     danger:
-      'bg-rose-700 text-white hover:bg-rose-800 active:bg-rose-900 focus:ring-rose-500 shadow-xs border border-transparent font-semibold',
+      'bg-[#fff0f1] text-[#c74b55] hover:bg-[#ffe2e5] active:bg-[#ffd3d7] border border-[#ffd0d4] focus:ring-[#c74b55] font-semibold',
     success:
-      'bg-emerald-700 text-white hover:bg-emerald-800 active:bg-emerald-900 focus:ring-emerald-500 shadow-xs border border-transparent font-semibold',
+      'bg-[#eaf7f1] text-[#138a61] hover:bg-[#ddf2e8] active:bg-[#d0eddf] border border-[#bce8d4] focus:ring-[#138a61] font-semibold',
     warning:
-      'bg-amber-600 text-white hover:bg-amber-700 active:bg-amber-800 focus:ring-amber-500 shadow-xs border border-transparent font-semibold',
+      'bg-[#fcf3e8] text-[#b97318] hover:bg-[#faebda] active:bg-[#f5e1c8] border border-[#f5debe] focus:ring-[#b97318] font-semibold',
     subtle:
-      'bg-primary-50 text-primary-800 hover:bg-primary-100 active:bg-primary-200 focus:ring-primary-400 border border-primary-200 font-medium',
+      'bg-[#f0eeff] text-[#6558d9] hover:bg-[#e8e4ff] active:bg-[#ded8ff] focus:ring-[#6558d9] border border-[#e4dfff] font-medium',
   };
 
   return (
