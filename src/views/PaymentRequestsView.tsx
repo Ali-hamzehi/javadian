@@ -8,7 +8,7 @@ import { usePayments } from '../runtime/workflow';
 import { FieldGroup } from '../components/design-system/FieldGroup';
 import { AdaptiveTable } from '../components/design-system/AdaptiveTable';
 import React, { useState, useEffect } from 'react';
-import { CreditCard, Search, Building2, User, ShieldCheck, ShieldAlert, Eye, Copy, Lock, CheckCircle2, AlertTriangle, Clock, ChevronRight, Filter, Paperclip, Check, Plus, Sliders, Shield, RotateCcw } from 'lucide-react';
+import { CreditCard, Search, Building2, User, ShieldCheck, ShieldAlert, Eye, Copy, Lock, CheckCircle2, AlertTriangle, Clock, ChevronRight, Filter, Paperclip, Check, Plus, Sliders, Shield, RotateCcw, Download } from 'lucide-react';
 import {
   PaymentRequestRecord,
   PaymentRequestStatus,
@@ -792,81 +792,61 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
 
   return (
     <div className="space-y-4">
-      {/* View Header with Persona Scope Badge */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-white p-4 rounded-xl border border-slate-200 shadow-none">
-        <div>
-          <div className="flex flex-wrap items-center gap-3">
-            <h1 className="page-title text-xl sm:text-2xl font-extrabold text-slate-900 flex items-center gap-2">
-              <CreditCard className="w-5 h-5 text-primary-700" />
-              درخواست‌های پرداخت و تسویه مالی
-            </h1>
-            <span className="text-caption bg-primary-50 text-primary-800 font-bold px-2 py-0.5 rounded border border-primary-200">
-              واحد مالی و خزانه‌داری
+      {/* 1. Page Header matching prototype #page-payments */}
+      <div className="page-head">
+        <div className="page-title">
+          <h1>درخواست‌های پرداخت</h1>
+          <p>درخواست‌های مالی نمونه برای خرید، خدمات یا هزینه‌های عملیاتی با چرخه بررسی و وضعیت.</p>
+          <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+            <span className="text-xs font-bold text-slate-700">
+              {getPersonaDisplayName(activePersona)}
+            </span>
+            <span className="text-[10px] px-2 py-0.5 rounded-full font-bold bg-primary-50 text-primary-700 border border-primary-200">
+              {userScope.scopeBadgeText}
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-600 mt-1">
-            تفکیک سرفصل‌های حقوقی و حقیقی، کنترل سلسله‌مراتب تأیید مالی، منع خود-تأییدی، صیانت از داده‌های بانکی و تسویه دستی خزانه‌داری
-          </p>
         </div>
-
-        <div className="flex flex-wrap items-center gap-2 shrink-0">
-          {/* Organization Scope Matrix Button */}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setIsScopeRulesModalOpen(true)}
-            className="flex items-center gap-2 text-slate-700 hover:text-primary-700"
-          >
-            <Sliders className="w-3.5 h-3.5 text-slate-500" />
-            ماتریس حدود اختیارات سازمانی
-          </Button>
-
-          {/* Create Button with Scope Gate */}
-          {userScope.canCreate ? (
-            <Button
-              variant="primary"
-              size="sm"
+        <div className="page-actions">
+          {userScope.canCreate && (
+            <button
+              type="button"
               onClick={handleOpenCreateModal}
-              className="flex items-center gap-2"
+              className="btn primary cursor-pointer"
             >
               <Plus className="w-4 h-4" />
-              ثبت دستور پرداخت جدید
-            </Button>
-          ) : (
-            <div
-              className="text-xs text-slate-500 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200 flex items-center gap-1"
-              title={userScope.restrictionReason}
-            >
-              <Lock className="w-3.5 h-3.5 text-slate-500" />
-              {userScope.scopeBadgeText}
-            </div>
+              درخواست پرداخت
+            </button>
           )}
         </div>
       </div>
 
-      {/* Active Persona Scope Indicator Banner */}
-      <div className="p-3 bg-primary-50/70 border border-primary-200 rounded-xl flex flex-wrap items-center justify-between gap-2 text-xs">
-        <div className="flex items-center gap-2 text-primary-950">
-          <Shield className="w-4 h-4 text-primary-700 shrink-0" />
-          <span>حوزه اختیارات کاربر جاری ({getPersonaDisplayName(activePersona)}):</span>
-          <strong className="bg-white px-2 py-0.5 rounded border border-primary-300 font-bold text-primary-800">
-            {userScope.scopeBadgeText}
-          </strong>
-          {userScope.ruleTag === 'نیازمند_تنظیم_سازمان' && (
-            <span className="text-caption bg-amber-100 text-amber-900 px-2 py-0.5 rounded font-bold">
-              نیازمند تنظیم سازمان
-            </span>
-          )}
+      {/* 2. Compact Stats Row matching prototype #paymentStats */}
+      <div className="grid stats page-summary-stats" id="paymentStats">
+        <div className="card stat">
+          <div className="stat-label">کل درخواست‌ها</div>
+          <div className="stat-value">{toPersianDigits(payments.length)}</div>
         </div>
-
-        {userScope.isRestricted && userScope.restrictionReason && (
-          <div className="text-caption text-primary-800 font-medium">
-            {userScope.restrictionReason}
+        <div className="card stat">
+          <div className="stat-label">در انتظار بررسی و تأیید</div>
+          <div className="stat-value text-amber-600">
+            {toPersianDigits(payments.filter((p) => ['draft', 'submitted', 'under_review', 'pending_approval'].includes(p.status)).length)}
           </div>
-        )}
+        </div>
+        <div className="card stat">
+          <div className="stat-label">پرداخت‌شده</div>
+          <div className="stat-value text-emerald-600">
+            {toPersianDigits(payments.filter((p) => p.status === 'paid').length)}
+          </div>
+        </div>
+        <div className="card stat">
+          <div className="stat-label">جمع کل ریالی</div>
+          <div className="stat-value text-primary-700 font-mono text-sm">
+            {toPersianDigits(payments.reduce((sum, p) => sum + p.amountRials, 0).toLocaleString('fa-IR'))} ریال
+          </div>
+        </div>
       </div>
 
-      {/* Financial Integration Notice Banner (Explicit separation from business status) */}
+      {/* 3. Truthful Integration Notice Banner */}
       <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-slate-700 shadow-none">
         <div className="flex items-center gap-2.5">
           <Building2 className="w-4 h-4 text-slate-500 shrink-0" />
@@ -875,236 +855,118 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
           </span>
         </div>
         <span className="text-caption text-slate-500 shrink-0">
-          ثبت نتیجه پرداخت به صورت دستی انجام می‌شود
+          تسویه خارج از سامانه انجام و نتیجه به صورت دستی در جوادیان ثبت می‌شود
         </span>
       </div>
 
-      {/* Filters: Context Type, Search, Category & Status */}
-      <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-none space-y-3">
-        {/* Context Type Selector (Company / Personal) */}
-        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-2">
-          <div className="flex items-center gap-2 text-xs">
-            <span className="text-slate-500 font-medium ml-1">بستر حساب:</span>
-            {[
-              { id: 'all', label: 'همه بسترهای مالی' },
-              { id: 'company', label: 'حقوقی / شرکتی (Company)', icon: Building2 },
-              { id: 'personal', label: 'حقیقی / شخصی و تنخواه (Personal)', icon: User },
-            ].map((ctx) => {
-              const Icon = ctx.icon;
-              return (
-                <button
-                  key={ctx.id}
-                  onClick={() => setContextFilter(ctx.id)}
-                  className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
-                    contextFilter === ctx.id
-                      ? 'bg-slate-900 text-white font-bold'
-                      : 'bg-slate-50 text-slate-600 hover:bg-slate-100 border border-slate-200'
-                  }`}
-                >
-                  {Icon && <Icon className="w-3.5 h-3.5" />}
-                  {ctx.label}
-                </button>
-              );
-            })}
-          </div>
-
-          <span className="text-caption text-slate-500">
-            تعداد اسناد: <strong className="text-slate-800 font-mono">{toPersianDigits(filteredPayments.length)}</strong>
-          </span>
-        </div>
-
-        {/* Search & Select Filters */}
-        <div className="flex flex-col sm:flex-row items-center gap-3">
-          <div className="relative flex-1 w-full">
-            <Search className="w-4 h-4 text-slate-500 absolute right-3 top-2.5" />
-            <input
-              type="text"
-              placeholder="جستجو در کد دستور پرداخت، بابت، نام ذینفع، متقاضی یا مدیر مالی..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pr-9 pl-4 py-1.5 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500"
-            />
-          </div>
-
-          <div className="flex items-center gap-2 w-full sm:w-auto">
-            <Filter className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-            <select
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="text-xs bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:bg-white focus:outline-none focus:border-primary-500"
-            >
-              <option value="all">همه سرفصل‌ها</option>
-              {PAYMENT_CATEGORIES.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.label}
-                </option>
-              ))}
-            </select>
-
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="text-xs bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:bg-white focus:outline-none focus:border-primary-500"
-            >
-              <option value="all">همه وضعیت‌ها</option>
-              <option value="draft">پیش‌نویس اولیه</option>
-              <option value="submitted">ارسال به حسابداری</option>
-              <option value="under_review">رسیدگی حسابداری</option>
-              <option value="approved">تأیید شده / آماده تخصیص</option>
-              <option value="ready">آماده پرداخت خزانه‌داری</option>
-              <option value="paid">تسویه شده (نهایی)</option>
-              <option value="returned">عودت جهت رفع نقص</option>
-              <option value="blocked">مسدود (خود-تأییدی)</option>
-            </select>
-          </div>
-        </div>
+      {/* 4. Toolbar matching prototype */}
+      <div className="toolbar">
+        <input
+          className="input search"
+          placeholder="جست‌وجوی ذی‌نفع یا موضوع"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <select
+          className="select"
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+        >
+          <option value="all">همه وضعیت‌ها</option>
+          <option value="pending">در انتظار بررسی</option>
+          <option value="approved">تأییدشده</option>
+          <option value="rejected">ردشده</option>
+          <option value="paid">پرداخت‌شده</option>
+        </select>
+        <select
+          className="select hidden sm:block"
+          value={contextFilter}
+          onChange={(e) => setContextFilter(e.target.value)}
+        >
+          <option value="all">همه بسترهای مالی</option>
+          <option value="company">حقوقی / شرکتی</option>
+          <option value="personal">حقیقی / شخصی</option>
+        </select>
+        <div className="spacer" />
+        <button
+          type="button"
+          className="btn"
+          onClick={() => addToast('در حال دریافت گزارش درخواست‌های پرداخت...', { tone: 'info' })}
+        >
+          <Download className="w-4 h-4" />
+          گزارش
+        </button>
       </div>
 
-      <MetricStrip total={payments.length} pending={payments.filter(x => !['paid', 'closed', 'cancelled', 'rejected', 'completed'].includes(x.status)).length} amount={payments.reduce((sum, x) => sum + x.amountRials, 0)} />
-      <div className="flex items-center justify-between gap-3 flex-wrap"><button type="button" aria-pressed={largeOnly} onClick={() => setLargeOnly(!largeOnly)} className={`px-4 py-2 rounded-full text-xs border ${largeOnly ? 'bg-primary-50 border-primary-500 text-primary-700' : 'bg-white border-slate-200'}`}>بالای ۱۰۰ میلیون تومان</button><button type="button" aria-pressed={dueOnly} onClick={() => setDueOnly(!dueOnly)} className="text-xs border rounded-full px-4 py-2">سررسید نزدیک و معوق</button><button type="button" aria-pressed={mineOnly} onClick={() => setMineOnly(!mineOnly)} className="text-xs border rounded-full px-4 py-2">منتظر تأیید من</button><ViewSwitcher value={viewMode} onChange={setViewMode} /></div>
-      {viewMode === 'cards' && <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {filteredPayments.length === 0 && <div className="col-span-full"><EmptyState title="فضا برای پرونده‌های تازه" description="فیلترها را تغییر دهید یا یک درخواست جدید ثبت کنید." actionText="پاک کردن فیلترها" onAction={() => { setLargeOnly(false); setDueOnly(false); setMineOnly(false); setSearchQuery(''); setStatusFilter('all'); setCategoryFilter('all'); setContextFilter('all'); }} /></div>}
-        {filteredPayments.map(p => <EnterpriseCard key={p.id} isInteractive onClick={() => setSelectedRecord(p)} status="primary"><EnterpriseCardHeader title={p.purpose} code={p.code} /><EnterpriseCardBody><CurrencyAmount amountRials={p.amountRials} size="lg" /><p className="text-xs text-slate-600 mt-3">ذینفع: {p.beneficiary.name}</p><p className="text-xs text-slate-500 mt-1">مسئول اقدام: {getBallAndNextAction(p).holder}</p><div className="mt-3 text-xs text-slate-500">{renderStatusBadge(p.status)}<DueBadge id={p.id} settled={['paid', 'closed', 'cancelled', 'rejected'].includes(p.status)} /></div></EnterpriseCardBody></EnterpriseCard>)}
-      </div>}
-      {/* Main Table (Desktop) / Cards (Mobile) */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-none overflow-hidden">
-        {/* Desktop Table */}
-        <div className={viewMode === 'table' ? "hidden lg:block overflow-x-auto" : "hidden"}>
-          <AdaptiveTable className="w-full text-right text-xs">
-            <thead className="bg-slate-50/80 border-b border-slate-200 text-slate-600 font-semibold">
+      {/* 5. Clean Table matching prototype #paymentTable */}
+      <div className="table-card">
+        <div className="table-scroll hidden lg:block">
+          <table className="data-table">
+            <thead>
               <tr>
-                <th className="p-3">کد و بستر</th>
-                <th className="p-3">سرفصل و بابت پرداخت</th>
-                <th className="p-3">ذینفع و شماره حساب (ماسک‌شده)</th>
-                <th className="p-3">مبلغ پرداختی</th>
-                <th className="p-3">مسئول فعلی (در دست کیست؟)</th>
-                <th className="p-3">اقدام بعدی مورد انتظار</th>
-                <th className="p-3">وضعیت پرداخت</th>
-                <th className="p-3">سیستم مالی</th>
-                <th className="p-3 text-center">عملیات</th>
+                <th>شناسه</th>
+                <th>ذی‌نفع</th>
+                <th>موضوع</th>
+                <th>مبلغ</th>
+                <th>وضعیت</th>
+                <th>درخواست‌دهنده</th>
+                <th>موعد</th>
+                <th className="text-center">عملیات</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody>
               {filteredPayments.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="p-8 text-center text-slate-500">
-                    دستور پرداختی با شرایط جستجوی انتخابی یافت نشد.
+                  <td colSpan={8} className="text-center py-8 text-slate-500">
+                    درخواست پرداختی با شرایط جستجوی انتخابی یافت نشد.
                   </td>
                 </tr>
               ) : (
-                filteredPayments.map((p) => {
-                  const { holder, action } = getBallAndNextAction(p);
-                  const isSelf = p.requester.id === activePersona.id || p.requester.name === activePersona.name;
-
-                  return (
-                    <tr
-                      key={p.id}
-                      onClick={() => setSelectedRecord(p)}
-                      className="hover:bg-primary-50/40 cursor-pointer transition-colors"
-                    >
-                      {/* Code & Context */}
-                      <td className="p-3">
-                        <div className="font-mono font-bold text-primary-700">{p.code}</div>
-                        <div className="mt-1">
-                          {p.contextType === 'company' ? (
-                            <span className="inline-flex items-center gap-1 text-caption font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
-                              <Building2 className="w-3 h-3 text-slate-600" />
-                              شرکتی
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center gap-1 text-caption font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                              <User className="w-3 h-3 text-amber-600" />
-                              شخصی / تنخواه
-                            </span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* Category & Purpose */}
-                      <td className="p-3">
-                        <div className="mb-1">{renderCategoryBadge(p.category)}</div>
-                        <div className="font-medium text-slate-900 line-clamp-1 max-w-xs">{p.purpose}</div>
-                      </td>
-
-                      {/* Beneficiary & Masked Account */}
-                      <td className="p-3">
-                        <div className="font-bold text-slate-800">{p.beneficiary.name}</div>
-                        <div className="font-mono text-caption text-slate-500 mt-0.5 flex items-center gap-1">
-                          <Lock className="w-3 h-3 text-slate-500" />
-                          <span>
-                            {p.beneficiary.maskedIban}
-                          </span>
-                        </div>
-                      </td>
-
-                      {/* Amount in Rials & Tomans */}
-                      <td className="p-3">
-                        <div className="font-mono font-extrabold text-slate-900 text-sm">
-                          <CurrencyAmount amountRials={p.amountRials} />
-                        </div>
-                        <div className="text-caption text-slate-500 font-mono mt-0.5">
-                          {formatRialsWithWords(p.amountRials).inTomans}
-                        </div>
-                      </td>
-
-                      {/* Who has the ball */}
-                      <td className="p-3">
-                        <div className="font-semibold text-slate-800 text-caption flex items-center gap-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary-700 inline-block" />
-                          {holder}
-                        </div>
-                        {isSelf && (
-                          <span className="inline-block mt-0.5 text-caption bg-slate-100 text-slate-600 px-1.5 rounded">
-                            (ثبت‌شده توسط شما)
-                          </span>
-                        )}
-                      </td>
-
-                      {/* Next Action */}
-                      <td className="p-3 max-w-xs">
-                        <div className="text-caption text-slate-600 leading-snug line-clamp-2">
-                          {action}
-                        </div>
-                      </td>
-
-                      {/* Status */}
-                      <td className="p-3">
-                        {renderStatusBadge(p.status)}
-                        {p.isSelfApprovalBlocked && (
-                          <div className="text-caption text-rose-700 font-bold mt-1">
-                            ممنوعیت خودتأییدی
-                          </div>
-                        )}
-                      </td>
-
-                      {/* Integration Status */}
-                      <td className="p-3">
-                        {renderFinancialIntegrationBadge(p.financialIntegrationStatus)}
-                      </td>
-
-                      {/* Actions */}
-                      <td className="p-3 text-center">
-                        <Button
-                          size="xs"
-                          variant="outline"
+                filteredPayments.map((p) => (
+                  <tr
+                    key={p.id}
+                    onClick={() => setSelectedRecord(p)}
+                    className="cursor-pointer hover:bg-slate-50/70 transition-colors"
+                  >
+                    <td className="cell-main font-mono text-primary-700">{p.code}</td>
+                    <td>
+                      <div className="cell-main font-bold">{p.beneficiary.name}</div>
+                      <div className="cell-sub font-mono text-slate-500 text-[11px]">{p.beneficiary.maskedIban}</div>
+                    </td>
+                    <td>
+                      <div className="cell-main">{p.purpose}</div>
+                      <div className="cell-sub">{p.contextType === 'company' ? 'شرکتی' : 'شخصی / تنخواه'}</div>
+                    </td>
+                    <td className="font-mono font-bold text-slate-900">
+                      {toPersianDigits(p.amountRials.toLocaleString('fa-IR'))} ریال
+                    </td>
+                    <td>{renderStatusBadge(p.status)}</td>
+                    <td>{p.requester.name}</td>
+                    <td className="text-slate-500">{(p as any).dueDateJalali || p.dateJalali || '—'}</td>
+                    <td className="text-center">
+                      <div className="row-actions justify-center">
+                        <button
+                          type="button"
+                          className="mini-btn"
+                          title="مشاهده"
                           onClick={(ev) => {
                             ev.stopPropagation();
                             setSelectedRecord(p);
                           }}
                         >
-                          بررسی پرونده
-                        </Button>
-                      </td>
-                    </tr>
-                  );
-                })
+                          <Eye className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
               )}
             </tbody>
-          </AdaptiveTable>
+          </table>
         </div>
 
         {/* Mobile / Tablet Cards */}
-        <div className={viewMode === 'table' ? "lg:hidden divide-y divide-slate-100" : "hidden"}>
+        <div className="lg:hidden divide-y divide-slate-100">
           {filteredPayments.length === 0 ? (
             <div className="p-6 text-center text-slate-500 text-xs">درخواستی یافت نشد.</div>
           ) : (

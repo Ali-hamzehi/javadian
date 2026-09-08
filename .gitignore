@@ -7,3 +7,4 @@ coverage/
 .env*
 !.env.example
 *.zip
+javadian_interactive_prototype*.html

@@ -105,6 +105,17 @@ function AppContent() {
     } catch (e) {}
   }, [currentRoute]);
 
+  // Scroll to top on route change or persona switch to ensure headings are never clipped
+  useEffect(() => {
+    try {
+      window.scrollTo(0, 0);
+      const mainEl = document.getElementById('main-content');
+      if (mainEl) {
+        mainEl.scrollTop = 0;
+      }
+    } catch (e) {}
+  }, [currentRoute, activePersona?.id]);
+
   // Shell UI states
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState<boolean>(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);

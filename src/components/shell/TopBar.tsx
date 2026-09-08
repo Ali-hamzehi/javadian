@@ -497,7 +497,7 @@ export const TopBar: React.FC<TopBarProps> = ({
                     }
                   }}
                   className="w-full flex items-center justify-between p-2 rounded-lg text-xs font-bold text-amber-800 bg-amber-50 hover:bg-amber-100 transition-colors cursor-pointer"
-                  title="پاکسازی LocalStorage و بازگشت به داده‌های پیش‌فرض"
+                  title="پاکسازی و بازگشت به داده‌های پیش‌فرض"
                 >
                   <span className="flex items-center gap-2">
                     <RotateCcw className="w-3.5 h-3.5 text-amber-700" />

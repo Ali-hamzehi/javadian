@@ -347,7 +347,7 @@ export const ProductCatalogView: React.FC<ProductCatalogViewProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-sm font-extrabold text-slate-900">کاتالوگ و شناسنامه محصولات و کالاها</h2>
+              <h1 className="text-sm font-extrabold text-slate-900">کاتالوگ و شناسنامه محصولات و کالاها</h1>
               <span className="text-caption font-bold px-2 py-0.5 rounded-full bg-primary-50 text-primary-700 border border-primary-200">
                 روغن‌های خوراکی و سبد غذایی جوادیان
               </span>
