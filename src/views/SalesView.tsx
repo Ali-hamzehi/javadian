@@ -14,7 +14,7 @@ import { Chip, Badge } from '../components/design-system/Badges';
 import { ModalDialog, Drawer } from '../components/design-system/ModalAndDrawer';
 import { useToast } from '../components/design-system/ToastContext';
 import { formatRials, formatNumber, toPersianDigits } from '../utils/formatters';
-import { Plus, Search, Phone, MapPin, AlertTriangle, CheckCircle2, ArrowRight, ArrowLeft, History, FileText, CreditCard, Building2, Trash2, Send, ShieldAlert, User, RotateCcw, XCircle, LayoutGrid, List } from 'lucide-react';
+import { Plus, Search, Phone, MapPin, AlertTriangle, CheckCircle2, ArrowRight, ArrowLeft, History, FileText, CreditCard, Building2, Trash2, Send, ShieldAlert, User, RotateCcw, XCircle, LayoutGrid, List, Download, Eye } from 'lucide-react';
 import { CurrencyAmount } from '../components/design-system/CurrencyAmount';
 import {
   EnterpriseCard,
@@ -88,10 +88,52 @@ export const SalesView: React.FC<SalesViewProps> = ({
 
   const [orders, setOrders] = useState<SalesOrderDetails[]>(() => mockSalesWarehouseStore.getSalesOrders());
   const [customers, setCustomers] = useState(() => mockSalesWarehouseStore.getCustomers());
+  const [salesFilter, setSalesFilter] = useState<string>('all');
+  const [ownerFilter, setOwnerFilter] = useState<string>('all');
   const [savedView, setSavedView] = useState<SavedView>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [channelFilter, setChannelFilter] = useState<string>('all');
-  const [orderViewMode, setOrderViewMode] = useState<'cards' | 'table'>('cards');
+  const [orderViewMode, setOrderViewMode] = useState<'cards' | 'table'>('table');
+
+  const availableOwners = React.useMemo(() => {
+    const set = new Set<string>();
+    orders.forEach((o) => {
+      if (o.createdByName) set.add(o.createdByName);
+      if (o.salesResponsibleName) set.add(o.salesResponsibleName);
+    });
+    return Array.from(set);
+  }, [orders]);
+
+  const getSalesStatusPill = (status: string, customLabel?: string) => {
+    let tone = 'neutral';
+    let label = customLabel || status;
+    if (status === 'draft' || status === 'submitted') {
+      tone = 'neutral';
+      label = 'پیش‌نویس';
+    } else if (['pending', 'pending_approval', 'pending_commercial_approval', 'under_review', 'needs_price_approval'].includes(status)) {
+      tone = 'warning';
+      label = customLabel || 'در انتظار تأیید';
+    } else if (status === 'approved') {
+      tone = 'success';
+      label = 'تأییدشده';
+    } else if (status === 'returned') {
+      tone = 'danger';
+      label = 'برگشت‌خورده';
+    } else if (status === 'rejected') {
+      tone = 'danger';
+      label = 'ردشده';
+    } else if (['closed', 'dispatched', 'delivered'].includes(status)) {
+      tone = 'info';
+      label = customLabel || 'بسته‌شده';
+    }
+
+    return (
+      <span className={`pill ${tone}`}>
+        <span className="dot" />
+        {label}
+      </span>
+    );
+  };
 
   // Active Order Detail Drawer
   const [selectedOrder, setSelectedOrder] = useState<SalesOrderDetails | null>(null);
@@ -242,18 +284,22 @@ export const SalesView: React.FC<SalesViewProps> = ({
     (it) => !it.cartons || it.cartons <= 0 || !Number.isSafeInteger(it.cartons) || isNaN(it.cartons)
   );
 
-  // Filter orders by saved views and query
+  // Filter orders by prototype tabs (salesFilter), owner and query
   const filteredOrders = orders.filter((ord) => {
-    if (savedView === 'mine') {
-      if (ord.createdById !== activePersona.id && ord.salesResponsibleId !== activePersona.id) {
-        return false;
-      }
-    } else if (savedView === 'pending_approval') {
+    if (salesFilter === 'draft') {
+      if (ord.status !== 'draft' && ord.status !== 'submitted') return false;
+    } else if (salesFilter === 'pending') {
       if (!['submitted', 'under_review', 'needs_price_approval', 'pending_approval', 'pending_commercial_approval'].includes(ord.status)) return false;
-    } else if (savedView === 'urgent') {
-      if (!ord.hasPriceException && ord.status !== 'needs_price_approval') return false;
-    } else if (savedView === 'needs_action') {
-      if (ord.status === 'approved') return false;
+    } else if (salesFilter === 'approved') {
+      if (ord.status !== 'approved') return false;
+    } else if (salesFilter === 'returned') {
+      if (ord.status !== 'returned') return false;
+    } else if (salesFilter === 'closed') {
+      if (!['closed', 'dispatched', 'delivered'].includes(ord.status)) return false;
+    }
+
+    if (ownerFilter !== 'all') {
+      if (ord.createdByName !== ownerFilter && ord.salesResponsibleName !== ownerFilter) return false;
     }
 
     if (channelFilter !== 'all' && ord.channel !== channelFilter) return false;
@@ -263,7 +309,8 @@ export const SalesView: React.FC<SalesViewProps> = ({
       const match =
         ord.title.toLowerCase().includes(q) ||
         ord.code.toLowerCase().includes(q) ||
-        ord.customerName.toLowerCase().includes(q);
+        ord.customerName.toLowerCase().includes(q) ||
+        ord.createdByName.toLowerCase().includes(q);
       if (!match) return false;
     }
 
@@ -463,336 +510,253 @@ export const SalesView: React.FC<SalesViewProps> = ({
 
       {/* ================= VIEW 3: SALES ORDERS LIST & WORKSPACE ================= */}
       {subRoute === 'sales_orders' && (
-        <div className="space-y-4">
-          <MetricStrip total={orders.length} pending={orders.filter(o => ['submitted', 'under_review', 'needs_price_approval', 'pending_commercial_approval'].includes(o.status)).length} amount={orders.reduce((sum, o) => sum + o.totalAmountRials, 0)} label="منتظر تصمیم بازرگانی" />
-          {/* Saved Views Tabs */}
-          <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-none space-y-3">
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 border-b border-slate-100">
-              <Chip
-                label="همه سفارش‌ها"
-                count={orders.length}
-                isSelected={savedView === 'all'}
-                onClick={() => setSavedView('all')}
-              />
-              <Chip
-                label="سفارش‌های من"
-                count={orders.filter((o) => o.createdById === activePersona.id).length}
-                isSelected={savedView === 'mine'}
-                onClick={() => setSavedView('mine')}
-              />
-              <Chip
-                label="در انتظار تأیید تجاری"
-                count={orders.filter((o) => ['submitted', 'under_review', 'needs_price_approval', 'pending_approval', 'pending_commercial_approval'].includes(o.status)).length}
-                isSelected={savedView === 'pending_approval'}
-                onClick={() => setSavedView('pending_approval')}
-              />
-              <Chip
-                label="سفارش‌های دارای مغایرت نرخ/اعتبار"
-                count={orders.filter((o) => o.hasPriceException).length}
-                isSelected={savedView === 'urgent'}
-                onClick={() => setSavedView('urgent')}
-              />
+        <div className="space-y-3">
+          {/* 1. Page Header matching prototype #page-sales */}
+          <div className="page-head">
+            <div className="page-title">
+              <h1>فروش</h1>
+              <p>ثبت و پیگیری سفارش‌های فروش، با دسترسی سریع به جزئیات، وضعیت و تحویل.</p>
             </div>
-
-            {/* Filters bar & View Mode */}
-            <div className="flex flex-col sm:flex-row items-center gap-3 pt-1">
-              <div className="flex-1 w-full">
-                <TextInput
-                  prefixIcon={<Search className="w-4 h-4" />}
-                  placeholder="جستجوی شماره سفارش، عنوان، نام مشتری یا مسئول..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-
-              <div className="w-full sm:w-48">
-                <SelectInput
-                  value={channelFilter}
-                  onChange={(e) => setChannelFilter(e.target.value)}
-                  options={[
-                    { label: 'همه کانال‌ها', value: 'all' },
-                    { label: 'تلفنی', value: 'phone' },
-                    { label: 'حضوری', value: 'in_person' },
-                    { label: 'واتساپ', value: 'whatsapp' },
-                    { label: 'ویزیت میدانی', value: 'visit' },
-                  ]}
-                />
-              </div>
-
-              <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200 self-end sm:self-auto shrink-0">
+            <div className="page-actions">
+              {canCreateOrder && (
                 <button
-                  onClick={() => setOrderViewMode('cards')}
-                  className={`p-1.5 rounded text-xs flex items-center gap-1 transition-colors cursor-pointer ${
-                    orderViewMode === 'cards'
-                      ? 'bg-white text-primary-700 shadow-sm font-bold'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                  title="نمای کارت‌های سازمانی"
+                  type="button"
+                  onClick={handleOpenCreateModal}
+                  className="btn primary cursor-pointer"
                 >
-                  <LayoutGrid className="w-4 h-4" />
-                  <span className="hidden md:inline">کارت‌ها</span>
+                  <Plus className="w-4 h-4" />
+                  سفارش فروش
                 </button>
-                <button
-                  onClick={() => setOrderViewMode('table')}
-                  className={`p-1.5 rounded text-xs flex items-center gap-1 transition-colors cursor-pointer ${
-                    orderViewMode === 'table'
-                      ? 'bg-white text-primary-700 shadow-sm font-bold'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
-                  title="نمای جدول فشرده"
-                >
-                  <List className="w-4 h-4" />
-                  <span className="hidden md:inline">جدول</span>
-                </button>
-              </div>
+              )}
             </div>
           </div>
 
-          {/* Orders Content: Card View vs Table View */}
-          {orderViewMode === 'cards' ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filteredOrders.length === 0 ? (
-                <div className="col-span-full bg-white p-8 rounded-xl border border-slate-200 text-center text-slate-500 text-xs">
-                  سفارش فروشی با این مشخصات یافت نشد.
-                </div>
-              ) : (
-                filteredOrders.map((ord) => {
-                  const itemsCount = ord.items.length;
-                  const totalKg = ord.items.reduce((acc, it) => acc + (it.weightKg || 0), 0);
-                  return (
-                    <EnterpriseCard
-                      key={ord.id}
-                      onClick={() => setSelectedOrder(ord)}
-                      accent={
-                        ord.status === 'approved'
-                          ? 'emerald'
-                          : ord.status === 'returned'
-                          ? 'amber'
-                          : ord.hasPriceException
-                          ? 'rose'
-                          : 'primary'
-                      }
-                    >
-                      <EnterpriseCardHeader
-                        badge={
-                          <div className="flex items-center gap-1.5">
-                            {getPersianOrderStatusBadge(ord.status, ord.statusLabel)}
-                            <span className="px-1.5 py-0.5 rounded text-caption bg-slate-100 text-slate-600 font-medium">
-                              {getPersianChannelLabel(ord.channel, ord.channelLabel)}
-                            </span>
-                          </div>
-                        }
-                        title={
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono font-bold text-primary-800 text-sm">{ord.code}</span>
-                            {ord.dateJalali ? (
-                              <span className="text-caption text-slate-500 font-sans">({ord.dateJalali})</span>
-                            ) : null}
-                          </div>
-                        }
-                        subtitle={
-                          <div className="text-xs font-bold text-slate-900 line-clamp-1 mt-0.5">
-                            {ord.title}
-                          </div>
-                        }
-                      />
+          {/* 2. Tabs matching prototype #salesTabs */}
+          <div className="tabs">
+            <button
+              type="button"
+              onClick={() => setSalesFilter('all')}
+              className={`tab ${salesFilter === 'all' ? 'active' : ''}`}
+            >
+              همه ({toPersianDigits(orders.length)})
+            </button>
+            <button
+              type="button"
+              onClick={() => setSalesFilter('draft')}
+              className={`tab ${salesFilter === 'draft' ? 'active' : ''}`}
+            >
+              پیش‌نویس ({toPersianDigits(orders.filter(o => o.status === 'draft' || o.status === 'submitted').length)})
+            </button>
+            <button
+              type="button"
+              onClick={() => setSalesFilter('pending')}
+              className={`tab ${salesFilter === 'pending' ? 'active' : ''}`}
+            >
+              در انتظار تأیید ({toPersianDigits(orders.filter(o => ['submitted', 'under_review', 'needs_price_approval', 'pending_approval', 'pending_commercial_approval'].includes(o.status)).length)})
+            </button>
+            <button
+              type="button"
+              onClick={() => setSalesFilter('approved')}
+              className={`tab ${salesFilter === 'approved' ? 'active' : ''}`}
+            >
+              تأییدشده ({toPersianDigits(orders.filter(o => o.status === 'approved').length)})
+            </button>
+            <button
+              type="button"
+              onClick={() => setSalesFilter('returned')}
+              className={`tab ${salesFilter === 'returned' ? 'active' : ''}`}
+            >
+              برگشت‌خورده ({toPersianDigits(orders.filter(o => o.status === 'returned').length)})
+            </button>
+            <button
+              type="button"
+              onClick={() => setSalesFilter('closed')}
+              className={`tab ${salesFilter === 'closed' ? 'active' : ''}`}
+            >
+              بسته‌شده ({toPersianDigits(orders.filter(o => ['closed', 'dispatched', 'delivered'].includes(o.status)).length)})
+            </button>
+          </div>
 
-                      <EnterpriseCardBody className="space-y-3 text-xs">
-                        <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-100 space-y-1">
-                          <div className="flex items-center justify-between">
-                            <span className="font-bold text-slate-900 text-xs">{ord.customerName}</span>
-                            <span className="text-[11px] text-slate-500 font-mono">
-                              ثبت: {ord.createdByName}
-                            </span>
-                          </div>
-                          <div className="text-[11px] text-slate-500 flex items-center justify-between">
-                            <span>مسئول فروش: {ord.salesResponsibleName}</span>
-                            <span>{ord.deliveryAddress ? ord.deliveryAddress.substring(0, 25) + '...' : ''}</span>
-                          </div>
-                        </div>
+          {/* 3. Toolbar matching prototype */}
+          <div className="toolbar">
+            <input
+              className="input search"
+              placeholder="جست‌وجوی مشتری یا شماره سفارش"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <select
+              className="select"
+              value={ownerFilter}
+              onChange={(e) => setOwnerFilter(e.target.value)}
+            >
+              <option value="all">همه مسئولان</option>
+              {availableOwners.map((owner) => (
+                <option key={owner} value={owner}>
+                  {owner}
+                </option>
+              ))}
+            </select>
+            <div className="spacer" />
+            <button
+              type="button"
+              className="btn"
+              onClick={() => addToast('در حال آماده‌سازی گزارش سفارش‌های فروش...', { tone: 'info' })}
+            >
+              <Download className="w-4 h-4" />
+              گزارش
+            </button>
+          </div>
 
-                        {/* Items preview */}
-                        <div className="bg-slate-50/70 p-2 rounded-lg border border-slate-200/60 space-y-1">
-                          <div className="flex items-center justify-between text-caption text-slate-600">
-                            <span>اقلام سفارش:</span>
-                            <span className="font-bold text-slate-800">
-                              {toPersianDigits(itemsCount)} قلم ({toPersianDigits(formatNumber(totalKg))} کیلو)
-                            </span>
-                          </div>
-                          {ord.items[0] && (
-                            <div className="text-[11px] text-slate-500 line-clamp-1">
-                              • {ord.items[0].productName}
-                              {itemsCount > 1 && ` و ${toPersianDigits(itemsCount - 1)} قلم دیگر`}
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Price exception badge */}
-                        {ord.hasPriceException && (
-                          <div className="bg-rose-50 border border-rose-200 p-2 rounded-lg text-rose-800 text-caption font-bold flex items-center gap-1.5">
-                            <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0" />
-                            <span>دارای استثنای نرخ / فراتر از سقف اعتبار</span>
-                          </div>
-                        )}
-
-                        {/* Total Amount */}
-                        <div className="pt-1 border-t border-slate-100 flex items-center justify-between">
-                          <span className="text-slate-500 text-caption font-medium">مبلغ کل سفارش:</span>
-                          <CurrencyAmount amountRials={ord.totalAmountRials} layout="dual" size="sm" />
-                        </div>
-                      </EnterpriseCardBody>
-
-                      <EnterpriseCardFooter className="flex items-center justify-between">
-                        <div>
-                          {ord.revisions.length > 0 ? (
-                            <span className="text-caption font-bold text-primary-700 flex items-center gap-1">
-                              <History className="w-3.5 h-3.5" />
-                              نگارش ۲
-                            </span>
-                          ) : (
-                            <span className="text-caption text-slate-500">نگارش اصلی</span>
-                          )}
-                        </div>
-                        <Button
-                          size="xs"
-                          variant="outline"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setSelectedOrder(ord);
-                          }}
-                        >
-                          مشاهده جزئیات
-                        </Button>
-                      </EnterpriseCardFooter>
-                    </EnterpriseCard>
-                  );
-                })
-              )}
-            </div>
-          ) : (
-            <div className="bg-white rounded-xl border border-slate-200 shadow-none overflow-hidden">
-              {/* Desktop Table View */}
-              <div className="hidden md:block overflow-x-auto">
-                <AdaptiveTable className="w-full text-right text-xs border-collapse">
-                  <thead>
-                    <tr className="bg-slate-50 text-slate-500 border-b border-slate-200">
-                      <th className="p-3 font-bold">شماره و عنوان سفارش</th>
-                      <th className="p-3 font-bold">مشتری و کانال</th>
-                      <th className="p-3 font-bold">ثبت‌کننده / مسئول</th>
-                      <th className="p-3 font-bold">مبلغ کل سفارش</th>
-                      <th className="p-3 font-bold">وضعیت پرونده</th>
-                      <th className="p-3 font-bold">نگارش</th>
-                      <th className="p-3 font-bold text-center">عملیات</th>
+          {/* 4. Table matching prototype .table-card > .table-scroll > table.data-table */}
+          <div className="table-card">
+            <div className="table-scroll">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>شماره</th>
+                    <th>مشتری</th>
+                    <th>وضعیت</th>
+                    <th>مبلغ</th>
+                    <th>مسئول</th>
+                    <th>تاریخ ثبت</th>
+                    <th>موعد تحویل</th>
+                    <th className="text-center">عملیات</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredOrders.length === 0 ? (
+                    <tr>
+                      <td colSpan={8} className="text-center py-8 text-slate-500">
+                        سفارش فروشی با این مشخصات یافت نشد.
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {filteredOrders.map((ord) => (
+                  ) : (
+                    filteredOrders.map((ord) => (
                       <tr
                         key={ord.id}
-                        className="hover:bg-slate-50/80 transition-colors cursor-pointer"
                         onClick={() => setSelectedOrder(ord)}
+                        className="cursor-pointer hover:bg-slate-50/70 transition-colors"
                       >
-                        <td className="p-3">
-                          <div className="font-mono text-slate-500 text-caption font-bold">{ord.code}</div>
-                          <div className="font-extrabold text-slate-900 mt-0.5">{ord.title}</div>
+                        <td className="cell-main font-mono text-primary-700">{ord.code}</td>
+                        <td>
+                          <div className="cell-main">{ord.customerName}</div>
+                          <div className="cell-sub">{ord.title}</div>
                         </td>
-
-                        <td className="p-3">
-                          <div className="font-bold text-slate-800">{ord.customerName}</div>
-                          <div className="text-slate-500 text-caption flex items-center gap-1 mt-0.5">
-                            <Phone className="w-3 h-3 text-slate-500" />
-                            <span>{getPersianChannelLabel(ord.channel, ord.channelLabel)}</span>
-                          </div>
+                        <td>{getSalesStatusPill(ord.status, ord.statusLabel)}</td>
+                        <td className="font-mono">
+                          {toPersianDigits(ord.totalAmountRials.toLocaleString('fa-IR'))} ریال
                         </td>
-
-                        <td className="p-3">
-                          <div className="text-slate-800 font-medium">ثبت: {ord.createdByName}</div>
-                          <div className="text-slate-500 text-caption">مسئول: {ord.salesResponsibleName}</div>
-                        </td>
-
-                        <td className="p-3">
-                          <CurrencyAmount amountRials={ord.totalAmountRials} layout="dual" size="sm" />
-                          {ord.hasPriceException && (
-                            <span className="text-caption font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded mt-1 inline-block">
-                              مغایرت نرخ / اعتبار
-                            </span>
-                          )}
-                        </td>
-
-                        <td className="p-3">
-                          {getPersianOrderStatusBadge(ord.status, ord.statusLabel)}
-                        </td>
-
-                        <td className="p-3">
-                          {ord.revisions.length > 0 ? (
+                        <td>{ord.createdByName}</td>
+                        <td className="text-slate-500">{ord.createdAtJalali || ord.creationDateJalali || '—'}</td>
+                        <td className="text-slate-500">{ord.deliveryDateJalali || '—'}</td>
+                        <td className="text-center">
+                          <div className="row-actions justify-center">
                             <button
                               type="button"
+                              className="mini-btn"
+                              title="مشاهده"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setSelectedOrder(ord);
-                                setIsRevisionModalOpen(true);
                               }}
-                              className="text-caption font-bold text-primary-700 hover:underline flex items-center gap-1 cursor-pointer"
                             >
-                              <History className="w-3.5 h-3.5" />
-                              <span>نگارش ۲ (دارای تغییر)</span>
+                              <Eye className="w-3.5 h-3.5" />
                             </button>
-                          ) : (
-                            <span className="text-slate-500 text-caption">نگارش ۱</span>
-                          )}
-                        </td>
-
-                        <td className="p-3 text-center">
-                          <Button
-                            size="xs"
-                            variant="outline"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setSelectedOrder(ord);
-                            }}
-                          >
-                            مشاهده جزئیات
-                          </Button>
+                          </div>
                         </td>
                       </tr>
-                    ))}
-                  </tbody>
-                </AdaptiveTable>
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* 5. Two-column cards matching prototype .two-col */}
+          <div className="two-col" style={{ marginTop: '13px' }}>
+            <div className="card">
+              <div className="card-head">
+                <div>
+                  <div className="card-title">تماس‌ها و پیگیری‌های فروش</div>
+                  <div className="card-sub">ثبت دستی تماس، پیام و نتیجه پیگیری</div>
+                </div>
+                <button
+                  type="button"
+                  className="btn small"
+                  onClick={() => onNavigateToRoute ? onNavigateToRoute('sales_calls') : null}
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  ثبت تماس
+                </button>
               </div>
-
-              {/* Mobile Card List */}
-              <div className="md:hidden divide-y divide-slate-100 p-3 space-y-3">
-                {filteredOrders.map((ord) => (
-                  <div
-                    key={ord.id}
-                    onClick={() => setSelectedOrder(ord)}
-                    className="p-4 bg-white rounded-xl border border-slate-200 shadow-none space-y-2.5 cursor-pointer transition-transform"
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <div>
-                        <span className="font-mono text-caption font-bold text-slate-500">{ord.code}</span>
-                        <h4 className="text-xs font-extrabold text-slate-900 mt-0.5">{ord.title}</h4>
-                        <div className="text-caption text-slate-600 font-bold mt-0.5">{ord.customerName}</div>
-                      </div>
-                      <div className="shrink-0">
-                        {getPersianOrderStatusBadge(ord.status, ord.statusLabel)}
-                      </div>
+              <div className="card-body">
+                <div className="stack">
+                  <div className="queue-row">
+                    <div className="activity-dot shrink-0">
+                      <Phone className="w-3.5 h-3.5" />
                     </div>
-
-                    <div className="p-2 bg-slate-50 rounded-lg text-xs flex items-center justify-between">
-                      <span className="text-slate-500">ارزش کل سفارش:</span>
-                      <CurrencyAmount amountRials={ord.totalAmountRials} layout="dual" size="sm" />
+                    <div className="queue-main">
+                      <div className="queue-title">فروشگاه زنجیره‌ای سپید</div>
+                      <div className="queue-meta">استعلام موجودی روغن و زمان تحویل پارت دوم</div>
                     </div>
-
-                    <div className="flex items-center justify-between text-caption text-slate-500 pt-1">
-                      <span>کانال: {getPersianChannelLabel(ord.channel, ord.channelLabel)}</span>
-                      <span className="text-primary-700 font-bold">مشاهده جزئیات کامل ←</span>
-                    </div>
+                    <span className="pill info">
+                      <span className="dot" />
+                      تلفنی
+                    </span>
                   </div>
-                ))}
+                  <div className="queue-row">
+                    <div className="activity-dot shrink-0">
+                      <Phone className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="queue-main">
+                      <div className="queue-title">صنایع بسته‌بندی جوپار</div>
+                      <div className="queue-meta">توافق نهایی روی تخفیف ۵٪ و اصلاح پیش‌نویس</div>
+                    </div>
+                    <span className="pill success">
+                      <span className="dot" />
+                      واتساپ
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-          )}
+
+            <div className="card">
+              <div className="card-head">
+                <div>
+                  <div className="card-title">فرصت‌ها و پیش‌فاکتورها</div>
+                  <div className="card-sub">موارد باز قبل از تبدیل به سفارش قطعی</div>
+                </div>
+              </div>
+              <div className="card-body">
+                <div className="stack">
+                  {orders
+                    .filter((o) => o.status === 'draft' || o.status === 'submitted')
+                    .slice(0, 3)
+                    .map((draft) => (
+                      <div
+                        key={draft.id}
+                        className="overview-flow-row cursor-pointer"
+                        onClick={() => setSelectedOrder(draft)}
+                      >
+                        <div className="overview-flow-kind shrink-0">
+                          <FileText className="w-3.5 h-3.5" />
+                        </div>
+                        <div className="queue-main">
+                          <div className="queue-title">{draft.customerName}</div>
+                          <div className="queue-meta font-mono">{draft.code} • {draft.createdByName}</div>
+                        </div>
+                        <span className="pill neutral">
+                          <span className="dot" />
+                          {toPersianDigits(draft.totalAmountRials.toLocaleString('fa-IR'))} ریال
+                        </span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -800,9 +764,9 @@ export const SalesView: React.FC<SalesViewProps> = ({
       <Drawer
         isOpen={!!selectedOrder}
         onClose={() => setSelectedOrder(null)}
-        title={selectedOrder ? `${selectedOrder.code} • ${selectedOrder.title}` : ''}
-        subtitle={selectedOrder ? `مشتری: ${selectedOrder.customerName} • کانال: ${getPersianChannelLabel(selectedOrder.channel, selectedOrder.channelLabel)}` : ''}
-        width="lg"
+        title={selectedOrder ? `سفارش ${selectedOrder.code}` : ''}
+        subtitle={selectedOrder ? `${selectedOrder.customerName} • ${getPersianChannelLabel(selectedOrder.channel, selectedOrder.channelLabel)}` : ''}
+        width="md"
         footer={
           selectedOrder && (
             <div className="w-full flex items-center justify-between gap-2 flex-wrap">
@@ -932,7 +896,7 @@ export const SalesView: React.FC<SalesViewProps> = ({
                     leftIcon={<FileText className="w-4 h-4" />}
                     onClick={() => setIsRevisionModalOpen(true)}
                   >
-                    تاریخچه تغییرات ({selectedOrder.revisions.length})
+                    تاریخچه ({toPersianDigits(selectedOrder.revisions.length)})
                   </Button>
                 )}
               </div>
@@ -945,206 +909,157 @@ export const SalesView: React.FC<SalesViewProps> = ({
         }
       >
         {selectedOrder && (
-          <div className="space-y-5 text-xs">
-            {/* Commercial Approval Instance Card */}
-            {(selectedOrder.hasPriceException ||
-              selectedOrder.status === 'needs_price_approval' ||
-              selectedOrder.status === 'pending_commercial_approval' ||
-              selectedOrder.status === 'pending_approval' ||
-              selectedOrder.relatedApprovalId) && (
-              <div className="p-4 bg-primary-50/50 border-2 border-primary-200 rounded-xl space-y-3 text-primary-950">
-                <div className="flex items-center justify-between border-b border-primary-100 pb-2">
-                  <div className="flex items-center gap-2 font-bold text-sm text-primary-900">
-                    <ShieldAlert className="w-5 h-5 text-primary-700 shrink-0" />
-                    <span>تعهد تأیید تجاری و استثنای نرخ/اعتبار (Commercial Approval Instance)</span>
+          <div className="space-y-4 text-xs">
+            {/* 1. Summary Key-Value List matching prototype kv style */}
+            <div className="border border-slate-200 rounded-xl divide-y divide-slate-100 bg-white overflow-hidden">
+              <div className="flex items-center justify-between p-3">
+                <span className="text-slate-500 text-caption font-bold">وضعیت سفارش</span>
+                <div>{getSalesStatusPill(selectedOrder.status, selectedOrder.statusLabel)}</div>
+              </div>
+              <div className="flex items-center justify-between p-3">
+                <span className="text-slate-500 text-caption font-bold">مبلغ کل</span>
+                <span className="font-mono font-bold text-slate-900">
+                  {toPersianDigits(selectedOrder.totalAmountRials.toLocaleString('fa-IR'))} ریال
+                </span>
+              </div>
+              <div className="flex items-center justify-between p-3">
+                <span className="text-slate-500 text-caption font-bold">مسئول فروش</span>
+                <span className="font-bold text-primary-700">{selectedOrder.salesResponsibleName}</span>
+              </div>
+              <div className="flex items-center justify-between p-3">
+                <span className="text-slate-500 text-caption font-bold">ایجادکننده اولیه</span>
+                <span className="text-slate-800">{selectedOrder.createdByName}</span>
+              </div>
+              <div className="flex items-center justify-between p-3">
+                <span className="text-slate-500 text-caption font-bold">تاریخ ثبت</span>
+                <span className="text-slate-700">{selectedOrder.createdAtJalali || selectedOrder.creationDateJalali || '—'}</span>
+              </div>
+              <div className="flex items-center justify-between p-3">
+                <span className="text-slate-500 text-caption font-bold">موعد تحویل</span>
+                <span className="text-slate-700">{selectedOrder.deliveryDateJalali || '—'}</span>
+              </div>
+              {selectedOrder.deliveryAddress && (
+                <div className="flex items-start justify-between p-3 gap-2">
+                  <span className="text-slate-500 text-caption font-bold shrink-0">محل تحویل</span>
+                  <span className="text-slate-700 text-left">{selectedOrder.deliveryAddress}</span>
+                </div>
+              )}
+              {selectedOrder.paymentTerms && (
+                <div className="flex items-start justify-between p-3 gap-2">
+                  <span className="text-slate-500 text-caption font-bold shrink-0">شرایط تسویه</span>
+                  <span className="text-slate-700 text-left">{selectedOrder.paymentTerms}</span>
+                </div>
+              )}
+            </div>
+
+            {/* 2. Self-approval notice if user is creator */}
+            {(selectedOrder.createdByName.includes(activePersona.name) || selectedOrder.createdById === activePersona.id) && (
+              <div className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 flex items-start gap-2.5">
+                <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <div className="text-caption leading-relaxed">
+                  <span className="font-bold">منع خودتأییدی: </span>
+                  شما ثبت‌کننده این سفارش هستید. تأیید تجاری باید صرفاً توسط مقام مستقل انجام شود.
+                </div>
+              </div>
+            )}
+
+            {/* 3. Connected Flow (جریان متصل) matching prototype */}
+            <div className="form-section">
+              <div className="form-section-title font-bold text-slate-800 mb-2">جریان متصل</div>
+              <div className="space-y-2">
+                {/* Approval flow item */}
+                <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 flex items-center justify-between gap-2">
+                  <div>
+                    <div className="font-bold text-slate-900">
+                      گردش تأیید تجاری {selectedOrder.relatedApprovalId ? `(${selectedOrder.relatedApprovalId})` : ''}
+                    </div>
+                    <div className="text-caption text-slate-500 mt-0.5">
+                      {selectedOrder.statusLabel || 'در انتظار تصمیم تأییدکننده مستقل'}
+                    </div>
                   </div>
-                  <span className="font-mono text-xs font-bold text-primary-800 bg-primary-100 px-2 py-0.5 rounded">
-                    {selectedOrder.relatedApprovalId || 'appr-ord-0981-rev2'}
-                  </span>
+                  {onNavigateToInboxRecord && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onNavigateToInboxRecord(selectedOrder.linkedWorkItemId || selectedOrder.code);
+                        setSelectedOrder(null);
+                      }}
+                      className="btn small"
+                    >
+                      تأییدهای من
+                    </button>
+                  )}
                 </div>
 
-                <p className="text-xs text-primary-900 leading-relaxed">
-                  این سفارش به دلیل تخفیف استثنایی زیر کف قیمت مصوب و تجاوز از سقف اعتبار باز مشتری، نیازمند تصویب رسمی معاونت بازرگانی است. تا پیش از ثبت تصمیم تأیید، <strong>امکان تخصیص قطعی موجودی، صدور حواله خروج انبار یا شروع فرآیند ارسال وجود ندارد</strong>.
-                </p>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
-                  <div className="p-3 bg-white rounded-lg border border-primary-100 space-y-1">
-                    <span className="text-slate-500 text-caption block">مقام مستقل تأییدکننده (Approver):</span>
-                    <span className="font-bold text-slate-900">{getDisplayPersonaName(selectedOrder.currentApproverName) || 'تأییدکننده بازرگانی'}</span>
-                    <span className="text-primary-700 text-caption block font-medium">مسئولیت بازرگانی، فروش و خط‌مشی قیمت‌گذاری</span>
-                  </div>
-
-                  <div className="p-3 bg-white rounded-lg border border-primary-100 space-y-1">
-                    <span className="text-slate-500 text-caption block">شناسه وظیفه کاری در کارهای من:</span>
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono font-bold text-primary-700">{selectedOrder.relatedApprovalId || selectedOrder.linkedWorkItemId || selectedOrder.code}</span>
-                      {onNavigateToInboxRecord && (
+                {/* Warehouse Exit flow item */}
+                {(() => {
+                  const linkedExit = mockSalesWarehouseStore.getWarehouseExits().find(
+                    (e) => e.linkedSalesOrder?.id === selectedOrder.id || e.linkedSalesOrder?.code === selectedOrder.code
+                  );
+                  if (!linkedExit) return null;
+                  return (
+                    <div className="p-3 bg-emerald-50/70 rounded-xl border border-emerald-200 flex items-center justify-between gap-2">
+                      <div>
+                        <div className="font-bold text-emerald-950 flex items-center gap-1.5">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>حواله خروج انبار {linkedExit.code}</span>
+                        </div>
+                        <div className="text-caption text-emerald-800 mt-0.5">
+                          {linkedExit.warehouse.name} • {linkedExit.status === 'ready' ? 'آماده بارگیری' : linkedExit.status === 'dispatched' ? 'ترخیص‌شده' : 'در جریان'}
+                        </div>
+                      </div>
+                      {onNavigateToRoute && (
                         <button
-                          onClick={() => {
-                            onNavigateToInboxRecord(selectedOrder.linkedWorkItemId || selectedOrder.code);
-                            setSelectedOrder(null);
-                          }}
-                          className="text-caption text-primary-700 hover:text-primary-800 font-bold underline"
+                          type="button"
+                          onClick={() => onNavigateToRoute('warehouse_dispatch')}
+                          className="btn small"
                         >
-                          مشاهده در «تأییدهای من»
+                          مشاهده
                         </button>
                       )}
                     </div>
-                    <span className="text-slate-500 text-caption block">نگارش جاری ۲ (نگارش ۱ منسوخ شده)</span>
-                  </div>
-                </div>
-
-                <div className="pt-2 border-t border-primary-100 flex flex-wrap items-center justify-between font-bold text-caption text-primary-900 gap-2">
-                  <span>وضعیت گردش کار: {selectedOrder.statusLabel || 'در انتظار تصمیم تأییدکننده مستقل'}</span>
-                  <span className="bg-rose-100 text-rose-800 px-2 py-0.5 rounded font-mono">
-                    عملیات خروج انبار و تحویل: مسدود
-                  </span>
-                </div>
-              </div>
-            )}
-
-            {/* Self-approval banner */}
-            {(selectedOrder.createdByName.includes(activePersona.name) || selectedOrder.createdById === activePersona.id) && (
-              <div className="p-3 bg-amber-50 border border-amber-300 rounded-xl text-amber-900 flex items-start gap-3">
-                <ShieldAlert className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                <div className="text-caption leading-relaxed">
-                  <div className="font-bold">ثبت‌کننده نمی‌تواند درخواست خودش را تأیید کند (منع خودتأییدی)</div>
-                  <div>این سفارش توسط شما ثبت گردیده است. تأیید تجاری باید صرفاً توسط مقام مستقل دیگری انجام شود.</div>
-                </div>
-              </div>
-            )}
-
-            {/* Roles Distinction */}
-            <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 border border-slate-200 rounded-xl">
-              <div>
-                <span className="text-slate-500 font-bold block mb-1">ایجادکننده اولیه (ثبت)</span>
-                <span className="font-bold text-slate-900">{selectedOrder.createdByName}</span>
-              </div>
-              <div>
-                <span className="text-slate-500 font-bold block mb-1">کارشناس مسئول فروش</span>
-                <span className="font-bold text-primary-700">{selectedOrder.salesResponsibleName}</span>
+                  );
+                })()}
               </div>
             </div>
 
-            {/* Order Items Table */}
-            <div>
-              <h4 className="font-bold text-slate-900 mb-2">اقلام سفارش و محاسبات تبدیل واحد</h4>
+            {/* 4. Compact Items Table */}
+            <div className="form-section">
+              <div className="form-section-title font-bold text-slate-800 mb-2">اقلام سفارش</div>
               <div className="border border-slate-200 rounded-xl overflow-hidden">
-                <AdaptiveTable className="w-full text-right border-collapse text-xs">
+                <table className="w-full text-right text-xs border-collapse">
                   <thead>
-                    <tr className="bg-slate-50 text-slate-500 border-b border-slate-200">
-                      <th className="p-3 font-bold">شرح کالا</th>
-                      <th className="p-3 font-bold">بسته‌بندی / تعداد</th>
-                      <th className="p-3 font-bold">وزن خالص</th>
-                      <th className="p-3 font-bold">قیمت واحد</th>
-                      <th className="p-3 font-bold">جمع کل</th>
+                    <tr className="bg-slate-50 text-slate-500 border-b border-slate-200 text-caption">
+                      <th className="p-2.5 font-bold">کالا</th>
+                      <th className="p-2.5 font-bold">تعداد</th>
+                      <th className="p-2.5 font-bold">قیمت واحد</th>
+                      <th className="p-2.5 font-bold">جمع</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {selectedOrder.items.map((it) => (
                       <tr key={it.id}>
-                        <td className="p-3 font-bold text-slate-900">
-                          <div>{it.productName}</div>
+                        <td className="p-2.5 font-bold text-slate-900">
+                          {it.productName}
                           {it.discountPercent > 0 && (
-                            <span className="text-caption text-amber-700 font-bold">
-                              تخفیف: {it.discountPercent}٪
+                            <span className="text-caption text-amber-700 block font-normal">
+                              تخفیف: {toPersianDigits(it.discountPercent)}٪
                             </span>
                           )}
                         </td>
-                        <td className="p-3 text-slate-600 font-mono">
-                          {it.cartons} کارتن ({it.pieces} {it.baseUnit || 'بطری'})
+                        <td className="p-2.5 text-slate-600 font-mono text-caption">
+                          {toPersianDigits(it.cartons)} کارتن ({toPersianDigits(it.pieces)} {it.baseUnit || 'عدد'})
                         </td>
-                        <td className="p-3">
-                          <CurrencyAmount amountRials={it.agreedUnitPriceRials} layout="compact" />
+                        <td className="p-2.5 font-mono text-caption">
+                          {toPersianDigits(it.agreedUnitPriceRials.toLocaleString('fa-IR'))}
                         </td>
-                        <td className="p-3">
-                          <CurrencyAmount amountRials={it.totalRials} layout="compact" />
+                        <td className="p-2.5 font-mono font-bold text-caption">
+                          {toPersianDigits(it.totalRials.toLocaleString('fa-IR'))}
                         </td>
                       </tr>
                     ))}
                   </tbody>
-                </AdaptiveTable>
-              </div>
-            </div>
-
-            {/* Linked Warehouse Exit / Dispatch Record */}
-            {(() => {
-              const linkedExit = mockSalesWarehouseStore.getWarehouseExits().find(
-                (e) => e.linkedSalesOrder?.id === selectedOrder.id || e.linkedSalesOrder?.code === selectedOrder.code
-              );
-              if (!linkedExit) return null;
-              return (
-                <div className="p-4 bg-emerald-50 border-2 border-emerald-200 rounded-xl space-y-2 text-emerald-950">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 font-bold text-xs text-emerald-900">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                      <span>حواله خروج انبار مرتبط:</span>
-                      <span className="font-mono text-primary-700 bg-white px-2 py-0.5 rounded border border-emerald-200">
-                        {linkedExit.code}
-                      </span>
-                    </div>
-                    <span className="text-caption px-2 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800">
-                      {linkedExit.status === 'ready'
-                        ? 'آماده بارگیری و خروج'
-                        : linkedExit.status === 'dispatched'
-                        ? 'ترخیص و ارسال نهایی'
-                        : linkedExit.status === 'blocked'
-                        ? 'کسری انبار (مسدود)'
-                        : 'در جریان خروج'}
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-caption pt-1 border-t border-emerald-200">
-                    <div>
-                      <span className="text-emerald-700">انبار مبدأ: </span>
-                      <span className="font-bold">{linkedExit.warehouse.name}</span>
-                    </div>
-                    <div>
-                      <span className="text-emerald-700">ناوگان حمل: </span>
-                      <span className="font-bold">{linkedExit.logistics.driverName} ({linkedExit.logistics.vehicleType})</span>
-                    </div>
-                  </div>
-                  {onNavigateToRoute && (
-                    <div className="pt-1.5 flex justify-end">
-                      <Button
-                        size="xs"
-                        variant="primary"
-                        onClick={() => onNavigateToRoute('warehouse_dispatch')}
-                        className="text-caption"
-                      >
-                        مشاهده در حواله خروج
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              );
-            })()}
-
-            {/* Financial Pending Integration Status */}
-            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1 text-caption">
-              <div className="flex items-center justify-between text-slate-700">
-                <span className="font-bold">وضعیت در سیستم مالی سپیدار:</span>
-                <span className="font-bold px-2 py-0.5 rounded bg-slate-200 text-slate-700">ثبت نشده در سیستم مالی</span>
-              </div>
-              <p className="text-slate-500 leading-relaxed">
-                این بخش نمایشی است و هنوز به بانک یا پارسینا متصل نیست.
-              </p>
-            </div>
-
-            {/* Terms */}
-            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-              <div className="flex items-start gap-2">
-                <CreditCard className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-slate-800">شرایط تسویه و پرداخت:</span>
-                  <span className="text-slate-600 mr-1.5">{selectedOrder.paymentTerms}</span>
-                </div>
-              </div>
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-bold text-slate-800">محل و نحوه تحویل:</span>
-                  <span className="text-slate-600 mr-1.5">{selectedOrder.deliveryAddress}</span>
-                </div>
+                </table>
               </div>
             </div>
           </div>

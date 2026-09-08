@@ -59,7 +59,7 @@ export const PaymentRequestsView: React.FC<PaymentRequestsViewProps> = ({
   onNavigateToRoute,
 }) => {
   const { addToast } = useToast();
-  const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
+  const [viewMode, setViewMode] = useState<'cards' | 'table'>('table');
   const [largeOnly, setLargeOnly] = useState(false);
   const [dueOnly, setDueOnly] = useState(false);
   const [mineOnly, setMineOnly] = useState(false);
