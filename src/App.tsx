@@ -218,13 +218,7 @@ function AppContent() {
   // If user is not logged in, render the official enterprise LoginScreen
   if (!activePersona) {
     return (
-      <div
-        className="min-h-screen flex flex-col justify-between text-[#172554] antialiased"
-        style={{
-          background:
-            'radial-gradient(circle at 16% 10%, rgba(118, 133, 255, 0.12), transparent 30%), radial-gradient(circle at 92% 86%, rgba(75, 100, 255, 0.10), transparent 34%), #f6f7ff',
-        }}
-      >
+      <div className="min-h-screen flex flex-col justify-between text-slate-800 bg-[#f5f6fa] antialiased">
         <PWALaunchSplash />
         <PWAOfflineBanner />
         <LoginScreen
@@ -285,7 +279,7 @@ function AppContent() {
       }
     }
     return {
-      title: 'سامانه عملیات جوادیان',
+      title: 'سامانه جوادیان',
       breadcrumbs: ['خانه', 'کارهای من'],
     };
   };
@@ -295,13 +289,7 @@ function AppContent() {
   const currentRouteDef = APP_ROUTES[currentRoute as AppRouteKey];
 
   return (
-    <div
-      className="min-h-screen text-[#172554] flex flex-col antialiased selection:bg-primary-700 selection:text-white"
-      style={{
-        background:
-          'radial-gradient(circle at 16% 10%, rgba(118, 133, 255, 0.12), transparent 30%), radial-gradient(circle at 92% 86%, rgba(75, 100, 255, 0.10), transparent 34%), #f6f7ff',
-      }}
-    >
+    <div className="min-h-screen text-slate-800 bg-[#f5f6fa] flex flex-col antialiased selection:bg-[#6558d9] selection:text-white">
       <PWALaunchSplash />
       <PWAOfflineBanner />
 
@@ -508,8 +496,8 @@ function AppContent() {
             />
           )}
         </main>
-        <footer className="py-3 px-4 border-t border-slate-200 text-center text-caption text-slate-500 bg-white">
-          © سامانه عملیات جوادیان — نسخه نمایشی
+        <footer className="py-3 px-4 border-t border-[#e6e8ef] text-center text-caption text-[#697082] bg-white">
+          © سامانه جوادیان — مدیریت عملیات، فروش و فرایندها
         </footer>
       </div>
       </div>

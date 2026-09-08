@@ -28,17 +28,17 @@ export const EnterpriseCard: React.FC<EnterpriseCardProps> = ({
 }) => {
   // Border right accent in RTL layout:
   const statusBorderClasses: Record<EnterpriseCardStatus, string> = {
-    default: 'border-r-slate-200',
-    primary: 'border-r-4 border-r-primary-700',
-    success: 'border-r-4 border-r-emerald-600',
-    warning: 'border-r-4 border-r-amber-500',
-    danger: 'border-r-4 border-r-rose-600',
-    info: 'border-r-4 border-r-blue-600',
-    neutral: 'border-r-4 border-r-slate-400',
+    default: 'border-r-[#e6e8ef]',
+    primary: 'border-r-4 border-r-[#6558d9]',
+    success: 'border-r-4 border-r-[#138a61]',
+    warning: 'border-r-4 border-r-[#b97318]',
+    danger: 'border-r-4 border-r-[#c74b55]',
+    info: 'border-r-4 border-r-[#3566c8]',
+    neutral: 'border-r-4 border-r-[#697082]',
   };
 
   const interactiveClasses = isInteractive
-    ? 'cursor-pointer hover:border-primary-300 hover:shadow-[0_8px_24px_rgba(15,23,42,0.08)] transition-all duration-200 active:scale-[0.998]'
+    ? 'cursor-pointer hover:border-[#d5d8e2] hover:shadow-[0_4px_12px_rgba(0,0,0,0.04)] transition-all duration-150'
     : '';
 
   return (
@@ -48,7 +48,7 @@ export const EnterpriseCard: React.FC<EnterpriseCardProps> = ({
       role={isInteractive ? 'button' : undefined}
       tabIndex={isInteractive ? 0 : undefined}
       onKeyDown={isInteractive ? (event) => { if (event.target === event.currentTarget && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); onClick?.(); } } : undefined}
-      className={`bg-white rounded-2xl border border-slate-200/90 shadow-[0_2px_10px_rgba(15,23,42,0.03)] overflow-hidden flex flex-col justify-between ${statusBorderClasses[status]} ${interactiveClasses} ${className}`}
+      className={`bg-white rounded-xl border border-[#e6e8ef] shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col justify-between ${statusBorderClasses[status]} ${interactiveClasses} ${className}`}
     >
       {children}
     </div>

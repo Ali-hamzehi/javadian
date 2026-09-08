@@ -98,18 +98,18 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
   return (
     <div className="login-screen min-h-dvh flex flex-col justify-between items-center p-3 sm:p-6 text-slate-800 relative select-none">
       {/* Top Header */}
-      <header className="w-full max-w-5xl flex items-center justify-between gap-3 py-3 relative z-10 border-b border-[#e7ebf6] pb-4">
+      <header className="w-full max-w-5xl flex items-center justify-between gap-3 py-3 relative z-10 border-b border-[#e6e8ef] pb-4">
         {/* Logo, System Name, Demo Badge */}
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 shrink-0 rounded-xl bg-gradient-to-br from-[#556bff] via-[#354cff] to-[#5d36ef] shadow-[0_9px_22px_rgba(54,82,255,0.24)] flex items-center justify-center text-white font-black text-sm">
+          <div className="w-10 h-10 shrink-0 rounded-xl bg-[#6558d9] shadow-[0_8px_18px_rgba(101,88,217,0.28)] flex items-center justify-center text-white font-black text-lg">
             ج
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs sm:text-sm font-black text-[#0c2258]">
-              سامانه عملیات جوادیان
+            <span className="text-xs sm:text-sm font-black text-[#1a202c]">
+              سامانه جوادیان
             </span>
-            <span className="text-caption px-2 py-0.5 rounded-full bg-[#edf1ff] text-[#304cff] border border-[#dbe3ff] font-bold">
-              نسخه نمایشی
+            <span className="text-caption px-2 py-0.5 rounded-full bg-[#f0eeff] text-[#6558d9] border border-[#e4dfff] font-bold">
+              نسخه سازمانی
             </span>
           </div>
         </div>
@@ -120,18 +120,18 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             <button
               type="button"
               onClick={() => setAuthMode('credentials')}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 hover:text-[#304cff] bg-white hover:bg-[#f8faff] rounded-xl border border-[#dfe5ef] hover:border-[#cdd5ff] shadow-xs transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 hover:text-[#6558d9] bg-white hover:bg-[#fbfbfd] rounded-xl border border-[#e6e8ef] hover:border-[#d5d8e2] shadow-xs transition-colors cursor-pointer"
             >
-              <KeyRound className="w-3.5 h-3.5 text-[#3657ff]" />
+              <KeyRound className="w-3.5 h-3.5 text-[#6558d9]" />
               <span>ورود با شناسه</span>
             </button>
           ) : (
             <button
               type="button"
               onClick={() => setAuthMode('demo_personas')}
-              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 hover:text-[#304cff] bg-white hover:bg-[#f8faff] rounded-xl border border-[#dfe5ef] hover:border-[#cdd5ff] shadow-xs transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-700 hover:text-[#6558d9] bg-white hover:bg-[#fbfbfd] rounded-xl border border-[#e6e8ef] hover:border-[#d5d8e2] shadow-xs transition-colors cursor-pointer"
             >
-              <ArrowRight className="w-3.5 h-3.5 text-[#3657ff]" />
+              <ArrowRight className="w-3.5 h-3.5 text-[#6558d9]" />
               <span>انتخاب نقش</span>
             </button>
           )}
@@ -144,14 +144,14 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
           /* ========================================================================= */
           /* ROLE SELECTION VIEW                                                       */
           /* ========================================================================= */
-          <div className="bg-white rounded-2xl border border-slate-200 p-4 sm:p-6 shadow-none text-right">
+          <div className="bg-white rounded-2xl border border-[#e6e8ef] p-4 sm:p-6 shadow-[0_1px_3px_rgba(0,0,0,0.02)] text-right">
             {/* Hero Section */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#e6e8ef]">
               <div>
                 <h1 className="text-lg sm:text-xl font-bold text-slate-900">
                   انتخاب نقش برای ورود
                 </h1>
-                <p className="text-xs text-slate-500 mt-1">
+                <p className="text-xs text-[#697082] mt-1">
                   برای مشاهده امکانات، یکی از نقش‌های زیر را انتخاب کنید.
                 </p>
               </div>
@@ -164,7 +164,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                   onClick={() => setAuthMode('credentials')}
                   className="text-xs font-medium cursor-pointer"
                 >
-                  <KeyRound className="w-3.5 h-3.5 ml-1 text-slate-500" />
+                  <KeyRound className="w-3.5 h-3.5 ml-1 text-[#6558d9]" />
                   <span>ورود با شناسه</span>
                 </Button>
               </div>
@@ -175,19 +175,19 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
               <div
                 className={`my-3 p-3 rounded-xl border text-xs flex items-center gap-2.5 ${
                   sessionNotice.type === 'warning'
-                    ? 'bg-amber-50 border-amber-200 text-amber-900'
+                    ? 'bg-[#fcf3e8] border-[#f6dfbe] text-[#b97318]'
                     : sessionNotice.type === 'error'
-                    ? 'bg-rose-50 border-rose-200 text-rose-900'
-                    : 'bg-primary-50 border-primary-200 text-primary-900'
+                    ? 'bg-[#fff0f1] border-[#ffd0d4] text-[#c74b55]'
+                    : 'bg-[#f0eeff] border-[#e4dfff] text-[#6558d9]'
                 }`}
               >
                 <AlertCircle
                   className={`w-4 h-4 shrink-0 ${
                     sessionNotice.type === 'warning'
-                      ? 'text-amber-600'
+                      ? 'text-[#b97318]'
                       : sessionNotice.type === 'error'
-                      ? 'text-rose-600'
-                      : 'text-primary-700'
+                      ? 'text-[#c74b55]'
+                      : 'text-[#6558d9]'
                   }`}
                 />
                 <span className="font-semibold">{sessionNotice.message}</span>
@@ -195,7 +195,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
             )}
 
             {/* 5 Filter Tabs */}
-            <div className="flex items-center gap-1.5 py-3 border-b border-slate-100 overflow-x-auto">
+            <div className="flex items-center gap-1.5 py-3 border-b border-[#e6e8ef] overflow-x-auto">
               {ROLE_FILTER_TABS.map((tab) => {
                 const count =
                   tab.key === 'all'
@@ -210,14 +210,14 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                     onClick={() => setActiveCategory(tab.key)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer flex items-center gap-1.5 whitespace-nowrap ${
                       isSelected
-                        ? 'bg-primary-700 text-white shadow-none'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                        ? 'bg-[#6558d9] text-white shadow-none'
+                        : 'bg-[#eef1f6] text-[#697082] hover:bg-[#e2e6ed]'
                     }`}
                   >
                     <span>{tab.label}</span>
                     <span
                       className={`text-caption px-1.5 py-0.2 rounded-full ${
-                        isSelected ? 'bg-primary-800 text-white' : 'bg-slate-200 text-slate-700'
+                        isSelected ? 'bg-[#5548c7] text-white' : 'bg-[#e0e4eb] text-[#697082]'
                       }`}
                     >
                       {count}
@@ -344,16 +344,16 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
           /* ========================================================================= */
           /* MANUAL CREDENTIAL LOGIN VIEW                                             */
           /* ========================================================================= */
-          <div className="max-w-md mx-auto bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-none text-right">
+          <div className="max-w-md mx-auto bg-white rounded-2xl border border-[#e6e8ef] p-6 sm:p-8 shadow-[0_1px_3px_rgba(0,0,0,0.02)] text-right">
             {/* Header Title */}
             <div className="text-center mb-6">
-              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-primary-50 border border-primary-100 text-primary-700 mb-3">
+              <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#f0eeff] border border-[#e4dfff] text-[#6558d9] mb-3">
                 <ShieldCheck className="w-6 h-6" />
               </div>
               <h1 className="text-lg font-bold text-slate-900">
                 ورود با شناسه و رمز عبور
               </h1>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-[#697082] mt-1">
                 ورود به سامانه با نام کاربری یا شناسه پرسنلی
               </p>
             </div>
@@ -418,9 +418,9 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                       if (errorMessage) setErrorMessage(null);
                     }}
                     placeholder="نام کاربری یا کد پرسنلی"
-                    className="w-full h-10 px-4 pr-10 text-xs rounded-xl border border-slate-300 bg-slate-50/50 text-slate-900 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all text-right font-medium"
+                    className="w-full h-10 px-4 pr-10 text-xs rounded-xl border border-[#e6e8ef] bg-[#fbfbfd] text-slate-900 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-[#6558d9] focus:border-[#6558d9] transition-all text-right font-medium"
                   />
-                  <User className="w-4 h-4 text-slate-500 absolute right-3 top-3 pointer-events-none" />
+                  <User className="w-4 h-4 text-[#697082] absolute right-3 top-3 pointer-events-none" />
                 </div>
               </div>
 
@@ -446,9 +446,9 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                       if (errorMessage) setErrorMessage(null);
                     }}
                     placeholder="رمز عبور خود را وارد کنید"
-                    className="w-full h-10 px-10 text-xs rounded-xl border border-slate-300 bg-slate-50/50 text-slate-900 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all text-right font-medium"
+                    className="w-full h-10 px-10 text-xs rounded-xl border border-[#e6e8ef] bg-[#fbfbfd] text-slate-900 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-[#6558d9] focus:border-[#6558d9] transition-all text-right font-medium"
                   />
-                  <Lock className="w-4 h-4 text-slate-500 absolute right-3 top-3 pointer-events-none" />
+                  <Lock className="w-4 h-4 text-[#697082] absolute right-3 top-3 pointer-events-none" />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
@@ -478,7 +478,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
                   type="button"
                   variant="outline"
                   onClick={() => setAuthMode('demo_personas')}
-                  className="w-full justify-center h-10 font-bold text-xs text-slate-700 border-slate-300 hover:bg-slate-50 cursor-pointer"
+                  className="w-full justify-center h-10 font-bold text-xs text-slate-700 border-[#e6e8ef] hover:bg-[#fbfbfd] cursor-pointer"
                 >
                   <ArrowRight className="w-4 h-4 ml-1.5 text-slate-500" />
                   <span>بازگشت به انتخاب نقش</span>
@@ -490,8 +490,8 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({
       </main>
 
       {/* Footer */}
-      <footer className="w-full max-w-5xl py-2.5 text-center text-slate-400 text-caption relative z-10 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-center gap-2">
-        <span>© سامانه عملیات جوادیان — نسخه نمایشی</span>
+      <footer className="w-full max-w-5xl py-2.5 text-center text-[#697082] text-caption relative z-10 border-t border-[#e6e8ef] flex flex-col sm:flex-row items-center justify-center gap-2">
+        <span>© سامانه جوادیان — مدیریت عملیات، فروش و فرایندها</span>
       </footer>
     </div>
   );

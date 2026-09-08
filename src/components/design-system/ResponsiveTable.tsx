@@ -39,10 +39,10 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
   return (
     <div className="w-full">
       {/* ================= DESKTOP TABLE VIEW (Visible md and above) ================= */}
-      <div className="hidden md:block overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-none">
+      <div className="hidden md:block overflow-x-auto rounded-xl border border-[#e6e8ef] bg-white shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
         <AdaptiveTable className="w-full text-right border-collapse text-xs">
           <thead>
-            <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold">
+            <tr className="bg-[#fbfbfd] border-b border-[#e6e8ef] text-[#697082] font-bold">
               <th className="py-3 px-4 w-28">کد رهگیری</th>
               <th className="py-3 px-4">عنوان و شرح درخواست</th>
               <th className="py-3 px-4 w-40">ایجادکننده</th>
@@ -52,12 +52,12 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
               <th className="py-3 px-3 w-16 text-center">عملیات</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-[#e6e8ef]">
             {records.map((rec) => (
               <tr
                 key={rec.id}
                 onClick={() => onSelectRecord(rec)}
-                className="hover:bg-primary-50/40 transition-colors cursor-pointer group"
+                className="hover:bg-[#f8f8fd] transition-colors cursor-pointer group"
               >
                 {/* کد رهگیری و اولویت */}
                 <td className="py-4 px-4 font-mono font-bold text-slate-700">
@@ -117,7 +117,7 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
 
                 {/* دکمه اقدام */}
                 <td className="py-4 px-3 text-center">
-                  <button type="button" aria-label={`مشاهده ${rec.code}`} onClick={(event) => { event.stopPropagation(); onSelectRecord(rec); }} className="p-2 rounded-lg text-slate-600 hover:text-primary-700 hover:bg-primary-100/50 inline-flex items-center justify-center transition-colors">
+                  <button type="button" aria-label={`مشاهده ${rec.code}`} onClick={(event) => { event.stopPropagation(); onSelectRecord(rec); }} className="p-2 rounded-lg text-[#697082] hover:text-[#6558d9] hover:bg-[#f0eeff] inline-flex items-center justify-center transition-colors">
                     <ChevronLeft aria-hidden="true" className="w-4 h-4" />
                   </button>
                 </td>
@@ -132,12 +132,12 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
         {records.map((rec) => (
           <div
             key={rec.id}
-            className="bg-white rounded-xl border border-slate-200 p-4 shadow-none active:bg-slate-50 transition-colors space-y-3"
+            className="bg-white rounded-xl border border-[#e6e8ef] p-4 shadow-[0_1px_2px_rgba(0,0,0,0.02)] active:bg-[#fbfbfd] transition-colors space-y-3"
           >
             {/* Top row: Code + Status Badge */}
             <div className="mobile-record-heading flex flex-wrap items-center justify-between gap-2">
               <div className="flex flex-wrap items-center gap-2">
-                <span className="font-mono text-xs font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded">
+                <span className="font-mono text-xs font-bold text-slate-800 bg-[#f5f6fa] border border-[#e6e8ef] px-2 py-0.5 rounded-lg">
                   {rec.code}
                 </span>
                 <PriorityBadge priority={rec.priority} />
@@ -151,13 +151,13 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
             {/* Title & summary */}
             <div>
               <h4 className="text-sm font-bold text-slate-900 leading-snug">{rec.title}</h4>
-              <p className="text-xs text-slate-500 mt-1 line-clamp-2">{rec.itemSummary}</p>
+              <p className="text-xs text-[#697082] mt-1 line-clamp-2">{rec.itemSummary}</p>
             </div>
 
             {/* Blocker alert on mobile if exists */}
             {rec.blocker?.exists && (
-              <div className="p-2 rounded bg-rose-50 border border-rose-200 text-rose-900 text-xs flex items-start gap-2">
-                <AlertTriangle className="w-3.5 h-3.5 text-rose-600 shrink-0 mt-0.5" />
+              <div className="p-2 rounded-lg bg-[#fff0f1] border border-[#ffd0d4] text-[#c74b55] text-xs flex items-start gap-2">
+                <AlertTriangle className="w-3.5 h-3.5 text-[#c74b55] shrink-0 mt-0.5" />
                 <span className="font-medium text-caption leading-tight">
                   <strong>مانع:</strong> {rec.blocker.reason}
                 </span>
@@ -165,11 +165,11 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
             )}
 
             {/* Bottom info: Owner & Amount */}
-            <div className="mobile-record-meta pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between text-xs gap-2">
+            <div className="mobile-record-meta pt-2 border-t border-[#e6e8ef] flex flex-wrap items-center justify-between text-xs gap-2">
               <div className="flex items-center gap-1 text-slate-700 truncate">
-                <span className="text-slate-500">دست:</span>
-                <strong className="text-primary-900 truncate">{rec.currentOwner.name}</strong>
-                <span className="text-caption text-slate-500">
+                <span className="text-[#697082]">دست:</span>
+                <strong className="text-[#6558d9] truncate">{rec.currentOwner.name}</strong>
+                <span className="text-caption text-[#697082]">
                   ({toPersianDigits(rec.currentOwner.durationHours)}ساعت)
                 </span>
               </div>

@@ -20,12 +20,12 @@ export const StatusBadge: React.FC<StatusBadgeProps> = ({ status, label, classNa
   const state = external[status];
   const tone = state?.tone || meta.tone;
   const tones: Record<string, string> = {
-    neutral: 'bg-slate-100 text-slate-700 border-slate-300',
-    info: 'bg-info-surface text-info border-blue-300',
-    primary: 'bg-info-surface text-info border-blue-300',
-    warning: 'bg-warning-surface text-warning border-amber-300',
-    danger: 'bg-danger-surface text-danger border-red-300',
-    success: 'bg-success-surface text-success border-green-300',
+    neutral: 'bg-[#eef1f6] text-[#697082] border-[#e6e8ef]',
+    info: 'bg-[#eaf0ff] text-[#3566c8] border-[#cee0ff]',
+    primary: 'bg-[#f0eeff] text-[#6558d9] border-[#e4dfff]',
+    warning: 'bg-[#fcf3e8] text-[#b97318] border-[#f6dfbe]',
+    danger: 'bg-[#fff0f1] text-[#c74b55] border-[#ffd0d4]',
+    success: 'bg-[#eaf7f1] text-[#138a61] border-[#c8edd9]',
   };
   const displayLabel = label || state?.label || meta.label;
   return (
@@ -140,17 +140,17 @@ export interface BadgeProps {
 
 export const Badge: React.FC<BadgeProps> = ({ children, variant = 'default', className = '' }) => {
   const variantStyles = {
-    default: 'bg-slate-100 text-slate-700 border-slate-200',
-    success: 'bg-success-surface text-success border-green-300',
-    warning: 'bg-amber-50 text-amber-800 border-amber-200',
-    danger: 'bg-rose-50 text-rose-700 border-rose-200',
-    info: 'bg-info-surface text-info border-blue-300',
-    pending: 'bg-warning-surface text-warning border-amber-300',
-    blocked: 'bg-danger-surface text-danger border-red-300',
-    deferred: 'bg-slate-100 text-slate-700 border-slate-300 border-dashed',
-    'not-connected': 'bg-warning-surface text-warning border-amber-300 border-dashed',
-    'not-configured': 'bg-warning-surface text-warning border-amber-300 border-dashed',
-    'prototype-only': 'bg-slate-100 text-slate-700 border-slate-300 border-dashed',
+    default: 'bg-[#eef1f6] text-[#697082] border-[#e6e8ef]',
+    success: 'bg-[#eaf7f1] text-[#138a61] border-[#c8edd9]',
+    warning: 'bg-[#fcf3e8] text-[#b97318] border-[#f6dfbe]',
+    danger: 'bg-[#fff0f1] text-[#c74b55] border-[#ffd0d4]',
+    info: 'bg-[#eaf0ff] text-[#3566c8] border-[#cee0ff]',
+    pending: 'bg-[#fcf3e8] text-[#b97318] border-[#f6dfbe]',
+    blocked: 'bg-[#fff0f1] text-[#c74b55] border-[#ffd0d4]',
+    deferred: 'bg-[#eef1f6] text-[#697082] border-[#e6e8ef] border-dashed',
+    'not-connected': 'bg-[#fcf3e8] text-[#b97318] border-[#f6dfbe] border-dashed',
+    'not-configured': 'bg-[#fcf3e8] text-[#b97318] border-[#f6dfbe] border-dashed',
+    'prototype-only': 'bg-[#eef1f6] text-[#697082] border-[#e6e8ef] border-dashed',
   };
 
   return (
